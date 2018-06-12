@@ -55,7 +55,7 @@ export const asyncRouterMap = [
 	{
 		path: '/installMachine',
 		component: Layout,
-		redirect: '/installHome',
+		redirect: 'noredirect',
 		name: 'install_machine',
 		meta: {
 			title: 'install_machine',
@@ -91,7 +91,7 @@ export const asyncRouterMap = [
 	{
 		path: '/repairManage',
 		component: Layout,
-		redirect: '/repairHome',
+		redirect: 'noredirect',
 		name: 'repair_manage',
 		meta: {
 			title: 'repair_manage',
@@ -115,7 +115,7 @@ export const asyncRouterMap = [
 	{
 		path: '/maintainManage',
 		component: Layout,
-		redirect: '/maintainHome',
+		redirect: 'noredirect',
 		name: 'maintain_manage',
 		meta: {
 			title: 'maintain_manage',
