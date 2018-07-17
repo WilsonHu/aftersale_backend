@@ -9,7 +9,7 @@ export function loginByAccount(account, password) {
         "password": password,
     }
     return request({
-        url: 'user/requestLogin',
+        url: 'login',
         method: 'post',
         data: params
     })

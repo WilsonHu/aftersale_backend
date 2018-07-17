@@ -1,6 +1,6 @@
 const APIConfig = {
 
-	request_server_url: 'http://127.0.0.1:8080/',  // for axios ajax url
+	request_server_url: '/api/',  // for axios ajax url
 	ajax_header_token: 'security_token',    // for axios request header
 	ajax_header_role: 'security_role',      // for axios request header
 
