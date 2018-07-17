@@ -29,9 +29,9 @@
                        @click.native.prevent="handleLogin">{{$t('login.logIn')}}
             </el-button>
 
-            <div style="text-align: center;">
-                <social-sign/>
-            </div>
+            <!--<div style="text-align: center;">-->
+                <!--<social-sign/>-->
+            <!--</div>-->
         </el-form>
     </div>
 </template>

@@ -57,9 +57,11 @@ const user = {
             const account = userInfo.username.trim()
             return new Promise((resolve, reject) => {
                     loginByAccount(account, userInfo.password).then(response => {
-                        if (response.data.code == 200) {
+                        if (response.status == 200) {
+
                             const data = response.data.data
                             // Cookies.set(APIConfig.cookie_user_token, data)
+                            setToken(response.headers.authorization);
                             sessionStorage.setItem('user', data)
                             var token = 'editor'
                             if (data.role.id === 1)//admin
