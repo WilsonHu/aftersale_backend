@@ -30,11 +30,4 @@ export function getUserInfo(token) {
     })
 }
 
-export function getUserList(account) {
-    return request({
-        url: 'user/selectByAccount',
-        method: 'post',
-        params: {token}
-    })
-}
 
