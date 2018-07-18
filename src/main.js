@@ -16,6 +16,7 @@ import './icons' // icon
 import './errorLog'// error log
 import './permission' // permission control
 import * as filters from './filters' // global filters
+import './common/common'
 
 Vue.use(Element, {
   size: 'medium', // set element-ui default size
