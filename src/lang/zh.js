@@ -17,6 +17,9 @@ export default {
     maintain_detail:'保养详情',
     maintain_item:'保养项',
 
+    machine_manage:'机器管理',
+    machine_home:'机器管理',
+
     system_manage:'系统管理',
     staff_manage:'员工管理',
     agent_manage:'代理商管理',

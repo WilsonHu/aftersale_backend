@@ -59,7 +59,7 @@ export const asyncRouterMap = [
 		name: 'install_machine',
 		meta: {
 			title: 'install_machine',
-			icon: 'bug'
+			icon: 'install'
 		},
 		children: [
 			{
@@ -95,7 +95,7 @@ export const asyncRouterMap = [
 		name: 'repair_manage',
 		meta: {
 			title: 'repair_manage',
-			icon: 'form'
+			icon: 'repair'
 		},
 		children: [
 			{
@@ -119,7 +119,7 @@ export const asyncRouterMap = [
 		name: 'maintain_manage',
 		meta: {
 			title: 'maintain_manage',
-			icon: 'component'
+			icon: 'maintain'
 		},
 		children: [
 			{
@@ -142,42 +142,131 @@ export const asyncRouterMap = [
 			},
 		]
 	},
-	{
-		path: '/systemManage',
-		component: Layout,
-		redirect: 'noredirect',
-		name: 'system_manage',
-		meta: {
-			title: 'system_manage',
-			icon: 'peoples'
-		},
-		children: [
-			{
-				path: 'staffManage',
-				component: _import('system_manage/staff_manage'),
-				name: 'staff_manage',
-				meta: {title: 'staff_manage', noCache: true,}
-			},
-			{
-				path: 'clientManage',
-				component: _import('system_manage/client_manage'),
-				name: 'client_manage',
-				meta: {title: 'client_manage', noCache: true,}
-			},
-			{
-				path: 'agentManage',
-				component: _import('system_manage/agent_manage'),
-				name: 'agent_manage',
-				meta: {title: 'agent_manage', noCache: true,}
-			},
-			{
-				path: 'partsManage',
-				component: _import('system_manage/parts_manage'),
-				name: 'parts_manage',
-				meta: {title: 'parts_manage', noCache: true,}
-			},
-		]
-	},
+    {
+        path: '/machineManage',
+        component: Layout,
+        redirect: 'noredirect',
+        name: 'machine_manage',
+        meta: {
+            icon: 'sewingMachine'
+        },
+        children: [
+            {
+                path: 'machineHome',
+                component: _import('machine_manage/machine_home'),
+                name: 'machine_home',
+                meta: {
+                	title: 'machine_home',
+					noCache: true,
+                    icon: 'sewingMachine'
+				}
+            }
+        ]
+    },
+    {
+        path: '/partsManage',
+        component: Layout,
+        redirect: 'noredirect',
+        name: 'parts_manage',
+        meta: {
+
+        },
+        children: [
+            {
+                path: 'partsHome',
+                component: _import('system_manage/parts_manage'),
+                name: 'parts_manage',
+                meta: {title: 'parts_manage', noCache: true,icon: 'parts'}
+            }
+        ]
+    },
+    {
+        path: '/staffManage',
+        component: Layout,
+        redirect: 'noredirect',
+        name: 'staff_manage',
+        meta: {
+
+        },
+        children: [
+            {
+                path: 'staffHome',
+                component: _import('system_manage/staff_manage'),
+                name: 'staff_manage',
+                meta: {title: 'staff_manage', noCache: true,icon: 'people'}
+            }
+        ]
+    },
+    {
+        path: '/clientManage',
+        component: Layout,
+        redirect: 'noredirect',
+        name: 'client_manage',
+        meta: {
+
+        },
+        children: [
+            {
+                path: 'clientHome',
+                component: _import('system_manage/client_manage'),
+                name: 'client_manage',
+                meta: {title: 'client_manage', noCache: true,icon: 'peoples'}
+            }
+        ]
+    },
+    {
+        path: '/agentManage',
+        component: Layout,
+        redirect: 'noredirect',
+        name: 'agent_manage',
+        meta: {
+
+        },
+        children: [
+            {
+                path: 'agentHome',
+                component: _import('system_manage/agent_manage'),
+                name: 'agent_manage',
+                meta: {title: 'agent_manage', noCache: true,icon: 'agent'}
+            }
+        ]
+    },
+	// {
+	// 	path: '/systemManage',
+	// 	component: Layout,
+	// 	redirect: 'noredirect',
+	// 	name: 'system_manage',
+	// 	meta: {
+	// 		title: 'system_manage',
+	// 		icon: 'peoples'
+	// 	},
+	// 	children: [
+	// 		{
+	// 			path: 'staffManage',
+	// 			component: _import('system_manage/staff_manage'),
+	// 			name: 'staff_manage',
+	// 			meta: {title: 'staff_manage', noCache: true,}
+	// 		},
+	// 		{
+	// 			path: 'clientManage',
+	// 			component: _import('system_manage/client_manage'),
+	// 			name: 'client_manage',
+	// 			meta: {title: 'client_manage', noCache: true,}
+	// 		},
+	// 		{
+	// 			path: 'agentManage',
+	// 			component: _import('system_manage/agent_manage'),
+	// 			name: 'agent_manage',
+	// 			meta: {title: 'agent_manage', noCache: true,}
+	// 		},
+	// 		{
+	// 			path: 'partsManage',
+	// 			component: _import('system_manage/parts_manage'),
+	// 			name: 'parts_manage',
+	// 			meta: {title: 'parts_manage', noCache: true,}
+	// 		},
+	// 	]
+	// },
 	{
 		path: '/repositoryManage',
 		component: Layout,
