@@ -32,7 +32,7 @@
 		                        align="center"
 		                        label="序号" >
                             <template scope="scope" >
-                                {{scope.$index+startRow}}
+                                {{scope.$index+startRow+1}}
                             </template >
                         </el-table-column >
                         <el-table-column
