@@ -38,7 +38,7 @@
 							 </el-switch >
 	                    </el-form-item >
                     </el-col >
-	                <el-col :span="3" v-show="condition.isAgent">
+	                <el-col :span="3" v-show="condition.isAgent" >
 	                    <el-form-item label="" >
 		                    <el-input v-model="condition.agent"
 		                              placeholder="代理商"
@@ -57,7 +57,7 @@
                                 </el-option >
                             </el-select >
                         </el-form-item >
-                    </el-col >
+                     </el-col >
 	                <el-col :span="4" >
                         <el-form-item label="客户:" >
                             <el-input v-model="condition.customer"
@@ -114,16 +114,16 @@
 		                prop="nameplate"
 		                label="机器编号" >
                 </el-table-column >
-                <el-table-column
-		                align="center"
-		                prop="machineType"
-		                label="机型" >
-                    <template scope="scope" >
-                        <div >
-                            {{scope.row.machineType|filterMachineType}}
-                        </div >
-                    </template >
-                </el-table-column >
+	            <!--<el-table-column-->
+	            <!--align="center"-->
+	            <!--prop="machineType"-->
+	            <!--label="机型" >-->
+	            <!--<template scope="scope" >-->
+	            <!--<div >-->
+	            <!--{{scope.row.machineType|filterMachineType}}-->
+	            <!--</div >-->
+	            <!--</template >-->
+	            <!--</el-table-column >-->
                 <el-table-column label="订单号"
                                  align="center"
                                  prop="orderNum" >
@@ -149,11 +149,7 @@
                     <template scope="scope" >
                         <div v-if="scope.row.status==0"
                              style="color: #686868" >
-                            {{scope.row.status|filterStatus}}
-                        </div >
-                        <div v-if="scope.row.status==1"
-                             style="color: #8b6c0e" >
-                            {{scope.row.status|filterStatus}}
+                            {{scope.row.status}}
                         </div >
                     </template >
                 </el-table-column >
@@ -168,9 +164,9 @@
                     </template >
                 </el-table-column >
 	            <el-table-column
-			             align="center"
-			             prop="processCreateTime"
-			             label="出厂日期" >
+			            align="center"
+			            prop="processCreateTime"
+			            label="出厂日期" >
                     <template slot-scope="scope" >
                         <span >
                             {{(scope.row.processCreateTime)|filterDateString}}
@@ -191,7 +187,7 @@
                 <el-table-column width="200"
                                  label="操作" align="center" >
                     <template scope="scope" style="text-align: center" >
-                        <el-tooltip placement="left" content="详情" >
+                        <el-tooltip placement="top" content="详情" >
                             <el-button
 		                            size="mini"
 		                            type="primary"
@@ -199,12 +195,12 @@
 		                            @click="editWithItem(scope.row)" >
                             </el-button >
                         </el-tooltip >
-	                    <el-tooltip placement="left" content="分配" >
+	                    <el-tooltip placement="top" content="分配" >
                             <el-button
 		                            size="mini"
 		                            type="primary"
-		                            icon="el-icon-view"
-		                            @click="editWithItem(scope.row)" >查看
+		                            icon="el-icon-news"
+		                            @click="editWithItem(scope.row)" >
                             </el-button >
                         </el-tooltip >
                     </template >
@@ -239,6 +235,8 @@
 <script >
 import {APIConfig} from '@/config/apiConfig'
 import {Loading} from 'element-ui';
+import {getNotInstallMachineList} from '@/api/install_machine'
+const _this = this;
 export default {
 	name: 'install_home',
 	components: {},
@@ -350,13 +348,42 @@ export default {
 				condition.query_start_time = this.condition.selectDate[0].format("yyyy-MM-dd");
 				condition.query_finish_time = this.condition.selectDate[1].format("yyyy-MM-dd");
 			}
-
+			getNotInstallMachineList(condition).then(response => {
+				if (response.status == 200) {
+					this.tableData = response.data.data.list;
+					this.totalRecords = response.data.data.total;
+					this.startRow = response.data.data.startRow;
+					Promise.resolve()
+				}
+				else {
+					Promise.reject("error");
+				}
+			})
+			//SinsimProcessDB/getMachineList
+//			new Promise((resolve, reject) => {
+//				getNotInstallMachineList().then(response => {
+//					if (response.status == 200) {
+//						_this.tableData = response.data;
+//						resolve()
+//					}
+//					else {
+//						reject("error");
+//					}
+//				}).catch(error => {
+//					reject(error)
+//				})
+//			})
 		},
 		editWithItem(item)
 		{
 
 
 		},
+	},
+	mounted()
+	{
+//		this.pageSize = APIConfig.EveryPageNum
+//		this.statusList = APIConfig.MachineStatusList;
 	}
 }
 </script >
@@ -370,6 +397,6 @@ export default {
 }
 
 .el-select {
-		width: 100%;
+	width: 100%;
 }
 </style >
