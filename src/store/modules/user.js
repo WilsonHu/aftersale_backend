@@ -27,7 +27,7 @@ const user = {
 			return new Promise((resolve, reject) => {
 					loginByAccount(account, userInfo.password).then(response => {
 						if (response.status == 200) {
-							const userData = response.data;
+							let userData = response.data;
 							userData.Token = response.headers.authorization;
 							let roles = userData.roleId == 1 ? ['admin'] : ['editor']
 							setToken(userData);//set token to cookie

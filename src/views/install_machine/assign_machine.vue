@@ -141,11 +141,12 @@
     import {APIConfig} from '@/config/apiConfig'
     import {Loading} from 'element-ui';
     import {getNotInstallMachineList} from '@/api/install_machine'
-    const _this = this;
+    var _this;
     export default {
         name: 'assign_machine',
         components: {},
         data() {
+            _this = this;
             return {
                 tableData: [],
                 //分页
@@ -261,28 +262,31 @@
                         Promise.reject("error");
                     }
                 })
-                //SinsimProcessDB/getMachineList
-//			new Promise((resolve, reject) => {
-//				getNotInstallMachineList().then(response => {
-//					if (response.status == 200) {
-//						_this.tableData = response.data;
-//						resolve()
-//					}
-//					else {
-//						reject("error");
-//					}
-//				}).catch(error => {
-//					reject(error)
-//				})
-//			})
             },
             editWithItem(item)
             {
 
             },
+
+            initData()
+            {
+                if (_this.$store.getters.commonData.machineTypeList.length > 0) {
+                    _this.allMachineType = _this.$store.getters.commonData.machineTypeList;
+                }
+                else {
+                    _this.$store.dispatch("getAllMachineType")
+                            .then(() => {
+                                _this.allMachineType = _this.$store.getters.commonData.machineTypeList;
+                            })
+                            .catch((e) => {
+                                showMSG(_this, "getAllMachineType failed!");
+                            });
+                }
+            },
         },
         created()
         {
+            this.initData();
             this.search();
         }
     }
