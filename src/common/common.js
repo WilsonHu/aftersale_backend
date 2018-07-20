@@ -1,3 +1,7 @@
+function responseIsOK(response) {
+	return response.status == 200 && response.data.code == 200;
+}
+
 function objValueIsEmpty(obj) {
 	for (var key in obj) {
 		if (typeof (obj[key]) == 'object') {
