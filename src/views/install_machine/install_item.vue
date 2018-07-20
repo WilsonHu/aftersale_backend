@@ -1,11 +1,11 @@
 <template >
     <div class="install_item_div" >
-        <el-tabs v-model="activeTab" type="card" editable @edit="handleClick" >
+        <el-tabs v-model="activeItem.id" type="card" editable @edit="handleClick" >
             <el-tab-pane
-		            :key="item.name"
+		            :key="item.id"
 		            v-for="(item, index) in editableTabs"
-		            :label="item.title"
-		            :name="item.name"
+		            :label="item.name"
+		            :name="item.id"
             >
                 <div >
                     <div align="right" style="margin-bottom: 20px" >
@@ -81,10 +81,10 @@
         </el-tabs >
 
         <el-dialog title="添加" :visible.sync="addTabDialogVisible" width="40%" >
-            <el-form :model="addTabform" style="font-size: 18px">
+            <el-form :model="addTabform" style="font-size: 18px" >
                 <el-col :span="24" >
                     <el-form-item label="安装项名称：" :label-width="formLabelWidth" style="width: 80%" >
-                        <el-input v-model="addTabform.name" clearable style="font-size: 18px"></el-input >
+                        <el-input v-model="addTabform.name" clearable style="font-size: 18px" ></el-input >
                     </el-form-item >
                 </el-col >
             </el-form >
@@ -95,11 +95,11 @@
         </el-dialog >
 
         <el-dialog :title="contentformTitle" :visible.sync="addDialogVisible" width="40%" >
-            <el-form :model="addContentform">
+            <el-form :model="addContentform" >
                 <el-col :span="24" >
                     <el-form-item label="调试内容：" :label-width="formLabelWidth" style="width: 100%" >
                         <el-input v-model="addContentform.content" type="textarea"
-                                  :rows="5" clearable style="font-size: 18px"></el-input >
+                                  :rows="5" clearable style="font-size: 18px" ></el-input >
                     </el-form-item >
                 </el-col >
             </el-form >
@@ -109,7 +109,7 @@
             </div >
         </el-dialog >
         <el-dialog title="提示" :visible.sync="deleteTabConfirmDialog"
-                   append-to-body width="30%">
+                   append-to-body width="30%" >
             <span >确认要删除选定的安装项吗？</span >
             <span slot="footer" class="dialog-footer" >
               <el-button @click="deleteTabConfirmDialog = false" icon="el-icon-close" >取 消</el-button >
@@ -117,7 +117,7 @@
             </span >
         </el-dialog >
         <el-dialog title="提示" :visible.sync="deleteContentConfirmDialog"
-                   append-to-body width="30%">
+                   append-to-body width="30%" >
             <span >确认要删除选定的安装项吗？</span >
             <span slot="footer" class="dialog-footer" >
               <el-button @click="deleteContentConfirmDialog = false" icon="el-icon-close" >取 消</el-button >
@@ -129,23 +129,31 @@
 
 <script >
     import {Loading} from 'element-ui';
+    import {APIConfig} from '@/config/apiConfig'
+    import {selectLibList} from '@/api/install_machine'
+
+    var _this;
     export default {
 	    name: 'install_item',
 	    components: {},
 	    data(){
+		    _this = this;
 		    return {
-			    activeTab: '1',
-			    targetName: '',
+			    activeItem: {
+				    id: '1',
+				    name: '1',
+			    },
+			    targetId: '',
 			    editableTabs: [
 				    {
-					    title: 'Tab 1',
-					    name: '1',
+					    name: 'Tab 1',
+					    id: '1',
 					    tableData: [],
 
 				    },
 				    {
-					    title: 'Tab 2',
-					    name: '2',
+					    name: 'Tab 2',
+					    id: '2',
 					    tableData: [],
 				    }],
 			    tabIndex: 2,
@@ -153,7 +161,7 @@
 			    //分页
 			    totalRecords: 0,
 			    totalPage: 1,
-			    pageSize: 10,//每一页的num
+			    pageSize: APIConfig.EveryPageNum,//每一页的num
 			    currentPage: 1,
 			    startRow: 1,
 			    selectedItem: [],
@@ -181,19 +189,18 @@
 		    deleteTabFromUI()
 		    {
 			    let tabs = this.editableTabs;
-			    let activeName = this.activeTab;
-			    if (activeName === this.targetName) {
+			    let activeId = this.activeItem.id;
+			    if (activeId === this.targetId) {
 				    tabs.forEach((tab, index) => {
-					    if (tab.name === this.targetName) {
+					    if (tab.id === this.targetId) {
 						    let nextTab = tabs[index + 1] || tabs[index - 1];
 						    if (nextTab) {
-							    activeName = nextTab.name;
+							    this.activeTab = nextTab;
 						    }
 					    }
 				    });
 			    }
-			    this.activeTab = activeName;
-			    this.editableTabs = tabs.filter(tab => tab.name !== this.targetName);
+			    this.editableTabs = tabs.filter(tab => tab.id !== this.targetId);
 		    },
 
 		    onConfirmDeleteContent()
@@ -201,7 +208,7 @@
 			    this.deleteContentConfirmDialog = false;
 
 			    for (let item of this.editableTabs) {
-				    if (item.name == this.activeTab) {
+				    if (item.id == this.activeTab.id) {
 					    for (let tableItem of item.tableData) {
 						    if (tableItem.id == this.selectedItem.id) {
 							    let index = item.tableData.indexOf(tableItem);
@@ -219,13 +226,14 @@
 		    },
 		    addNewTab()
 		    {
-			    let newTabName = ++this.tabIndex + '';
-			    this.editableTabs.push({
-				    title: this.addTabform.name,
-				    name: newTabName,
+			    let newTabId = ++this.tabIndex + '';
+			    let tab = {
+				    name: this.addTabform.name,
+				    id: newTabId,
 				    tableData: [],
-			    });
-			    this.activeTab = newTabName;
+			    }
+			    this.editableTabs.push(tab);
+			    this.activeTab = tab;
 			    this.addTabform.name = "";
 		    },
 
@@ -256,7 +264,7 @@
 			    this.addDialogVisible = false;
 
 			    for (let item of this.editableTabs) {
-				    if (item.name == this.activeTab) {
+				    if (item.id == this.activeTab.id) {
 					    if (this.isAdd) {
 						    item.tableData.push({
 							    id: item.tableData.length - 1,
@@ -281,7 +289,7 @@
 			    }
 			    if (action === 'remove') {
 				    this.deleteTabConfirmDialog = true;
-				    this.targetName = target;
+				    this.targetId = target;
 			    }
 		    },
 		    handleEdit(item) {
@@ -295,10 +303,60 @@
 			    this.selectedItem = copyObjectByJSON(item);
 			    this.deleteContentConfirmDialog = true;
 		    },
+		    onSearchBaseData()
+		    {
+			    let condition = {
+				    isBaseLib: "0",
+				    installLibName: '',
+				    page: '',
+				    size: '',
+
+			    };
+			    selectLibList(condition).then(response => {
+				    if (response.status == 200) {
+					    for (let item of response.data.data.list) {
+						    _this.editableTabs.push({
+							    id: item.id,
+							    name: item.installLibName,
+							    tableData: [],
+						    });
+					    }
+					    Promise.resolve()
+				    }
+				    else {
+					    Promise.reject("error");
+				    }
+			    })
+		    },
+
+		    onSearchDetailData()
+		    {
+			    let condition = {
+				    installLibName: _this.activeTab.name,
+				    page: this.currentPage,
+				    size: this.pageSize
+			    };
+
+			    selectLibList(condition).then(response => {
+				    if (response.status == 200) {
+					    _this.totalRecords = response.data.data.total;
+					    _this.startRow = response.data.data.startRow;
+					    _this.editableTabs.forEach((tab, index) => {
+						    if (tab.id === this.activeTab.id) {
+							    _this.editableTabs[index].tableData = response.data.data.list;
+						    }
+					    });
+					    Promise.resolve()
+				    }
+				    else {
+					    Promise.reject("error");
+				    }
+			    })
+		    },
 
 		    initData()
 		    {
-
+			    _this.onSearchBaseData();
 		    },
 
 	    },

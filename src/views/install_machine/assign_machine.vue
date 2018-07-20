@@ -58,7 +58,7 @@
                             label="机型">
                         <template scope="scope">
                             <div>
-                                {{scope.row.name}}
+                                {{scope.row.machineType|filterMachineType}}
                             </div>
                         </template>
                     </el-table-column>
@@ -121,16 +121,6 @@
                             :total="totalRecords">
                     </el-pagination>
                 </div>
-                <!--<el-dialog title="确认取消机器" :visible.sync="confirmCancelDialog" width="30%"-->
-                <!--:modal="false" >-->
-                <!--<span >确定要取消机器编号为 [<b style="color: red;font-size: 18px" >{{selectedItem.nameplate}}</b >] 吗？</span >-->
-                <!--<span slot="footer" class="dialog-footer" >-->
-                <!--<el-button @click="confirmCancelDialog = false"-->
-                <!--icon="el-icon-close" >取 消</el-button >-->
-                <!--<el-button type="primary" @click="onConfirmCancel"-->
-                <!--icon="el-icon-check" >确 定</el-button >-->
-                <!--</span >-->
-                <!--</el-dialog >-->
             </el-col>
 
         </div>
@@ -206,10 +196,10 @@
 
             filterStatus(id)
             {
-                var result = this.statusList[0].name;
-                for (var i = 0; i < this.statusList.length; i++) {
-                    if (id == this.statusList[i].value) {
-                        result = this.statusList[i].name;
+                var result = _this.statusList[0].name;
+                for (var i = 0; i < _this.statusList.length; i++) {
+                    if (id == _this.statusList[i].value) {
+                        result = _this.statusList[i].name;
                         break;
                     }
                 }
@@ -218,9 +208,9 @@
             filterMachineType(id)
             {
                 var result = '';
-                for (var i = 0; i < this.allMachineType.length; i++) {
-                    if (id == this.allMachineType[i].id) {
-                        result = this.allMachineType[i].name;
+                for (var i = 0; i < _this.allMachineType.length; i++) {
+                    if (id == _this.allMachineType[i].id) {
+                        result = _this.allMachineType[i].name;
                         break;
                     }
                 }
@@ -253,9 +243,9 @@
                 }
                 getNotInstallMachineList(condition).then(response => {
                     if (response.status == 200) {
-                        this.tableData = response.data.data.list;
-                        this.totalRecords = response.data.data.total;
-                        this.startRow = response.data.data.startRow;
+                        _this.tableData = response.data.data.list;
+                        _this.totalRecords = response.data.data.total;
+                        _this.startRow = response.data.data.startRow;
                         Promise.resolve()
                     }
                     else {

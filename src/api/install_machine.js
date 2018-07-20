@@ -7,12 +7,21 @@ export function getNotInstallMachineList(condition) {
 	let params = new URLSearchParams();
 	params.append('page', condition.page);
 	params.append('size', condition.size);
-	const data = {
-		"page": condition.page,
-		"size": condition.size,
-	}
 	return request({
 		url: 'SinsimProcessDB/getMachineList',
+		method: 'post',
+		data: params
+	})
+}
+
+export function selectLibList(condition) {
+	let params = new URLSearchParams();
+	params.append('page', condition.page);
+	params.append('size', condition.size);
+	params.append('isBaseLib', condition.isBaseLib);
+	params.append('installLibName', condition.installLibName);
+	return request({
+		url: 'install/lib/selectLibList',
 		method: 'post',
 		data: params
 	})

@@ -120,7 +120,7 @@
 		                    label="机型" >
                     <template scope="scope" >
                     <div >
-                    {{scope.row.name}}
+                    {{scope.row.machineType|filterMachineType}}
                     </div >
                     </template >
                     </el-table-column >
@@ -303,10 +303,10 @@
 
 		    filterStatus(id)
 		    {
-			    var result = this.statusList[0].name;
-			    for (var i = 0; i < this.statusList.length; i++) {
-				    if (id == this.statusList[i].value) {
-					    result = this.statusList[i].name;
+			    var result = _this.statusList[0].name;
+			    for (var i = 0; i < _this.statusList.length; i++) {
+				    if (id == _this.statusList[i].value) {
+					    result = _this.statusList[i].name;
 					    break;
 				    }
 			    }
@@ -315,9 +315,9 @@
 		    filterMachineType(id)
 		    {
 			    var result = '';
-			    for (var i = 0; i < this.allMachineType.length; i++) {
-				    if (id == this.allMachineType[i].id) {
-					    result = this.allMachineType[i].name;
+			    for (var i = 0; i < _this.allMachineType.length; i++) {
+				    if (id == _this.allMachineType[i].id) {
+					    result = _this.allMachineType[i].name;
 					    break;
 				    }
 			    }
@@ -350,9 +350,9 @@
 			    }
 			    getNotInstallMachineList(condition).then(response => {
 				    if (response.status == 200) {
-					    this.tableData = response.data.data.list;
-					    this.totalRecords = response.data.data.total;
-					    this.startRow = response.data.data.startRow;
+					    _this.tableData = response.data.data.list;
+					    _this.totalRecords = response.data.data.total;
+					    _this.startRow = response.data.data.startRow;
 					    Promise.resolve()
 				    }
 				    else {
