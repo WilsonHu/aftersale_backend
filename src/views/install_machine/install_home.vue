@@ -183,7 +183,7 @@
                         </template >
                     </el-table-column >
 
-                    <el-table-column width="200"
+                    <el-table-column width="150"
                                      label="操作" align="center" >
                         <template scope="scope" style="text-align: center" >
                             <el-tooltip placement="top" content="详情" >
@@ -194,12 +194,12 @@
 		                                @click="editWithItem(scope.row)" >
                                 </el-button >
                             </el-tooltip >
-                            <el-tooltip placement="top" content="分配" >
+                            <el-tooltip placement="top" content="派单" >
                                 <el-button
 		                                size="mini"
 		                                type="primary"
 		                                icon="el-icon-news"
-		                                @click="editWithItem(scope.row)" >
+		                                @click="assignTask(scope.row)" >
                                 </el-button >
                             </el-tooltip >
                         </template >
@@ -215,16 +215,12 @@
 		                    :total="totalRecords" >
                     </el-pagination >
                 </div >
-	            <!--<el-dialog title="确认取消机器" :visible.sync="confirmCancelDialog" width="30%"-->
-	            <!--:modal="false" >-->
-	            <!--<span >确定要取消机器编号为 [<b style="color: red;font-size: 18px" >{{selectedItem.nameplate}}</b >] 吗？</span >-->
-	            <!--<span slot="footer" class="dialog-footer" >-->
-	            <!--<el-button @click="confirmCancelDialog = false"-->
-	            <!--icon="el-icon-close" >取 消</el-button >-->
-	            <!--<el-button type="primary" @click="onConfirmCancel"-->
-	            <!--icon="el-icon-check" >确 定</el-button >-->
-	            <!--</span >-->
-	            <!--</el-dialog >-->
+	            <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body width="75%" >
+	                <install-detail :tabSwitchClick="tabContentClick" :formData="formData" :activeTabId="activeTabId"></install-detail >
+		            <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
+                        <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
+                    </div >
+	            </el-dialog >
             </el-col >
 
         </div >
@@ -234,14 +230,23 @@
 <script >
     import {APIConfig} from '@/config/apiConfig'
     import {Loading} from 'element-ui';
-    import {getNotInstallMachineList} from '@/api/install_machine'
+    import {getNotInstallMachineList} from '@/api/install_machine';
+    import InstallDetail from '@/views/install_machine/install_detail';
     var _this;
     export default {
 	    name: 'install_home',
-	    components: {},
+	    components: {InstallDetail},
 	    data() {
 		    _this = this;
 		    return {
+
+		    	//detail info
+			    formData: {},
+			    machineNameplate: '',
+			    selectedItem: {},
+			    activeTabId: '0',
+			    //detail info
+
 			    tableData: [],
 			    //分页
 			    pageSize: APIConfig.EveryPageNum,//每一页的num
@@ -262,6 +267,7 @@
 			    allMachineType: [],
 			    allRoles: [],
 			    loadingUI: false,
+			    showDetailDialog: false,
 			    pickerOptions: {
 				    shortcuts: [{
 					    text: '最近一周',
@@ -291,9 +297,7 @@
 			    },
 		    }
 	    },
-	    mounted() {
 
-	    },
 	    filters: {
 		    filterDateString(strDate)
 		    {
@@ -349,19 +353,35 @@
 				    condition.query_finish_time = this.condition.selectDate[1].format("yyyy-MM-dd");
 			    }
 			    getNotInstallMachineList(condition).then(response => {
-				    if (response.status == 200) {
+				    if (responseIsOK(response)) {
 					    _this.tableData = response.data.data.list;
 					    _this.totalRecords = response.data.data.total;
 					    _this.startRow = response.data.data.startRow;
-					    Promise.resolve()
 				    }
 				    else {
-					    Promise.reject("error");
+					    showMSG(_this, isStringEmpty(response.data.message) ? "加载数据失败！" : response.data.message)
 				    }
 			    })
-			    //SinsimProcessDB/getMachineList
 		    },
-		    editWithItem(item)
+		    editWithItem(item)//详情
+		    {
+			    _this.selectedItem = item;
+			    _this.machineNameplate = item.nameplate;
+			    _this.formData = {
+				    customer: 'aaaa',
+				    customerPhone: '1367898765',
+				    agnet: 'bbbb'
+			    };
+			    _this.activeTabId = '0';
+			    _this.showDetailDialog = true;
+		    },
+
+		    tabContentClick(tab)
+		    {
+
+		    },
+
+		    assignTask(item)//派单
 		    {
 
 		    },

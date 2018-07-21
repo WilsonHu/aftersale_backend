@@ -68,12 +68,12 @@ export const asyncRouterMap = [
 				name: 'install_home',
 				meta: {title: 'install_home', noCache: true,}
 			},
-			{
-				path: 'installDetail',
-				component: _import('install_machine/install_detail'),
-				name: 'install_detail',
-				meta: {title: 'install_detail', noCache: true,}
-			},
+			// {
+			// 	path: 'installDetail',
+			// 	component: _import('install_machine/install_detail'),
+			// 	name: 'install_detail',
+			// 	meta: {title: 'install_detail', noCache: true,}
+			// },
 			{
 				path: 'assignMachine',
 				component: _import('install_machine/assign_machine'),
