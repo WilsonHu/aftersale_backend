@@ -241,15 +241,15 @@
                     condition.query_start_time = this.condition.selectDate[0].format("yyyy-MM-dd");
                     condition.query_finish_time = this.condition.selectDate[1].format("yyyy-MM-dd");
                 }
-                getNotInstallMachineList(condition).then(response => {
-                    if (response.status == 200) {
+                getNotInstallMachineList(condition).then(response=>{
+                    if (responseIsOK(response)){
                         _this.tableData = response.data.data.list;
                         _this.totalRecords = response.data.data.total;
                         _this.startRow = response.data.data.startRow;
-                        Promise.resolve()
                     }
                     else {
-                        Promise.reject("error");
+                        showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+
                     }
                 })
             },
