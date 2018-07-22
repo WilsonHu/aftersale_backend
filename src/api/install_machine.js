@@ -6,8 +6,10 @@ import request from '@/utils/request'
 export function getNotInstallMachineList(condition) {
     return new Promise((resolve, reject) => {
         let params = new URLSearchParams();
-        params.append('page', condition.page);
-        params.append('size', condition.size);
+        let keys = Object.keys(condition);
+        for (let key of keys) {
+            params.append(key, condition[key]);
+        }
         return request({
             url: 'SinsimProcessDB/getMachineList',
             method: 'post',
@@ -98,6 +100,21 @@ export function getSaledMachineInfoList(condition) {
             url: 'machine/getSaledMachineInfoList',
             method: 'post',
             data: params
+        }).then(response=> {
+            resolve(response);
+        }).catch(error=> {
+            reject(error);
+        })
+    })
+}
+
+//requestCustomerList
+export function requestCustomerList() {
+    return new Promise((resolve, reject) => {
+        return request({
+            url: 'user/list',
+            method: 'post',
+            data: {}
         }).then(response=> {
             resolve(response);
         }).catch(error=> {
