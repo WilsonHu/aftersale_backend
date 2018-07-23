@@ -1,59 +1,66 @@
 <template>
     <div class="root_div">
         <el-row>
-            <el-col>
-                <el-form :model="filters" label-position="right" label-width="60px">
-                    <el-col :span="3">
-                        <el-form-item label="账号:">
-                            <el-input v-model="filters.account"
-                                      placeholder="账号"
-                                      auto-complete="off"
-                                      clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="3">
-                        <el-form-item label="姓名:">
-                            <el-input v-model="filters.name"
-                                      placeholder="姓名"
-                                      auto-complete="off"
-                                      clearable></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-form-item label="角色:">
-                            <el-select v-model="filters.roleId" clearable>
-                                <el-option
-                                        v-for="item in allRoles"
-                                        v-bind:value="item.id"
-                                        v-bind:label="item.roleName">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-form-item label="代理商:">
-                            <el-select v-model="filters.agent" clearable>
-                                <el-option
-                                        v-for="item in allAgents"
-                                        v-bind:value="item.id"
-                                        v-bind:label="item.name">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="3">
-                        <el-form-item label="状态:">
-                            <el-select v-model="filters.valid" clearable>
-                                <el-option
-                                        v-for="item in valid"
-                                        v-bind:value="item.valid"
-                                        v-bind:label="item.name">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-form>
-                <el-col :span="3" style="margin-left: 25px">
+            <el-form :model="filters" label-position="right" label-width="60px">
+                <el-col :span="3">
+                    <el-form-item label="账号:">
+                        <el-input v-model="filters.account"
+                                  placeholder="账号"
+                                  auto-complete="off"
+                                  clearable></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                    <el-form-item label="姓名:">
+                        <el-input v-model="filters.name"
+                                  placeholder="姓名"
+                                  auto-complete="off"
+                                  clearable></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                    <el-form-item label="角色:">
+                        <el-select v-model="filters.roleId" clearable>
+                            <el-option
+                                    v-for="item in allRoles"
+                                    v-bind:value="item.id"
+                                    v-bind:label="item.roleName">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4" :offset="1">
+                    <el-form-item label="显示代理商:" label-width="90px">
+                        <el-switch
+                                v-model="filters.isAgent"
+                                active-text="是"
+                                inactive-text="否">
+                        </el-switch>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                    <el-form-item label="代理商:" v-if="filters.isAgent">
+                        <el-select v-model="filters.agent" clearable>
+                            <el-option
+                                    v-for="item in allAgents"
+                                    v-bind:value="item.id"
+                                    v-bind:label="item.name">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <!--<el-col :span="3">-->
+                    <!--<el-form-item label="状态:">-->
+                        <!--<el-select v-model="filters.valid" clearable>-->
+                            <!--<el-option-->
+                                    <!--v-for="item in valid"-->
+                                    <!--v-bind:value="item.valid"-->
+                                    <!--v-bind:label="item.name">-->
+                            <!--</el-option>-->
+                        <!--</el-select>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
+                <el-col :span="2" :offset="1">
                     <el-button
                             icon="el-icon-search"
                             size="normal"
@@ -68,92 +75,92 @@
                            type="primary"
                            @click="handleAdd">用户
                 </el-button>
+            </el-form>
+        </el-row>
+        <el-row>
+            <el-table
+                    v-loading="loadingUI"
+                    element-loading-text="获取数据中..."
+                    :data="tableData"
+                    border
+                    style="width: 100%;">
+                <el-table-column
+                        width="75"
+                        align="center"
+                        label="序号">
+                    <template scope="scope">
+                        {{scope.$index+startRow}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="account"
+                        label="账号">
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="name"
+                        label="姓名">
+                </el-table-column>
 
-
-                <el-table
-                        v-loading="loadingUI"
-                        element-loading-text="获取数据中..."
-                        :data="tableData"
-                        border
-                        style="width: 100%;">
-                    <el-table-column
-                            width="75"
-                            align="center"
-                            label="序号">
-                        <template scope="scope">
-                            {{scope.$index+startRow}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="account"
-                            label="账号">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="name"
-                            label="姓名">
-                    </el-table-column>
-
-                    <el-table-column
-                            align="center"
-                            label="角色">
-                        <template scope="scope">
-                            {{scope.row.roleId | filterRole}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="代理商">
-                        <template scope="scope">
-                            {{scope.row.agent | filterAgent}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="phone"
-                            label="联系方式">
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            prop="valid"
-                            label="在职情况">
-                        <template scope="scope">
-                            {{scope.row.valid == 1 ? "在职" : "离职"}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            align="center"
-                            label="操作"
-                            width="200">
-                        <template scope="scope">
-                            <el-button
-                                    size="small"
-                                    icon="el-icon-edit"
-                                    type="primary"
-                                    @click="handleEdit(scope.$index, scope.row)">编辑
-                            </el-button>
-                            <el-button
-                                    size="small"
-                                    type="danger"
-                                    icon="el-icon-delete"
-                                    :disabled="scope.row.account=='admin'"
-                                    @click="handleDelete(scope.$index, scope.row)">删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div class="block" style="text-align: center; margin-top: 20px">
-                    <el-pagination
-                            background
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage"
-                            :page-size="pageSize"
-                            layout="total, prev, pager, next, jumper"
-                            :total="totalRecords">
-                    </el-pagination>
-                </div>
-            </el-col>
+                <el-table-column
+                        align="center"
+                        label="角色">
+                    <template scope="scope">
+                        {{scope.row.roleId | filterRole}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        label="代理商">
+                    <template scope="scope">
+                        {{scope.row.agent | filterAgent}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="phone"
+                        label="联系方式">
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        prop="valid"
+                        label="在职情况">
+                    <template scope="scope">
+                        {{scope.row.valid == 1 ? "在职" : "离职"}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        align="center"
+                        label="操作"
+                        width="200">
+                    <template scope="scope">
+                        <el-button
+                                size="small"
+                                icon="el-icon-edit"
+                                type="primary"
+                                @click="handleEdit(scope.$index, scope.row)">编辑
+                        </el-button>
+                        <el-button
+                                size="small"
+                                type="danger"
+                                icon="el-icon-delete"
+                                :disabled="scope.row.account=='admin'"
+                                @click="handleDelete(scope.$index, scope.row)">删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="block" style="text-align: center; margin-top: 20px">
+                <el-pagination
+                        background
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-size="pageSize"
+                        layout="total, prev, pager, next, jumper"
+                        :total="totalRecords">
+                </el-pagination>
+            </div>
         </el-row>
         <el-dialog title="增加用户" :visible.sync="addDialogVisible" width="50%">
             <el-form :model="form">
@@ -378,6 +385,7 @@
                 filters: {
                     name: "",
                     account: "",
+                    isAgent:true,
                     roleId: "",
                     groupId: "",
                     valid: "",
