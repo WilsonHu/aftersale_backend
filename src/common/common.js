@@ -132,7 +132,6 @@ function getAudioType(fileName) {
 	return audioType;
 }
 
-
 Date.prototype.format = function (format) {
 	var o = {
 		"M+": this.getMonth() + 1, //month
@@ -154,7 +153,7 @@ Date.prototype.format = function (format) {
 }
 
 function copyObject(item) {
-	return $.extend(true, {}, item);
+	return Object.assign({}, item);
 }
 
 function copyObjectByJSON(obj) {
