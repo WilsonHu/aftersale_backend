@@ -1,97 +1,97 @@
-<template>
-    <div class="assign_machine_div">
-        <div>
-            <el-col class="well well-lg" style="background-color: white;">
-                <el-form :model="condition" label-position="right" label-width="90px">
-                    <el-row>
-                        <el-col :span="5">
-                            <el-form-item label="机器编号:">
+<template >
+    <div class="assign_machine_div" >
+        <div >
+            <el-col class="well well-lg" style="background-color: white;" >
+                <el-form :model="condition" label-position="right" label-width="90px" >
+                    <el-row >
+                        <el-col :span="5" >
+                            <el-form-item label="机器编号:" >
                                 <el-input v-model="condition.nameplate"
                                           placeholder="机器编号" clearable
-                                          auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-form-item label="订单编号:">
+                                          auto-complete="off" ></el-input >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="5" >
+                            <el-form-item label="订单编号:" >
                                 <el-input v-model="condition.orderNum"
                                           placeholder="订单号" clearable
-                                          auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="2" :offset="12">
+                                          auto-complete="off" ></el-input >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="2" :offset="12" >
                             <el-button
-                                    icon="el-icon-search"
-                                    size="normal"
-                                    type="primary"
-                                    @click="search">查询
-                            </el-button>
-                        </el-col>
-                    </el-row>
-                </el-form>
+		                            icon="el-icon-search"
+		                            size="normal"
+		                            type="primary"
+		                            @click="search" >查询
+                            </el-button >
+                        </el-col >
+                    </el-row >
+                </el-form >
                 <el-table
-                        v-loading="loadingUI"
-                        element-loading-text="获取数据中..."
-                        :data="tableData"
-                        border
-                        empty-text="暂无数据..."
-                        ref="singleTable"
-                        highlight-current-row
-                        show-overflow-tooltip="true"
-                        style="width: 100%; ">
+		                v-loading="loadingUI"
+		                element-loading-text="获取数据中..."
+		                :data="tableData"
+		                border
+		                empty-text="暂无数据..."
+		                ref="singleTable"
+		                highlight-current-row
+		                show-overflow-tooltip="true"
+		                style="width: 100%; " >
                     <el-table-column
-                            width="75"
-                            align="center"
-                            label="序号">
-                        <template scope="scope">
+		                    width="75"
+		                    align="center"
+		                    label="序号" >
+                        <template scope="scope" >
                             {{scope.$index+startRow+1}}
-                        </template>
-                    </el-table-column>
+                        </template >
+                    </el-table-column >
 
                     <el-table-column
-                            align="center"
-                            prop="nameplate"
-                            label="机器编号">
-                    </el-table-column>
+		                    align="center"
+		                    prop="nameplate"
+		                    label="机器编号" >
+                    </el-table-column >
                     <el-table-column
-                            align="center"
-                            prop="machineType"
-                            label="机型">
-                        <template scope="scope">
-                            <div>
-                                {{scope.row.machineType|filterMachineType}}
-                            </div>
-                        </template>
-                    </el-table-column>
+		                    align="center"
+		                    prop="machineTypeName"
+		                    label="机型" >
+                        <template scope="scope" >
+                            <div >
+                                {{scope.row.machineTypeName}}
+                            </div >
+                        </template >
+                    </el-table-column >
                     <el-table-column label="订单号"
                                      align="center"
-                                     prop="orderNum">
-                        <template scope="scope">
-                            <div>
+                                     prop="orderNum" >
+                        <template scope="scope" >
+                            <div >
                                 {{scope.row.orderNum}}
-                            </div>
-                        </template>
-                    </el-table-column>
+                            </div >
+                        </template >
+                    </el-table-column >
                     <el-table-column
-                            align="center"
-                            label="交货日期">
-                        <template slot-scope="scope">
-                        <span>
+		                    align="center"
+		                    label="交货日期" >
+                        <template slot-scope="scope" >
+                        <span >
                             {{(scope.row.shipTime)|filterDateString}}
-                        </span>
-                        </template>
-                    </el-table-column>
-                    <!--<el-table-column-->
-                    <!--align="center"-->
-                    <!--label="出厂日期">-->
-                    <!--<template slot-scope="scope">-->
-                    <!--<span>-->
-                    <!--{{(scope.row.shipTime)|filterDateString}}-->
-                    <!--</span>-->
-                    <!--</template>-->
-                    <!--</el-table-column>-->
+                        </span >
+                        </template >
+                    </el-table-column >
+	                <!--<el-table-column-->
+	                <!--align="center"-->
+	                <!--label="出厂日期">-->
+	                <!--<template slot-scope="scope">-->
+	                <!--<span>-->
+	                <!--{{(scope.row.shipTime)|filterDateString}}-->
+	                <!--</span>-->
+	                <!--</template>-->
+	                <!--</el-table-column>-->
                     <el-table-column width="100"
-                                     label="操作" align="center">
-                        <template scope="scope" style="text-align: center">
+                                     label="操作" align="center" >
+                        <template scope="scope" style="text-align: center" >
                             <!--<el-tooltip placement="top" content="详情">-->
                             <!--<el-button-->
                             <!--size="mini"-->
@@ -100,454 +100,456 @@
                             <!--@click="editWithItem(scope.row)">-->
                             <!--</el-button>-->
                             <!--</el-tooltip>-->
-                            <el-tooltip placement="top" content="分配">
+                            <el-tooltip placement="top" content="分配" >
                                 <el-button
-                                        size="mini"
-                                        type="primary"
-                                        icon="el-icon-news"
-                                        @click="editWithItem(scope.row)">
-                                </el-button>
-                            </el-tooltip>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div class="block" style="text-align: center; margin-top: 20px">
+		                                size="mini"
+		                                type="primary"
+		                                icon="el-icon-news"
+		                                @click="editWithItem(scope.row)" >
+                                </el-button >
+                            </el-tooltip >
+                        </template >
+                    </el-table-column >
+                </el-table >
+                <div class="block" style="text-align: center; margin-top: 20px" >
                     <el-pagination
-                            background
-                            @current-change="handleCurrentChange"
-                            :current-page="currentPage"
-                            :page-size="pageSize"
-                            layout="total, prev, pager, next, jumper"
-                            :total="totalRecords">
-                    </el-pagination>
-                </div>
-            </el-col>
+		                    background
+		                    @current-change="handleCurrentChange"
+		                    :current-page="currentPage"
+		                    :page-size="pageSize"
+		                    layout="total, prev, pager, next, jumper"
+		                    :total="totalRecords" >
+                    </el-pagination >
+                </div >
+            </el-col >
 
-            <el-dialog title="分配机器" :visible.sync="showAssignDialog" append-to-body width="80%">
-                <el-col class="well well-lg" style="background-color: white;">
-                    <el-form :model="dataform" label-position="right" label-width="90px">
-                        <el-row>
-                            <el-col :span="4">
-                                <el-form-item label="订单编号:">
-                                    <span v-html="dataform.orderNum"></span>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="4">
-                                <el-form-item label="客户:">
+            <el-dialog title="分配机器" :visible.sync="showAssignDialog" append-to-body width="80%" >
+                <el-col class="well well-lg" style="background-color: white;" >
+                    <el-form :model="dataform" label-position="right" label-width="90px" >
+                        <el-row >
+                            <el-col :span="4" >
+                                <el-form-item label="订单编号:" >
+                                    <span v-html="dataform.orderNum" ></span >
+                                </el-form-item >
+                            </el-col >
+                            <el-col :span="4" >
+                                <el-form-item label="客户:" >
                                     <el-autocomplete
-                                            v-model="dataform.customerName"
-                                            :fetch-suggestions="queryCustomer"
-                                            placeholder="客户"
+		                                    v-model="dataform.customerName"
+		                                    :fetch-suggestions="queryCustomer"
+		                                    placeholder="客户"
                                     >
-                                    </el-autocomplete>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="5">
-                                <el-form-item label="代理商:">
-                                    <span v-html="dataform.agent"></span>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="5">
-                                <el-form-item label="出厂日期:">
+                                    </el-autocomplete >
+                                </el-form-item >
+                            </el-col >
+                            <el-col :span="5" >
+                                <el-form-item label="代理商:" >
+                                    <span v-html="dataform.agent" ></span >
+                                </el-form-item >
+                            </el-col >
+                            <el-col :span="5" >
+                                <el-form-item label="出厂日期:" >
                                     <el-date-picker
-                                            v-model="dataform.factoryDate"
-                                            type="datetime"
-                                            placeholder="出厂日期"
-                                            align="left"
-                                            :picker-options="pickerOptions">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="2" :offset="4">
+		                                    v-model="dataform.factoryDate"
+		                                    type="datetime"
+		                                    placeholder="出厂日期"
+		                                    align="left"
+		                                    :picker-options="pickerOptions" >
+                                    </el-date-picker >
+                                </el-form-item >
+                            </el-col >
+                            <el-col :span="2" :offset="4" >
                                 <el-button
-                                        icon="el-icon-setting"
-                                        size="normal"
-                                        type="primary"
-                                        @click="onBindMachine">绑定
-                                </el-button>
-                            </el-col>
-                        </el-row>
-                    </el-form>
+		                                icon="el-icon-setting"
+		                                size="normal"
+		                                type="primary"
+		                                @click="onBindMachine" >绑定
+                                </el-button >
+                            </el-col >
+                        </el-row >
+                    </el-form >
                     <el-table
-                            element-loading-text="获取数据中..."
-                            :data="machineTableData"
-                            border
-                            empty-text="暂无数据..."
-                            ref="multipleTable"
-                            @selection-change="handleSelectionChange"
-                            show-overflow-tooltip="true"
-                            style="width: 100%; ">
+		                    element-loading-text="获取数据中..."
+		                    :data="machineTableData"
+		                    border
+		                    empty-text="暂无数据..."
+		                    ref="multipleTable"
+		                    @selection-change="handleSelectionChange"
+		                    show-overflow-tooltip="true"
+		                    style="width: 100%; " >
                         <el-table-column
-                                type="selection"
-                                width="55">
-                        </el-table-column>
+		                        type="selection"
+		                        width="55" >
+                        </el-table-column >
 
                         <el-table-column
-                                align="center"
-                                prop="nameplate"
-                                label="机器编号">
-                        </el-table-column>
+		                        align="center"
+		                        prop="nameplate"
+		                        label="机器编号" >
+                        </el-table-column >
                         <el-table-column
-                                align="center"
-                                prop="machineType"
-                                label="机型">
-                            <template scope="scope">
-                                <div>
-                                    {{scope.row.machineType|filterMachineType}}
-                                </div>
-                            </template>
-                        </el-table-column>
+		                        align="center"
+		                        prop="machineTypeName"
+		                        label="机型" >
+                            <template scope="scope" >
+                                <div >
+                                    {{scope.row.machineTypeName}}
+                                </div >
+                            </template >
+                        </el-table-column >
                         <el-table-column label="订单号"
                                          align="center"
-                                         prop="orderNum">
-                            <template scope="scope">
-                                <div>
+                                         prop="orderNum" >
+                            <template scope="scope" >
+                                <div >
                                     {{scope.row.orderNum}}
-                                </div>
-                            </template>
-                        </el-table-column>
+                                </div >
+                            </template >
+                        </el-table-column >
                         <el-table-column
-                                align="center"
-                                prop="customerName"
-                                label="客户">
-                        </el-table-column>
+		                        align="center"
+		                        prop="customerName"
+		                        label="客户" >
+                        </el-table-column >
                         <el-table-column
-                                align="center"
-                                prop="agent"
-                                label="代理商">
-                        </el-table-column>
+		                        align="center"
+		                        prop="agent"
+		                        label="代理商" >
+                        </el-table-column >
                         <el-table-column
-                                align="center"
-                                label="安装状态">
-                            <template scope="scope">
+		                        align="center"
+		                        label="安装状态" >
+                            <template scope="scope" >
                                 <div v-if="scope.row.status==0"
-                                     style="color: #686868">
+                                     style="color: #686868" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==1"
-                                     style="color: #8b6c0e">
+                                     style="color: #8b6c0e" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==2"
-                                     style="color: #13678b">
+                                     style="color: #13678b" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==3"
-                                     style="color: #198b57">
+                                     style="color: #198b57" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==4"
-                                     style="color: darkred">
+                                     style="color: darkred" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==5"
-                                     style="color: indianred">
+                                     style="color: indianred" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==6"
-                                     style="color: darkred">
+                                     style="color: darkred" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
+                                </div >
                                 <div v-if="scope.row.status==7"
-                                     style="color: red">
+                                     style="color: red" >
                                     {{scope.row.status|filterStatus}}
-                                </div>
-                            </template>
-                        </el-table-column>
+                                </div >
+                            </template >
+                        </el-table-column >
                         <el-table-column
-                                align="center"
-                                label="交货日期">
-                            <template slot-scope="scope">
-                        <span>
+		                        align="center"
+		                        label="交货日期" >
+                            <template slot-scope="scope" >
+                        <span >
                             {{(scope.row.shipTime)|filterDateString}}
-                        </span>
-                            </template>
-                        </el-table-column>
+                        </span >
+                            </template >
+                        </el-table-column >
                         <el-table-column
-                                align="center"
-                                label="出厂日期">
-                            <template slot-scope="scope">
-                        <span>
+		                        align="center"
+		                        label="出厂日期" >
+                            <template slot-scope="scope" >
+                        <span >
                             {{(scope.row.shipTime)|filterDateString}}
-                        </span>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-col>
-                <div slot="footer" class="dialog-footer" style="margin-bottom: 20px">
-                    <el-button @click="showAssignDialog = false" icon="el-icon-back">关闭</el-button>
-                </div>
-            </el-dialog>
-        </div>
-    </div>
-</template>
+                        </span >
+                            </template >
+                        </el-table-column >
+                    </el-table >
+                </el-col >
+                <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
+                    <el-button @click="showAssignDialog = false" icon="el-icon-back" >关闭</el-button >
+                </div >
+            </el-dialog >
+        </div >
+    </div >
+</template >
 
-<script>
+<script >
     import {APIConfig} from '@/config/apiConfig'
     import {Loading} from 'element-ui';
     import {getNotInstallMachineList, requestCustomerList, addMachineList} from '@/api/install_machine'
     import {resetObject} from '@/utils'
     var _this;
     export default {
-        name: 'assign_machine',
-        components: {},
-        data() {
-            _this = this;
-            return {
-                tableData: [],
-                //分页
-                pageSize: APIConfig.EveryPageNum,//每一页的num
-                currentPage: 1,
-                startRow: 0,
-                totalRecords: 0,
-                statusList: APIConfig.MachineStatusList,
-                condition: {
-                    nameplate: '',
-                    orderNum: '',
-                    machineType: '',
-                    customer: '',
-                    isAgent: true,
-                    agent: '',
-                    status: '',
-                    selectDate: '',
-                },
-                showAssignDialog: false,
-                selectedItem: {},
-                customerList: [],
-                customerTimeout: null,
-                dataform: {},
-                machineTableData: [],
-                multipleSelection: [],
+	    name: 'assign_machine',
+	    components: {},
+	    data() {
+		    _this = this;
+		    return {
+			    tableData: [],
+			    //分页
+			    pageSize: APIConfig.EveryPageNum,//每一页的num
+			    currentPage: 1,
+			    startRow: 0,
+			    totalRecords: 0,
+			    statusList: APIConfig.MachineStatusList,
+			    condition: {
+				    nameplate: '',
+				    orderNum: '',
+				    machineType: '',
+				    customer: '',
+				    isAgent: true,
+				    agent: '',
+				    status: '',
+				    selectDate: '',
+			    },
+			    showAssignDialog: false,
+			    selectedItem: {},
+			    customerList: [],
+			    customerTimeout: null,
+			    dataform: {},
+			    machineTableData: [],
+			    multipleSelection: [],
 
-                allMachineType: [],
-                allRoles: [],
-                loadingUI: false,
-                pickerOptions: {
-                    shortcuts: [{
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    }, {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    }, {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }]
-                },
-            }
-        },
-        filters: {
-            filterDateString(strDate)
-            {
-                var resDate = new Date(strDate);
-                return resDate.format("yyyy-MM-dd");
-            },
+			    allMachineType: [],
+			    allRoles: [],
+			    loadingUI: false,
+			    pickerOptions: {
+				    shortcuts: [{
+					    text: '今天',
+					    onClick(picker) {
+						    picker.$emit('pick', new Date());
+					    }
+				    }, {
+					    text: '昨天',
+					    onClick(picker) {
+						    const date = new Date();
+						    date.setTime(date.getTime() - 3600 * 1000 * 24);
+						    picker.$emit('pick', date);
+					    }
+				    }, {
+					    text: '一周前',
+					    onClick(picker) {
+						    const date = new Date();
+						    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+						    picker.$emit('pick', date);
+					    }
+				    }]
+			    },
+		    }
+	    },
+	    filters: {
+		    filterDateString(strDate)
+		    {
+			    var resDate = new Date(strDate);
+			    return resDate.format("yyyy-MM-dd");
+		    },
 
-            filterStatus(id)
-            {
-                var result = _this.statusList[0].name;
-                for (var i = 0; i < _this.statusList.length; i++) {
-                    if (id == _this.statusList[i].value) {
-                        result = _this.statusList[i].name;
-                        break;
-                    }
-                }
-                return result;
-            },
-            filterMachineType(id)
-            {
-                var result = '';
-                for (var i = 0; i < _this.allMachineType.length; i++) {
-                    if (id == _this.allMachineType[i].id) {
-                        result = _this.allMachineType[i].name;
-                        break;
-                    }
-                }
-                return result;
-            },
-        },
-        methods: {
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.search();
-            },
-            search() {
-                this.onSearchDetailData();
-            },
-            onSearchDetailData()
-            {
-                var condition = {
-                    orderNum: this.condition.orderNum.trim(),
-                    nameplate: this.condition.nameplate.trim(),
-                    page: this.currentPage,
-                    size: this.pageSize
-                };
-                getNotInstallMachineList(condition).then(response=> {
-                    if (responseIsOK(response)) {
-                        _this.tableData = response.data.data.list;
-                        _this.totalRecords = response.data.data.total;
-                        _this.startRow = response.data.data.startRow;
-                    }
-                    else {
-                        showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+		    filterStatus(id)
+		    {
+			    var result = _this.statusList[0].name;
+			    for (var i = 0; i < _this.statusList.length; i++) {
+				    if (id == _this.statusList[i].value) {
+					    result = _this.statusList[i].name;
+					    break;
+				    }
+			    }
+			    return result;
+		    },
+		    filterMachineType(id)
+		    {
+			    var result = '';
+			    for (var i = 0; i < _this.allMachineType.length; i++) {
+				    if (id == _this.allMachineType[i].id) {
+					    result = _this.allMachineType[i].name;
+					    break;
+				    }
+			    }
+			    return result;
+		    },
+	    },
+	    methods: {
+		    handleCurrentChange(val) {
+			    this.currentPage = val;
+			    this.search();
+		    },
+		    search() {
+			    this.onSearchDetailData();
+		    },
+		    onSearchDetailData()
+		    {
+			    var condition = {
+				    orderNum: this.condition.orderNum.trim(),
+				    nameplate: this.condition.nameplate.trim(),
+				    isFuzzy: true,
+				    page: this.currentPage,
+				    size: this.pageSize
+			    };
+			    getNotInstallMachineList(condition).then(response=> {
+				    if (responseIsOK(response)) {
+					    _this.tableData = response.data.data.list;
+					    _this.totalRecords = response.data.data.total;
+					    _this.startRow = response.data.data.startRow;
+				    }
+				    else {
+					    showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
 
-                    }
-                })
-            },
+				    }
+			    })
+		    },
 
-            handleSelectionChange(val)
-            {
-                _this.multipleSelection = val;
-            },
+		    handleSelectionChange(val)
+		    {
+			    _this.multipleSelection = val;
+		    },
 
-            onBindMachine()
-            {
-                if (isStringEmpty(_this.dataform.customerName)) {
-                    showMSG(_this, "客户不能为空!");
-                    return;
-                }
-                if (isStringEmpty(_this.dataform.factoryDate)) {
-                    showMSG(_this, "出厂日期不能为空!");
-                    return;
-                }
-                if (this.dataform.factoryDate != null && this.dataform.factoryDate.length > 0) {
-                    this.dataform.factoryDate = this.dataform.factoryDate.format("yyyy-MM-dd");
-                }
-                let machineList = [];
-                let customerId = 0;
-                for (let item of _this.customerList) {
-                    if (item.name == _this.dataform.customerName) {
-                        customerId = item.id;
-                        break;
-                    }
-                }
-                for (let item of _this.multipleSelection) {
-                    let machine = Object.assign(
-                            {
-                                customer: customerId,
-                                facoryDate: _this.dataform.factoryDate,
-                                customerInContract: item.customer,
-                                nameplate: item.nameplate,
-                                orderNum: item.orderNum,
-                                contractNum: item.contractNum,
-                                geoLocation: item.geoLocation,
-                                address: item.address,
-                                status: "0",
-                                machineType: item.machineType,
-                                needleNum: item.needleNum,
-                                xDistance: item.xDistance,
-                                yDistance: item.yDistance,
-                                headDistance: item.headDistance,
-                                headNum: item.headNum,
-                                isOldMachine: "0",
+		    onBindMachine()
+		    {
+			    if (isStringEmpty(_this.dataform.customerName)) {
+				    showMSG(_this, "客户不能为空!");
+				    return;
+			    }
+			    if (isStringEmpty(_this.dataform.factoryDate)) {
+				    showMSG(_this, "出厂日期不能为空!");
+				    return;
+			    }
+			    if (this.dataform.factoryDate != null && this.dataform.factoryDate.length > 0) {
+				    this.dataform.factoryDate = this.dataform.factoryDate.format("yyyy-MM-dd");
+			    }
+			    let machineList = [];
+			    let customerId = 0;
+			    for (let item of _this.customerList) {
+				    if (item.value == _this.dataform.customerName) {
+					    customerId = item.id;
+					    break;
+				    }
+			    }
+			    for (let item of _this.multipleSelection) {
+				    let machine = Object.assign(
+						    {
+							    customer: customerId,
+							    facoryDate: _this.dataform.factoryDate,
+							    customerInContract: item.customerName,
+							    nameplate: item.nameplate,
+							    orderNum: item.orderNum,
+							    contractNum: item.contractNum,
+							    geoLocation: item.geoLocation,
+							    address: item.address,
+							    status: "1",
+							    machineType: item.machineTypeName,
+							    needleNum: item.needleNum,
+							    xDistance: item.xDistance,
+							    yDistance: item.yDistance,
+							    headDistance: item.headDistance,
+							    headNum: item.headNum,
+							    isOldMachine: "0",
 
-                            },)
-                    machineList.push(machine)
-                }
-                addMachineList(machineList).then(response=> {
-                    if (responseIsOK(response)) {
-                        showMessage(_this, "绑定成功!", 1);
-                    }
-                    else {
-                        showMessage(_this, "绑定失败!");
-                    }
-                });
-            },
-            editWithItem(item)
-            {
-                resetObject(this.dataform);
-                _this.selectedItem = Object.assign({}, item);
-                _this.dataform.orderNum = _this.selectedItem.orderNum;
-                _this.showAssignDialog = true;
-                var condition = {
-                    orderNum: _this.selectedItem.orderNum,
-                    nameplate: '',
-                    page: 0,
-                    size: 0
-                };
-                getNotInstallMachineList(condition).then(response=> {
-                    if (responseIsOK(response)) {
-                        _this.machineTableData = response.data.data.list;
-                    }
-                })
-            },
-            initCustomerList() {
-                requestCustomerList().then(response=> {
-                    if (responseIsOK(response)) {
-                        _this.customerList = [];
-                        for (let item of response.data.data.list) {
-                            _this.customerList.push({
-                                value: item.name,
-                                id: item.id,
-                                agent: item.agent,
-                            });
-                        }
-                    }
-                })
-            },
+						    },)
+				    machineList.push(machine)
+			    }
+			    addMachineList(machineList).then(response=> {
+				    if (responseIsOK(response)) {
+					    showMessage(_this, "绑定成功!", 1);
+				    }
+				    else {
+					    showMessage(_this, "绑定失败!");
+				    }
+			    });
+		    },
+		    editWithItem(item)
+		    {
+			    resetObject(this.dataform);
+			    _this.selectedItem = Object.assign({}, item);
+			    _this.dataform.orderNum = _this.selectedItem.orderNum;
+			    _this.showAssignDialog = true;
+			    var condition = {
+				    orderNum: _this.selectedItem.orderNum,
+				    nameplate: '',
+				    isFuzzy: false,
+				    page: 0,
+				    size: 0
+			    };
+			    getNotInstallMachineList(condition).then(response=> {
+				    if (responseIsOK(response)) {
+					    _this.machineTableData = response.data.data.list;
+				    }
+			    })
+		    },
+		    initCustomerList() {
+			    requestCustomerList().then(response=> {
+				    if (responseIsOK(response)) {
+					    _this.customerList = [];
+					    for (let item of response.data.data.list) {
+						    _this.customerList.push({
+							    value: item.name,
+							    id: item.id,
+							    agent: item.agent,
+						    });
+					    }
+				    }
+			    })
+		    },
 
-            queryCustomer(queryString, check) {
-                //缓存加载
-                var results = _this.customerList;
-                if (queryString) {
-                    results = _this.customerList.filter(
-                            p=>p.value.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
-                    );
-                }
-                clearTimeout(_this.customerTimeout);
-                _this.customerTimeout = setTimeout(() => {
-                    check(results);
-                }, 800 * Math.random());
-            },
-            createStateFilter(queryString) {
-                return item => {
-                    return (
-                            item.value.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
-                    );
-                };
-            },
+		    queryCustomer(queryString, check) {
+			    //缓存加载
+			    var results = _this.customerList;
+			    if (queryString) {
+				    results = _this.customerList.filter(
+						    p=>p.value.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
+				    );
+			    }
+			    clearTimeout(_this.customerTimeout);
+			    _this.customerTimeout = setTimeout(() => {
+				    check(results);
+			    }, 800 * Math.random());
+		    },
+		    createStateFilter(queryString) {
+			    return item => {
+				    return (
+						    item.value.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
+				    );
+			    };
+		    },
 
-            initData()
-            {
-                _this.initCustomerList();
-                if (_this.$store.getters.commonData.machineTypeList.length > 0) {
-                    _this.allMachineType = _this.$store.getters.commonData.machineTypeList;
-                }
-                else {
-                    _this.$store.dispatch("getAllMachineType")
-                            .then(() => {
-                                _this.allMachineType = _this.$store.getters.commonData.machineTypeList;
-                            })
-                            .catch((e) => {
-                                showMSG(_this, "getAllMachineType failed!");
-                            });
-                }
-            },
-        },
-        created()
-        {
-            this.initData();
-            this.search();
-        }
+		    initData()
+		    {
+			    _this.initCustomerList();
+			    if (_this.$store.getters.commonData.machineTypeList.length > 0) {
+				    _this.allMachineType = _this.$store.getters.commonData.machineTypeList;
+			    }
+			    else {
+				    _this.$store.dispatch("getAllMachineType")
+						    .then(() => {
+							    _this.allMachineType = _this.$store.getters.commonData.machineTypeList;
+						    })
+						    .catch((e) => {
+							    showMSG(_this, "getAllMachineType failed!");
+						    });
+			    }
+		    },
+	    },
+	    created()
+	    {
+		    this.initData();
+		    this.search();
+	    }
     }
 
-</script>
+</script >
 
-<style scoped>
+<style scoped >
     .assign_machine_div {
-        position: relative;
-        padding: 20px;
-        width: 100%;
-        height: 85vh;
+	    position: relative;
+	    padding: 20px;
+	    width: 100%;
+	    height: 85vh;
     }
-</style>
+</style >
