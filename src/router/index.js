@@ -135,6 +135,12 @@ export const asyncRouterMap = [
 				meta: {title: 'maintain_detail', noCache: true,}
 			},
 			{
+				path: 'maintainTypeManage',
+				component: _import('maintain_manage/maintain_type_manage'),
+				name: 'maintain_type_manage',
+				meta: {title: 'maintain_type_manage', noCache: true,}
+			},
+			{
 				path: 'maintainItem',
 				component: _import('maintain_manage/maintain_item'),
 				name: 'maintain_item',
