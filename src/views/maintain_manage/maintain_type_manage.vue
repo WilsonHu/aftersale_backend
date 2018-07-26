@@ -100,7 +100,7 @@
             addMaintainType,
             updateMaintainType,
             deleteMaintainType,
-    } from '@/api/install_machine'
+    } from '@/api/maintain_manage'
     var _this;
     export default {
         name: 'maintain_type_manage',

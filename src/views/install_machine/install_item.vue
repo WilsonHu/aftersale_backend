@@ -297,7 +297,6 @@
 						    _this.onSearchDetailData();
 						    _this.addContentform.installContent = "";//reset
 						    _this.addDialogVisible = false;
-						    Promise.resolve()
 					    }
 					    else {
 						    showMSG(_this, isStringEmpty(response.data.message) ? "提交失败！" : response.data.message)
@@ -369,7 +368,9 @@
 							    tableData: [],
 						    });
 					    }
-					    _this.activeId = _this.editableTabs[_this.editableTabs.length - 1].id;
+					    if (_this.editableTabs.length > 0) {
+						    _this.activeId = _this.editableTabs[_this.editableTabs.length - 1].id;
+					    }
 					    _this.onSearchDetailData();
 				    }
 				    else {
@@ -381,6 +382,9 @@
 		    onSearchDetailData()
 		    {
 			    let activeTab = _this.getCurrentActiveTab();
+			    if (activeTab == null) {
+				    return;
+			    }
 			    let condition = {
 				    isBaseLib: "1",
 				    installLibName: activeTab.name,
@@ -427,5 +431,9 @@
 	    padding: 20px;
 	    width: 100%;
 	    height: 85vh;
+    }
+
+    .el-select {
+	    width: 100%;
     }
 </style >

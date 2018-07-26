@@ -156,8 +156,8 @@
                     </div >
                 </div >
           </el-tab-pane >
-          <el-tab-pane label="调试总结" >配置管理</el-tab-pane >
-          <el-tab-pane label="客户评价" >角色管理</el-tab-pane >
+          <el-tab-pane label="调试总结" >调试总结</el-tab-pane >
+          <el-tab-pane label="客户评价" >客户评价</el-tab-pane >
         </el-tabs >
 
     </el-form >
