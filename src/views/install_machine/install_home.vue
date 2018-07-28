@@ -243,9 +243,10 @@
 		                    :total="totalRecords" >
                     </el-pagination >
                 </div >
-                <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body width="75%" >
-                    <install-detail :tabSwitchClick="tabContentClick" :formData="formData"
-                                    :activeTabId="activeTabId" ></install-detail >
+                <el-dialog title="安装详情" :visible.sync="showDetailDialog" append-to-body width="75%" >
+                    <InstallDetail ref="installDetail"  v-if="showDetailDialog"
+                                   :machineNameplate="machineNameplate"
+                                    ></InstallDetail >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
@@ -264,16 +265,16 @@
     var _this;
     export default {
 	    name: 'install_home',
-	    components: {InstallDetail},
+	    components: {
+		   InstallDetail
+	    },
 	    data() {
 		    _this = this;
 		    return {
 
 			    //detail info
-			    formData: {},
 			    machineNameplate: '',
 			    selectedItem: {},
-			    activeTabId: '0',
 			    //detail info
 
 			    tableData: [],
@@ -402,18 +403,13 @@
 		    {
 			    _this.selectedItem = item;
 			    _this.machineNameplate = item.nameplate;
-			    _this.formData = {
-				    customer: 'aaaa',
-				    customerPhone: '1367898765',
-				    agnet: 'bbbb'
-			    };
-			    _this.activeTabId = '0';
 			    _this.showDetailDialog = true;
-		    },
-
-		    tabContentClick(tab)
-		    {
-
+			    // 注意：UI中子组件也绑定了v-if="showDetailDialog",这样可以让组件重新初始化，否则数据不能刷新。
+			    //注意：当此子组件没有show出来之前，ref是取不到此子组件的
+			    if (this.$refs.installDetail) {
+				    _this.$refs.installDetail.loadData();//方法1
+				    //this.$refs.installDetail.$emit('onShowDetail') // 方法2，子控件需要注册相应的事件
+			    }
 		    },
 
 		    assignTask(item)//派单

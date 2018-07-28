@@ -8,27 +8,27 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="客户:" >
-                        <span v-html="formData.customer" ></span >
+                        <span v-html="formData.customerInInstallRecord" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="联系方式:" >
-                      <span v-html="formData.customerPhone" ></span >
+                      <span v-html="formData.customerPhoneInInstallRecord" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="代理商:" >
-                      <span v-html="formData.agent" ></span >
+                      <span v-html="formData.machineAgentName" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="联系方式:" >
-                      <span v-html="formData.agentPhone" ></span >
+                      <span v-html="formData.machineAgentPhone" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="出厂日期:" >
-                      <span v-html="formData.outFactoryDate" ></span >
+                      <span v-html="formData.facoryDate" ></span >
                     </el-form-item >
                 </el-col >
             </div >
@@ -41,7 +41,7 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="机器编号:" >
-                        <span v-html="formData.nameplate" ></span >
+                        <span v-html="formData.machineNameplate" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -59,7 +59,7 @@
                       <span v-html="formData.headNum" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
+                <el-col :span="6" >
                     <el-form-item label="头距:" >
                       <span v-html="formData.headDistance" ></span >
                     </el-form-item >
@@ -70,21 +70,21 @@
                       <span v-html="formData.xDistance" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
+                <el-col :span="6" >
                     <el-form-item label="Y行程:" >
                       <span v-html="formData.yDistance" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
-                    <el-form-item label="剪线方式:" >
-                      <span v-html="formData.electricTrim" ></span >
-                    </el-form-item >
-                </el-col >
-                <el-col :span="6"  >
-                    <el-form-item label="电脑:" >
-                      <span v-html="formData.electricPc" ></span >
-                    </el-form-item >
-                </el-col >
+	            <!--<el-col :span="6" >-->
+	            <!--<el-form-item label="剪线方式:" >-->
+	            <!--<span v-html="formData.electricTrim" ></span >-->
+	            <!--</el-form-item >-->
+	            <!--</el-col >-->
+	            <!--<el-col :span="6" >-->
+	            <!--<el-form-item label="电脑:" >-->
+	            <!--<span v-html="formData.electricPc" ></span >-->
+	            <!--</el-form-item >-->
+	            <!--</el-col >-->
             </div >
         </div >
 
@@ -95,27 +95,27 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="调试联系人:" >
-                        <span v-html="formData.customerContacter" ></span >
+                        <span v-html="formData.machineCustomerName" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
+                <el-col :span="6" >
                     <el-form-item label="联系电话:" >
-                      <span v-html="formData.phone" ></span >
+                      <span v-html="formData.machineCustomerPhone" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
+                <el-col :span="6" >
                     <el-form-item label="地址:" >
                       <span v-html="formData.address" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
+                <el-col :span="6" >
                     <el-form-item label="调试员:" >
-                      <span v-html="formData.headNum" ></span >
+                      <span v-html="formData.installChargePersonName" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6"  >
+                <el-col :span="6" >
                     <el-form-item label="调试时间:" >
-                      <span v-html="formData.installDate" ></span >
+                      <span v-html="formData.installActualTime" ></span >
                     </el-form-item >
                 </el-col >
             </div >
@@ -130,27 +130,27 @@
                     <div class="panel-body" style="margin-left: -20px" >
                         <el-col :span="6" >
                             <el-form-item label="调试联系人:" >
-                                <span v-html="formData.customerContacter" ></span >
+                                <span v-html="formData.machineCustomerName" ></span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6"  >
+                        <el-col :span="6" >
                             <el-form-item label="联系电话:" >
-                              <span v-html="formData.phone" ></span >
+                              <span v-html="formData.machineCustomerPhone" ></span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6"  >
+                        <el-col :span="6" >
                             <el-form-item label="地址:" >
                               <span v-html="formData.address" ></span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6"  >
+                        <el-col :span="6" >
                             <el-form-item label="调试员:" >
-                              <span v-html="formData.headNum" ></span >
+                              <span v-html="formData.installChargePersonName" ></span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6"  >
+                        <el-col :span="6" >
                             <el-form-item label="调试时间:" >
-                              <span v-html="formData.installDate" ></span >
+                              <span v-html="formData.installActualTime" ></span >
                             </el-form-item >
                         </el-col >
                     </div >
@@ -166,37 +166,39 @@
 
 <script >
  import {APIConfig} from '@/config/apiConfig'
+ import {getInstallDetail} from '@/api/install_machine';
+ import {resetObject} from '@/utils'
  var _this;
+
  export default {
-	 name: 'install-detail',
+	 name: 'InstallDetail',
 	 props: {
 		 machineNameplate: {
 			 type: String,
 			 default: ''
 		 },
-		 formData: {
-			 type: Object,
-			 default: {}
-		 },
-		 activeTabId: {
-			 type: String,
-			 default: ''
-		 },
-		 tabSwitchClick: {
-			 type: Function,
-			 default: null
-		 }
+//		 formData: {
+//			 type: Object,
+//			 default: {}
+//		 },
+//		 activeTabId: {
+//			 type: String,
+//			 default: ''
+//		 },
+//		 tabSwitchClick: {
+//			 type: Function,
+//			 default: null
+//		 }
 	 },
 	 data() {
 		 _this = this;
 		 return {
 			 statusList: APIConfig.MachineStatusList,
+			 loading: {},
+			 formData: {},
+			 activeTabId: 0,
 		 }
 	 },
-	 mounted() {
-
-	 },
-
 	 filters: {
 		 filterDateString(strDate)
 		 {
@@ -216,7 +218,49 @@
 			 return result;
 		 },
 	 },
-	 methods: {},
+	 methods: {
+		 loadData()
+		 {
+             this.formData={};
+             _this.loading = this.$loading({
+				 lock: true,
+				 text: '拼命加载中',
+				 spinner: 'el-icon-loading',
+				 background: 'rgba(0, 0, 0, 0.7)'
+			 });
+			 if (_this.machineNameplate != null) {
+				 var condition = {
+					 nameplate: _this.machineNameplate,
+				 };
+				 getInstallDetail(condition).then(response => {
+					 if (responseIsOK(response)) {
+						 if (response.data.data.list.length > 0) {
+							 _this.formData = response.data.data.list[0];
+						 }
+					 }
+					 else {
+						 showMSG(_this, isStringEmpty(response.data.message) ? "加载数据失败！" : response.data.message)
+					 }
+					 _this.loading.close();
+				 }).catch(error=> {
+					 _this.loading.close();
+				 })
+			 }
+		 },
+		 tabSwitchClick(tab)
+		 {
+			 console.log("tabSwitchClick:" + tab);
+
+		 },
+	 },
+
+	 mounted(){
+		 _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
+//		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
+//			 _this.loadData();
+//			 console.log('监听成功')
+//		 })
+	 },
  }
 </script >
 
