@@ -7,7 +7,7 @@
                         <el-col :span="5" >
                             <el-form-item label="机器编号:" >
                                 <el-input v-model="condition.nameplate"
-                                          placeholder="订单号" clearable
+                                          placeholder="机器编号" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >

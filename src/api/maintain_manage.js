@@ -3,6 +3,27 @@
  */
 import request from '@/utils/request'
 
+//maintain
+export function getMaintainRecordInfoList(condition) {
+	let params = new URLSearchParams();
+	let keys = Object.keys(condition);
+	for (let key of keys) {
+		params.append(key, condition[key]);
+	}
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'maintain/record/getMaintainRecordInfoList',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+
 //maintain_type
 export function getMaintainTypeList() {
 	let params = new URLSearchParams();
