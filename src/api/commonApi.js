@@ -38,3 +38,38 @@ export function selectUsers(condition) {
 		})
 	})
 }
+
+//查询客户集合 -5:客户 -6:客户的联系人
+export function requestCustomerList() {
+	let params = new URLSearchParams();
+	params.append("type", "5");
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'user/getUsersByType',
+			method: 'post',
+			data: {}
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+
+//查询员工集合 type=3
+export function requestEmployeeList() {
+	let params = new URLSearchParams();
+	params.append("type", "3");
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'user/getUsersByType',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}

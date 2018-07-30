@@ -239,8 +239,8 @@
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
-	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="50%" >
-					<AssignTask :showType="0" ref="assignTask"  v-if="showAssignTaskDialog"></AssignTask >
+	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" >
+					<AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
 	                    <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check" >确定</el-button >
                         <el-button @click="showAssignTaskDialog = false" icon="el-icon-back" >关闭</el-button >
@@ -385,6 +385,9 @@
 		    onConfirmAssign()
 		    {
 			    _this.showAssignTaskDialog = false;
+			    if (this.$refs.assignTask) {
+				    let resultData = _this.$refs.assignTask.getCurrentData();
+			    }
 		    },
 
 		    editWithItem(row)
