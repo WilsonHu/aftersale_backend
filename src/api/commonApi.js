@@ -47,7 +47,7 @@ export function requestCustomerList() {
 		return request({
 			url: 'user/getUsersByType',
 			method: 'post',
-			data: {}
+			data: params
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {

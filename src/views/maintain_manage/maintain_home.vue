@@ -234,15 +234,16 @@
                 </div >
                 <el-dialog title="保养详情" :visible.sync="showDetailDialog" append-to-body width="75%" >
                     <!--<install-detail :tabSwitchClick="tabContentClick" :formData="formData"-->
-                    <!--:activeTabId="activeTabId"></install-detail>-->
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
-	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" >
-					<AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog" ></AssignTask >
+	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" height="60%">
+					<AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
+					            :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
-	                    <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check" >确定</el-button >
+	                    <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check"
+	                               :disabled="isDisableOK" >确定</el-button >
                         <el-button @click="showAssignTaskDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
@@ -289,6 +290,13 @@
 			    },
 			    showDetailDialog: false,
 			    showAssignTaskDialog: false,
+			    assignTaskData: {
+				    formData: {
+					    planDate: '',
+					    customerName: '',
+				    },
+				    workerList: [],
+			    },
 			    pickerOptions: {
 				    shortcuts: [{
 					    text: '最近一周',
@@ -341,7 +349,21 @@
 			    return result;
 		    },
 	    },
+
+	    computed: {
+		    isDisableOK: {//property
+			    get: function () {//getter
+				    if (_this.assignTaskData.formData.planDate == "" || _this.assignTaskData.formData.customerName == "" || _this.assignTaskData.workerList.length < 1) {
+					    return true;
+				    }
+				    return false;
+			    },
+		    },
+	    },
 	    methods: {
+		    dataChanged(val){
+			    _this.assignTaskData = Object.assign({}, val)
+		    },
 		    handleCurrentChange(val) {
 			    this.currentPage = val;
 			    this.search();
@@ -382,11 +404,13 @@
 				    //this.$refs.AssignTask.$emit('onShowDetail') // 方法2，子控件需要注册相应的事件
 			    }
 		    },
+
+		    //Submit OK
 		    onConfirmAssign()
 		    {
 			    _this.showAssignTaskDialog = false;
 			    if (this.$refs.assignTask) {
-				    let resultData = _this.$refs.assignTask.getCurrentData();
+				    _this.assignTaskData = _this.$refs.assignTask.getCurrentData();
 			    }
 		    },
 

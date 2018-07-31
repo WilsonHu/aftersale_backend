@@ -93,8 +93,12 @@
 		 showType: 0,
 //		 resultData: {
 //			 type: Object,
-//			 default: {}
+//			 default:{}
 //		 },
+		 dataChanged: {
+			 type: Function,
+			 default: null
+		 }
 	 },
 	 data() {
 		 _this = this;
@@ -223,13 +227,6 @@
 			 }
 		 },
 
-		 //父组件调用
-		 submitData()
-		 {
-			 console.log("submitData:");
-
-		 },
-
 		 getCurrentData()
 		 {
 			 if (this.formData.planDate != null && this.formData.planDate.length > 0) {
@@ -244,6 +241,15 @@
 		 onSelectedChanged(selectObj)
 		 {
 			 _this.formData.customerPhone = selectObj.phone;
+			 _this.formData.address = selectObj.phone;
+		 },
+	 },
+	 watch: {
+		 formData: function (val) {
+			 _this.dataChanged(_this.getCurrentData());
+		 },
+		 multipleSelection: function (val) {
+			 _this.dataChanged(_this.getCurrentData());
 		 },
 	 },
 
@@ -256,9 +262,9 @@
 
 <style scoped >
 .root_div {
-	position: relative;
-	padding: 20px;
-	width: 100%;
+	/*position: relative;*/
+	/*padding: 20px;*/
+	/*width: 100%;*/
 }
 
 span {
