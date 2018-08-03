@@ -29,7 +29,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="4" :offset="1">
+                <el-col :span="3" :offset="1">
                     <el-form-item label="显示代理商:" label-width="90px">
                         <el-switch
                                 v-model="filters.isAgent"
@@ -38,7 +38,7 @@
                         </el-switch>
                     </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="3">
                     <el-form-item label="代理商:" v-if="filters.isAgent">
                         <el-select v-model="filters.agent" clearable>
                             <el-option
@@ -49,17 +49,17 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <!--<el-col :span="3">-->
-                    <!--<el-form-item label="状态:">-->
-                        <!--<el-select v-model="filters.valid" clearable>-->
-                            <!--<el-option-->
-                                    <!--v-for="item in valid"-->
-                                    <!--v-bind:value="item.valid"-->
-                                    <!--v-bind:label="item.name">-->
-                            <!--</el-option>-->
-                        <!--</el-select>-->
-                    <!--</el-form-item>-->
-                <!--</el-col>-->
+                <el-col :span="3">
+                    <el-form-item label="在职:">
+                        <el-select v-model="filters.valid" clearable>
+                            <el-option
+                                    v-for="item in valid"
+                                    v-bind:value="item.valid"
+                                    v-bind:label="item.name">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
                 <el-col :span="2" :offset="1">
                     <el-button
                             icon="el-icon-search"
@@ -112,15 +112,15 @@
                 </el-table-column>
                 <el-table-column
                         align="center"
+                        prop="phone"
+                        label="联系方式">
+                </el-table-column>
+                <el-table-column
+                        align="center"
                         label="代理商">
                     <template scope="scope">
                         {{scope.row.agent | filterAgent}}
                     </template>
-                </el-table-column>
-                <el-table-column
-                        align="center"
-                        prop="phone"
-                        label="联系方式">
                 </el-table-column>
                 <el-table-column
                         align="center"
@@ -162,9 +162,8 @@
                 </el-pagination>
             </div>
         </el-row>
-        <el-dialog title="增加用户" :visible.sync="addDialogVisible" width="50%">
+        <el-dialog title="增加用户" :visible.sync="addDialogVisible" width="60%">
             <el-form :model="form">
-
                 <el-col :span="8">
                     <el-form-item label="账号：" :label-width="formLabelWidth">
                         <el-input v-model="form.account" @change="onChange"></el-input>
@@ -176,16 +175,11 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="密码：" :label-width="formLabelWidth">
-                        <el-input v-model="form.password" @change="onChange"></el-input>
+                    <el-form-item label="联系方式：" :label-width="formLabelWidth">
+                        <el-input v-model="form.phone" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <!--<el-col :span="12">-->
-                <!--<el-form-item label="确认密码：" :label-width="formLabelWidth">-->
-                <!--<el-input v-model="form.confirmpwd" @change="onChange"></el-input>-->
-                <!--</el-form-item>-->
-                <!--</el-col>-->
-                <el-col :span="6">
+                <el-col :span="8">
                     <el-form-item label="角色：" :label-width="formLabelWidth">
                         <el-select v-model="form.roleId" @change="onChange">
                             <el-option
@@ -196,7 +190,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                     <el-form-item label="代理商：" :label-width="formLabelWidth">
                         <el-select v-model="form.agent" @change="onChange" clearable>
                             <el-option
@@ -207,18 +201,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item label="销售组：" :label-width="formLabelWidth">
-                        <el-select v-model="form.marketGroupName" @change="onChange" clearable>
-                            <el-option
-                                    v-for="item in allMarketGroups"
-                                    v-bind:value="item.groupName"
-                                    v-bind:label="item.groupName">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                     <el-form-item label="在职情况：" :label-width="formLabelWidth">
                         <el-select v-model="form.valid" @change="onChange">
                             <el-option
@@ -334,9 +317,9 @@
 
 <script>
     var _this;
-    import {getAllRole, selectUsers} from '@/api/staff';
+    import {getAllRole, selectUsers, addStaff} from '@/api/user';
     import {getAllAgent} from '@/api/agent';
-    import {APIConfig} from '@/config/apiConfig'
+    import {APIConfig} from '@/config/apiConfig';
 
     export default {
         name: 'staff_manage',
@@ -360,11 +343,9 @@
                 form: {
                     account: "",
                     name: "",
-                    password: "",
-                    confirmpwd: "",
                     roleId: "",
                     agent: "",
-                    marketGroupName: "",
+                    phone: "",
                     valid: 1
                 },
                 formLabelWidth: '100px',
@@ -522,22 +503,21 @@
                     this.errorMsg = '姓名不能为空';
                 }
 
-                // if (!iserror && !isEdit) {
-                //     if (isStringEmpty(formObj.password)) {
-                //         iserror = true;
-                //         this.errorMsg = '密码不能为空';
-                //     } else if (!isEdit && formObj.password != formObj.confirmpwd) {
-                //         iserror = true;
-                //         this.errorMsg = '密码和确认密码不一致';
-                //     }
-                // }
+                if (!iserror && isStringEmpty(formObj.phone)) {
+                    iserror = true;
+                    this.errorMsg = '联系方式不能为空';
+                }
+
+                if(!iserror && !isPoneAvailable(formObj.phone)) {
+                    iserror = true;
+                    this.errorMsg = '手机号格式不正确';
+                }
 
                 if (!iserror && formObj.roleId == "") {
                     iserror = true;
                     this.errorMsg = '请选择角色';
                 }
 
-                //group检查不是必选项
                 if (!iserror) {
                     this.errorMsg = ""
                 }
@@ -549,25 +529,16 @@
                 this.isError = _this.validateForm(this.form, false);
 
                 if (!this.isError) {
-                    // $.ajax({
-                    //     url: HOST + "user/add",
-                    //     type: 'POST',
-                    //     dataType: 'json',
-                    //     data: {"user": JSON.stringify(this.form)},
-                    //     success: function (data) {
-                    //         if (data.code == 200) {
-                    //             _this.onSelectUsers();
-                    //             _this.addDialogVisible = false;
-                    //             showMessage(_this, '添加成功', 1);
-                    //         } else {
-                    //             _this.isError = true;
-                    //             _this.errorMsg = data.message;
-                    //         }
-                    //     },
-                    //     error: function (data) {
-                    //         _this.errorMsg = '服务器访问出错！';
-                    //     }
-                    // })
+                    addStaff(this.form).then(response => {
+                        if (responseIsOK(response)) {
+                            showMSG(_this, "添加员工成功！", 1);
+                            _this.addDialogVisible = false;
+                            this.onSelectUsers();
+                        }
+                        else {
+                            showMessage(_this,isStringEmpty(response.data.message) ? "添加员工失败！" : response.data.message);
+                        }
+                    });
                 }
 
             },
@@ -600,7 +571,7 @@
             initAllRoles() {
                 getAllRole().then(response => {
                     if (response.data.code == 200) {
-                        _this.allRoles = response.data.data.list;
+                        _this.allRoles = response.data.data.list.filter(item => (item.roleName.indexOf("客户") === -1 && item.roleName.indexOf("联系人") === -1));
                         Promise.resolve()
                     }
                     else {

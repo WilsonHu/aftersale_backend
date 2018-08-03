@@ -20,3 +20,11 @@ export function selectUsers(condition) {
         data: params
     })
 }
+
+export function addStaff(condition) {
+    return request({
+        url: 'user/addStaff',
+        method: 'post',
+        data: condition
+    })
+}

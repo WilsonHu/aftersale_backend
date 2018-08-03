@@ -96,9 +96,13 @@ function regIsEmail(fData) {
 }
 
 //判断手机号是否正确
-function regIsPhone(fData) {
-	var reg = /^1\d{10}$/;
-	return reg.test(fData);
+function isPoneAvailable(phone) {
+	var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+	if (phone.length != 11 || !myreg.test(phone)) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 function getAudioType(fileName) {
@@ -180,7 +184,7 @@ function showMessage(obj, msg, msgType = 0) {
 			break
 	}
 	var dialog = obj.$notify({
-		title: title,
+		//title: title,
 		showClose: true,
 		message: msg,
 		type: dialogType,
