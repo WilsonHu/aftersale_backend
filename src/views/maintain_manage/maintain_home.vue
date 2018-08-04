@@ -7,7 +7,7 @@
                         <el-col :span="5" >
                             <el-form-item label="机器编号:" >
                                 <el-input v-model="condition.nameplate"
-                                          placeholder="订单号" clearable
+                                          placeholder="机器编号" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
@@ -247,13 +247,54 @@
 		                    :total="totalRecords" >
                     </el-pagination >
                 </div >
+	            <el-dialog title="添加保养" :visible.sync="showAddDialog" append-to-body width="50%" >
+					 <el-form :model="formData" label-position="right" label-width="90px" >
+						 <el-row >
+							 <el-col :span="12" >
+								 <el-form-item label="机器编号:" >
+									  <el-input placeholder="选择机器" v-model="formData.machineNameplate"
+									            class="input-with-select" >
+									    <el-button slot="append" icon="el-icon-search"
+									               @click="onShowSelectMachine" ></el-button >
+									  </el-input >
+								 </el-form-item >
+							 </el-col >
+							 <el-col :span="12" >
+								 <el-form-item label="保养项:" >
+									 <el-select v-model="formData.maintainLibName" clearable >
+										 <el-option
+												 v-for="item in mainTainLibList"
+												 :value="item.maintainLibName"
+												 :label="item.maintainLibName" >
+                                         </el-option >
+                                     </el-select >
+								 </el-form-item >
+							 </el-col >
+						 </el-row >
+					 </el-form >
+                    <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
+	                    <el-button type="primary" @click="onAddOK" icon="el-icon-check"
+	                    >确定</el-button >
+                        <el-button @click="showAddDialog = false" icon="el-icon-back" >关闭</el-button >
+                    </div >
+                </el-dialog >
+	            <el-dialog title="选择机器" :visible.sync="showSelectMachineDialog" append-to-body width="50%" >
+                    <SelectAssignMachine ref="selectMachineControl" v-if="showSelectMachineDialog"
+                                         :dataChanged="onSelectMachineChanged" >
+                    </SelectAssignMachine >
+                    <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
+	                    <el-button type="primary" @click="onSelectMachineOK" icon="el-icon-check"
+	                    >确定</el-button >
+                        <el-button @click="showSelectMachineDialog = false" icon="el-icon-back" >关闭</el-button >
+                    </div >
+                </el-dialog >
                 <el-dialog title="保养详情" :visible.sync="showDetailDialog" append-to-body width="75%" >
                     <!--<install-detail :tabSwitchClick="tabContentClick" :formData="formData"-->
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
-	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" height="60%" >
+	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" >
 					<AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
 					            :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
@@ -279,12 +320,19 @@
 <script >
     import {APIConfig} from '@/config/apiConfig'
     import {Loading} from 'element-ui';
-    import {getMaintainRecordInfoList, assignTaskToSubmit} from '@/api/maintain_manage';
+    import {
+		    getMaintainRecordInfoList,
+		    assignTaskToSubmit,
+		    selectLibList,
+		    addMainTainRecorder
+    } from '@/api/maintain_manage';
     import AssignTask from '@/views/common_component/assign_task';
+    import SelectAssignMachine from '@/views/common_component/select_assign_machine';
+    import {resetObject} from '@/utils'
     var _this;
     export default {
 	    name: 'maintain_home',
-	    components: {AssignTask},
+	    components: {AssignTask, SelectAssignMachine},
 	    data() {
 		    _this = this;
 		    return {
@@ -321,6 +369,12 @@
 				    },
 				    workerList: [],
 			    },
+			    showAddDialog: false,
+			    formData: {},
+			    showSelectMachineDialog: false,
+			    selectedMachine: {},
+			    mainTainLibList: [],
+
 			    pickerOptions: {
 				    shortcuts: [{
 					    text: '最近一周',
@@ -385,8 +439,76 @@
 		    },
 	    },
 	    methods: {
-		    handleAddMaintain(){
+		    onSelectMachineChanged(val)
+		    {
+			    _this.selectedMachine = Object.assign({}, val);
+		    },
+		    onShowSelectMachine()
+		    {
+			    _this.selectedMachine = null;
+			    _this.showSelectMachineDialog = true;
+		    },
+		    onSelectMachineOK()
+		    {
 
+			    _this.showSelectMachineDialog = false;
+			    if (this.$refs.selectMachineControl) {
+				    _this.selectedMachine = _this.$refs.selectMachineControl.getCurrentData();
+			    }
+			    if (_this.selectedMachine != null) {
+				    _this.formData.machineNameplate = _this.selectedMachine.nameplate;
+			    }
+		    },
+		    onAddOK()
+		    {
+			    if (isStringEmpty(_this.formData.machineNameplate)) {
+				    showMessage(_this, "请选择要保养的机器！")
+				    return;
+			    }
+			    if (isStringEmpty(_this.formData.machineNameplate)) {
+				    showMessage(_this, "请选择保养项！")
+				    return;
+			    }
+			    _this.showAddDialog = false;
+			    let submitData = {
+				    machineNameplate: _this.formData.machineNameplate,
+				    maintainLibName: _this.formData.maintainLibName,
+				    createTime: new Date().format("yyyy-MM-dd"),
+				    maintainStatus: 0,
+			    };
+			    addMainTainRecorder(submitData).then(response=> {
+				    if (responseIsOK(response)) {
+					    showMSG(_this, "提交保养数据成功！", 1)
+					    _this.onSearchDetailData();
+				    }
+				    else {
+					    showMSG(_this, isStringEmpty(response.data.message) ? "提交保养数据失败！" : response.data.message)
+
+				    }
+			    })
+		    },
+
+		    handleAddMaintain(){
+			    resetObject(_this.formData);
+			    if (_this.mainTainLibList.length == 0) {
+				    let condition = {
+					    maintainType: "0",
+					    maintainLibName: '',
+				    };
+				    selectLibList(condition).then(response=> {
+					    if (responseIsOK(response)) {
+						    _this.mainTainLibList = response.data.data.list;
+						    _this.showAddDialog = true;
+					    }
+					    else {
+						    showMSG(_this, isStringEmpty(response.data.message) ? "获取保养项数据失败！" : response.data.message)
+
+					    }
+				    })
+			    }
+			    else {
+				    _this.showAddDialog = true;
+			    }
 		    },
 		    onConShowAssign()
 		    {
@@ -480,25 +602,23 @@
 			    _this.assignTaskData.workerList.forEach(item=> {
 				    memberList.push({
 					    userId: item.id,
+					    installRecordId: _this.selectedItem.id,
 				    });
 			    });
 			    let submitData = {
 				    maintainRecord: {
-//					    id: 0,
-					    machineNameplate: _this.selectedItem.machineNameplate,
-					    maintainLibName: _this.selectedItem.maintainLibName,
-					    maintainDatePlan: _this.assignTaskData.formData.planDate,
+					    id: _this.selectedItem.id,
 					    maintainChargePerson: _this.assignTaskData.formData.chargePersonId,
 					    customer: _this.assignTaskData.formData.customerId,
-//					    maintainSuggestion: "",
-//					    createTime: new Date().format("yyyy-MM-dd"),
-//					    maintainInfo: "",
+					    maintainDatePlan: _this.assignTaskData.formData.planDate,
+
 				    },
 				    installMembers: memberList,
 			    };
 			    assignTaskToSubmit(submitData).then(response=> {
 				    if (responseIsOK(response)) {
 					    showMSG(_this, "分配任务成功！", 1)
+					    _this.onSearchDetailData();
 				    }
 				    else {
 					    showMSG(_this, isStringEmpty(response.data.message) ? "分配任务失败！" : response.data.message)
@@ -527,6 +647,10 @@
 	    padding: 20px;
 	    width: 100%;
 	    height: 85vh;
+    }
+
+    .input-with-select .el-input-group__prepend {
+	    background-color: #fff;
     }
 
     .el-select {

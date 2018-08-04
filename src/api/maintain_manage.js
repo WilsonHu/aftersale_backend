@@ -91,10 +91,14 @@ export function deleteMaintainType(id) {
 
 export function selectLibList(condition) {
 	let params = new URLSearchParams();
-	params.append('page', condition.page);
-	params.append('size', condition.size);
-	params.append('maintainType', condition.maintainType);
-	params.append('maintainLibName', condition.maintainLibName);
+	let keys = Object.keys(condition);
+	for (let key of keys) {
+		params.append(key, condition[key]);
+	}
+	// params.append('page', condition.page);
+	// params.append('size', condition.size);
+	// params.append('maintainType', condition.maintainType);
+	// params.append('maintainLibName', condition.maintainLibName);
 	return request({
 		url: 'maintain/lib/selectLibList',
 		method: 'post',
@@ -176,6 +180,23 @@ export function assignTaskToSubmit(condition) {
 		}
 		return request({
 			url: 'maintain/record/AssignTask',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+// /add
+export function addMainTainRecorder(submitData) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		params.append('maintainRecord', JSON.stringify(submitData));
+		return request({
+			url: 'maintain/record/add',
 			method: 'post',
 			data: params
 		}).then(response=> {
