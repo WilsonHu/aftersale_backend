@@ -139,7 +139,7 @@
                                 size="small"
                                 icon="el-icon-edit"
                                 type="primary"
-                                @click="handleEdit(scope.$index, scope.row)">编辑
+                                @click="handleEdit(scope.row)">编辑
                         </el-button>
                         <el-button
                                 size="small"
@@ -225,7 +225,7 @@
             </div>
         </el-dialog>
 
-        <el-dialog title="编辑用户" :visible.sync="modifyDialogVisible" width="50%">
+        <el-dialog title="编辑用户" :visible.sync="modifyDialogVisible" width="60%">
             <el-form :model="modifyForm">
                 <el-col :span="8">
                     <el-form-item label="账号：" :label-width="formLabelWidth">
@@ -239,8 +239,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="密码：" :label-width="formLabelWidth">
-                        <el-input v-model="modifyForm.password" @change="onChange"></el-input>
+                    <el-form-item label="联系方式：" :label-width="formLabelWidth">
+                        <el-input v-model="modifyForm.phone" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
                 <!--<el-col :span="12">-->
@@ -248,7 +248,7 @@
                 <!--<el-input v-model="modifyForm.confirmpwd" @change="onChange"></el-input>-->
                 <!--</el-form-item>-->
                 <!--</el-col>-->
-                <el-col :span="6">
+                <el-col :span="8">
                     <el-form-item label="角色：" :label-width="formLabelWidth">
                         <el-select v-model="modifyForm.roleId" @change="onChange">
                             <el-option
@@ -259,29 +259,18 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item label="安装组：" :label-width="formLabelWidth">
-                        <el-select v-model="modifyForm.groupId" @change="onChange" clearable>
+                <el-col :span="8">
+                    <el-form-item label="代理商：" :label-width="formLabelWidth">
+                        <el-select v-model="modifyForm.agent" @change="onChange" clearable>
                             <el-option
                                     v-for="item in allAgents"
                                     v-bind:value="item.id"
-                                    v-bind:label="item.groupName">
+                                    v-bind:label="item.name">
                             </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                    <el-form-item label="销售组：" :label-width="formLabelWidth">
-                        <el-select v-model="modifyForm.marketGroupName" @change="onChange" clearable>
-                            <el-option
-                                    v-for="item in allMarketGroups"
-                                    v-bind:value="item.groupName"
-                                    v-bind:label="item.groupName">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                     <el-form-item label="在职情况：" :label-width="formLabelWidth">
                         <el-select v-model="modifyForm.valid" @change="onChange">
                             <el-option
@@ -317,7 +306,7 @@
 
 <script>
     var _this;
-    import {getAllRole, selectUsers, addStaff} from '@/api/user';
+    import {getAllRole, selectUsers, addStaff,updateUser} from '@/api/system_manage';
     import {getAllAgent} from '@/api/agent';
     import {APIConfig} from '@/config/apiConfig';
 
@@ -346,27 +335,24 @@
                     roleId: "",
                     agent: "",
                     phone: "",
-                    valid: 1
+                    valid: "1"
                 },
                 formLabelWidth: '100px',
 
                 //增加对话框
                 modifyDialogVisible: false,
                 modifyForm: {
-                    id: '',
                     account: "",
                     name: "",
-                    password: "",
-                    confirmpwd: "",
                     roleId: "",
-                    groupId: "",
-                    marketGroupName: "",
-                    valid: ""
+                    agent: "",
+                    phone: "",
+                    valid: "1"
                 },
                 filters: {
                     name: "",
                     account: "",
-                    isAgent:true,
+                    isAgent: true,
                     roleId: "",
                     groupId: "",
                     valid: "",
@@ -374,11 +360,12 @@
                 allRoles: [],
                 allAgents: [],
                 allMarketGroups: [],
-                valid: [{"valid": 1, "name": "在职"}, {"valid": 0, "name": "离职"}],
+                valid: [{"valid": "1", "name": "在职"}, {"valid": "0", "name": "离职"}],
                 loadingUI: false,
             }
         },
         methods: {
+
             onChange: function () {
                 if (_this.addDialogVisible) {
                     _this.isError = _this.validateForm(_this.form, false);
@@ -410,7 +397,6 @@
                         _this.totalRecords = response.data.data.total;
                         _this.tableData = response.data.data.list;
                         _this.startRow = response.data.data.startRow;
-                        Promise.resolve()
                         _this.loadingUI = false;
                     }
                     else {
@@ -418,24 +404,6 @@
                         _this.loadingUI = false;
                     }
                 });
-                // $.ajax({
-                //     url: HOST + "/user/selectUsers",
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: _this.filters,
-                //     success: function (data) {
-                //         if (data.code == 200) {
-                //             _this.totalRecords = data.data.total;
-                //             _this.tableData = data.data.list;
-                //             _this.startRow = data.data.startRow;
-                //         }
-                //         _this.loadingUI = false;
-                //     },
-                //     error: function (data) {
-                //         showMessage(_this, '服务器访问出错', 0);
-                //         _this.loadingUI = false;
-                //     }
-                // })
             },
 
 
@@ -445,19 +413,16 @@
                 this.addDialogVisible = true;
             },
 
-            handleEdit(index, item) {
+            handleEdit(item) {
                 this.isError = false;
                 this.errorMsg = '';
                 this.selectedItem = item;
-
                 this.modifyForm.id = item.id;
                 this.modifyForm.account = item.account;
                 this.modifyForm.name = item.name;
-                this.modifyForm.roleId = item.role.id;
-                this.modifyForm.groupId = item.group != null ? item.group.id : "";
-                this.modifyForm.marketGroupName = item.marketGroupName != null ? item.marketGroupName : "";
-                this.modifyForm.password = "";
-                this.modifyForm.confirmpwd = "";
+                this.modifyForm.agent = item.agent;
+                this.modifyForm.phone = item.phone;
+                this.modifyForm.roleId = item.roleId;
                 this.modifyForm.valid = item.valid;
                 this.isError = this.validateForm(this.modifyForm, true);
                 this.modifyDialogVisible = true;
@@ -508,7 +473,7 @@
                     this.errorMsg = '联系方式不能为空';
                 }
 
-                if(!iserror && !isPoneAvailable(formObj.phone)) {
+                if (!iserror && !isPoneAvailable(formObj.phone)) {
                     iserror = true;
                     this.errorMsg = '手机号格式不正确';
                 }
@@ -536,7 +501,7 @@
                             this.onSelectUsers();
                         }
                         else {
-                            showMessage(_this,isStringEmpty(response.data.message) ? "添加员工失败！" : response.data.message);
+                            showMessage(_this, isStringEmpty(response.data.message) ? "添加员工失败！" : response.data.message);
                         }
                     });
                 }
@@ -545,26 +510,16 @@
             onEidt() {
                 this.isError = this.validateForm(this.modifyForm, true);
                 if (!_this.isError) {
-                    // $.ajax({
-                    //     url: HOST + "user/update",
-                    //     type: 'POST',
-                    //     dataType: 'json',
-                    //     data: {"user":JSON.stringify(_this.modifyForm)},
-                    //     success: function (data) {
-                    //         if (data.code == 200){
-                    //             _this.modifyDialogVisible = false;
-                    //             _this.onSelectUsers();
-                    //             showMessage(_this, '修改成功', 1);
-                    //         }else {
-                    //             _this.errorMsg = data.message;
-                    //             _this.isError = true;
-                    //         }
-                    //     },
-                    //     error: function (data) {
-                    //         _this.errorMsg = '服务器访问出错！';
-                    //         _this.isError = true;
-                    //     }
-                    // })
+                    updateUser(this.modifyForm).then(response => {
+                        if (responseIsOK(response)) {
+                            showMSG(_this, "修改员工信息成功！", 1);
+                            _this.modifyDialogVisible = false;
+                            this.onSelectUsers();
+                        }
+                        else {
+                            showMessage(_this, isStringEmpty(response.data.message) ? "修改员工信息失败！" : response.data.message);
+                        }
+                    });
                 }
             },
 
@@ -583,8 +538,12 @@
             initAllAgent() {
                 getAllAgent().then(response => {
                     if (response.data.code == 200) {
+                        alert(JSON.stringify(response.data.data.list))
                         _this.allAgents = response.data.data.list;
-                        Promise.resolve()
+                        _this.allAgents.push({
+                            "id":0,
+                            "name":" "
+                        });
                     }
                     else {
                         Promise.reject("获取代理商信息错误！");
