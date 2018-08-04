@@ -104,7 +104,9 @@
 		 _this = this;
 		 return {
 			 loading: {},
-			 formData: {},
+			 formData: {
+				 chargePersonId: 0,
+			 },
 			 tableData: [],
 			 multipleSelection: [],
 			 customerList: [],
@@ -204,6 +206,7 @@
 					 for (let item of response.data.data.list) {
 						 _this.customerList.push(Object.assign({
 							 value: item.name,
+							 id: item.id,
 						 }, item));
 					 }
 				 }
@@ -231,6 +234,18 @@
 		 {
 			 if (this.formData.planDate != null && this.formData.planDate.length > 0) {
 				 this.formData.planDate = this.formData.planDate.format("yyyy-MM-dd");
+			 }
+			 for (let item of _this.multipleSelection) {
+				 if (item.checked == true) {
+					 _this.formData.chargePersonId = item.id;
+					 break;
+				 }
+			 }
+			 for (let item of _this.customerList) {
+				 if (item.name === _this.formData.customerName) {
+					 _this.formData.customerId = item.id
+					 break;
+				 }
 			 }
 			 return {
 				 formData: _this.formData,

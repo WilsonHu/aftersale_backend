@@ -63,6 +63,12 @@ export const asyncRouterMap = [
 		},
 		children: [
 			{
+				path: 'assignMachine',
+				component: _import('install_machine/assign_machine'),
+				name: 'assign_machine',
+				meta: {title: 'assign_machine', noCache: true,}
+			},
+			{
 				path: 'installHome',
 				component: _import('install_machine/install_home'),
 				name: 'install_home',
@@ -74,12 +80,6 @@ export const asyncRouterMap = [
 			// 	name: 'install_detail',
 			// 	meta: {title: 'install_detail', noCache: true,}
 			// },
-			{
-				path: 'assignMachine',
-				component: _import('install_machine/assign_machine'),
-				name: 'assign_machine',
-				meta: {title: 'assign_machine', noCache: true,}
-			},
 			{
 				path: 'installItem',
 				component: _import('install_machine/install_item'),
@@ -128,12 +128,12 @@ export const asyncRouterMap = [
 				name: 'maintain_home',
 				meta: {title: 'maintain_home', noCache: true,}
 			},
-			{
-				path: 'maintainDetail',
-				component: _import('maintain_manage/maintain_detail'),
-				name: 'maintain_detail',
-				meta: {title: 'maintain_detail', noCache: true,}
-			},
+			// {
+			// 	path: 'maintainDetail',
+			// 	component: _import('maintain_manage/maintain_detail'),
+			// 	name: 'maintain_detail',
+			// 	meta: {title: 'maintain_detail', noCache: true,}
+			// },
 			{
 				path: 'maintainTypeManage',
 				component: _import('maintain_manage/maintain_type_manage'),

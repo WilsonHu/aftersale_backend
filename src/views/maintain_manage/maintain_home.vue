@@ -99,6 +99,16 @@
 
                     </el-row >
                 </el-form >
+	            <div align="right" style="margin-bottom: 16px" >
+                        <el-tooltip placement="right" >
+                            <div slot="content" >添加保养</div >
+                            <el-button
+		                            icon="el-icon-plus"
+		                            size="small"
+		                            type="primary"
+		                            @click="handleAddMaintain" ></el-button >
+                        </el-tooltip >
+	            </div >
                 <el-table
 		                :data="tableData"
 		                border
@@ -142,8 +152,13 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
-		                    prop="customerName"
+		                    prop="machineCustomerName"
 		                    label="客户" >
+                    </el-table-column >
+	                 <el-table-column
+			                 align="center"
+			                 prop="customerNameInMaintainRecord"
+			                 label="客户联系人" >
                     </el-table-column >
                     <el-table-column
 		                    align="center"
@@ -238,7 +253,7 @@
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
-	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" height="60%">
+	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" height="60%" >
 					<AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
 					            :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
@@ -247,6 +262,14 @@
                         <el-button @click="showAssignTaskDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
+	            <el-dialog title="提示" :visible.sync="showConfirmAssign"
+	                       append-to-body width="30%" >
+		            <span >当前任务状态是<span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.maintainStatus|filterStatus}}</span >, 确定需要再次派单吗？</span >
+		            <span slot="footer" class="dialog-footer" >
+		              <el-button @click="showConfirmAssign = false" icon="el-icon-close" >取 消</el-button >
+		              <el-button type="primary" @click="onConShowAssign" icon="el-icon-check" >确 定</el-button >
+		            </span >
+	            </el-dialog >
             </el-col >
 
         </div >
@@ -256,7 +279,7 @@
 <script >
     import {APIConfig} from '@/config/apiConfig'
     import {Loading} from 'element-ui';
-    import {getMaintainRecordInfoList} from '@/api/maintain_manage';
+    import {getMaintainRecordInfoList, assignTaskToSubmit} from '@/api/maintain_manage';
     import AssignTask from '@/views/common_component/assign_task';
     var _this;
     export default {
@@ -290,6 +313,7 @@
 			    },
 			    showDetailDialog: false,
 			    showAssignTaskDialog: false,
+			    showConfirmAssign: false,
 			    assignTaskData: {
 				    formData: {
 					    planDate: '',
@@ -361,6 +385,18 @@
 		    },
 	    },
 	    methods: {
+		    handleAddMaintain(){
+
+		    },
+		    onConShowAssign()
+		    {
+			    _this.showConfirmAssign = false;
+			    _this.showAssignTaskDialog = true;
+			    if (this.$refs.assignTask) {
+				    _this.$refs.assignTask.loadData();//方法1
+				    //this.$refs.AssignTask.$emit('onShowDetail') // 方法2，子控件需要注册相应的事件
+			    }
+		    },
 		    dataChanged(val){
 			    _this.assignTaskData = Object.assign({}, val)
 		    },
@@ -398,20 +434,77 @@
 		    },
 		    assignTask(row)
 		    {
-			    _this.showAssignTaskDialog = true;
-			    if (this.$refs.assignTask) {
-				    _this.$refs.assignTask.loadData();//方法1
-				    //this.$refs.AssignTask.$emit('onShowDetail') // 方法2，子控件需要注册相应的事件
+			    _this.selectedItem = copyObject(row);
+			    if (_this.selectedItem.maintainStatus > 0) {//当前有保养还在进行.
+				    _this.showConfirmAssign = true;
 			    }
+			    else {
+				    _this.onConShowAssign();
+			    }
+
 		    },
 
 		    //Submit OK
 		    onConfirmAssign()
 		    {
-			    _this.showAssignTaskDialog = false;
 			    if (this.$refs.assignTask) {
 				    _this.assignTaskData = _this.$refs.assignTask.getCurrentData();
 			    }
+			    if (_this.assignTaskData == null || _this.assignTaskData.length < 0) {
+				    showMessage(_this, "请填写完整的派单数据！")
+				    return;
+			    }
+			    if (_this.assignTaskData.formData.chargePersonId == 0) {
+				    showMessage(_this, "请选择负责人！")
+				    return;
+			    }
+
+			    if (isStringEmpty(_this.assignTaskData.formData.planDate)) {
+				    showMessage(_this, "请选择上门日期！")
+				    return;
+			    }
+
+
+			    if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+				    showMessage(_this, "请选择客户联系人！")
+				    return;
+			    }
+
+			    if (isStringEmpty(_this.assignTaskData.workerList)) {
+				    showMessage(_this, "请选择要派出的工人！")
+				    return;
+			    }
+
+			    _this.showAssignTaskDialog = false;
+			    let memberList = [];
+			    _this.assignTaskData.workerList.forEach(item=> {
+				    memberList.push({
+					    userId: item.id,
+				    });
+			    });
+			    let submitData = {
+				    maintainRecord: {
+//					    id: 0,
+					    machineNameplate: _this.selectedItem.machineNameplate,
+					    maintainLibName: _this.selectedItem.maintainLibName,
+					    maintainDatePlan: _this.assignTaskData.formData.planDate,
+					    maintainChargePerson: _this.assignTaskData.formData.chargePersonId,
+					    customer: _this.assignTaskData.formData.customerId,
+//					    maintainSuggestion: "",
+//					    createTime: new Date().format("yyyy-MM-dd"),
+//					    maintainInfo: "",
+				    },
+				    installMembers: memberList,
+			    };
+			    assignTaskToSubmit(submitData).then(response=> {
+				    if (responseIsOK(response)) {
+					    showMSG(_this, "分配任务成功！", 1)
+				    }
+				    else {
+					    showMSG(_this, isStringEmpty(response.data.message) ? "分配任务失败！" : response.data.message)
+
+				    }
+			    })
 		    },
 
 		    editWithItem(row)
