@@ -60,7 +60,7 @@ export function addInstallItem(installLib) {
     return request({
         url: 'install/lib/add',
         method: 'post',
-        data: params
+        data: installLib
     })
 }
 
@@ -70,7 +70,7 @@ export function updateInstallItem(installLib) {
     return request({
         url: 'install/lib/update',
         method: 'post',
-        data: params
+        data: installLib
     })
 }
 

@@ -41,13 +41,13 @@ export function getMaintainTypeList() {
 }
 
 export function addMaintainType(maintainType) {
-	let params = new URLSearchParams();
-	params.append('maintainType', JSON.stringify(maintainType));
+	// let params = new URLSearchParams();
+	// params.append('maintainType', JSON.stringify(maintainType));
 	return new Promise((resolve, reject) => {
 		return request({
 			url: 'maintain/type/add',
 			method: 'post',
-			data: params
+			data: maintainType
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {
@@ -63,7 +63,7 @@ export function updateMaintainType(maintainType) {
 		return request({
 			url: 'maintain/type/update',
 			method: 'post',
-			data: params
+			data: maintainType
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {
@@ -113,7 +113,7 @@ export function addMaintainLib(maintainLib) {
 		return request({
 			url: 'maintain/lib/add',
 			method: 'post',
-			data: params
+			data: maintainLib
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {
@@ -129,7 +129,7 @@ export function updateMaintainLib(maintainLib) {
 		return request({
 			url: 'maintain/lib/update',
 			method: 'post',
-			data: params
+			data: maintainLib
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {
@@ -198,7 +198,7 @@ export function addMainTainRecorder(submitData) {
 		return request({
 			url: 'maintain/record/add',
 			method: 'post',
-			data: params
+			data: submitData
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {
