@@ -534,7 +534,7 @@
             editWithItem(item)//详情
             {
                 _this.selectedItem = item;
-                _this.machineNameplate = item.nameplate;
+                _this.machineNameplate = item.machineNameplate;
                 _this.showDetailDialog = true;
                 // 注意：UI中子组件也绑定了v-if="showDetailDialog",这样可以让组件重新初始化，否则数据不能刷新。
                 //注意：当此子组件没有show出来之前，ref是取不到此子组件的
