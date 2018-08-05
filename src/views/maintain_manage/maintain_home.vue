@@ -294,7 +294,7 @@
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
-	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" >
+	            <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
 					<AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
 					            :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
@@ -602,7 +602,7 @@
 			    _this.assignTaskData.workerList.forEach(item=> {
 				    memberList.push({
 					    userId: item.id,
-					    installRecordId: _this.selectedItem.id,
+                        maintainRecordId: _this.selectedItem.id,
 				    });
 			    });
 			    let submitData = {
@@ -613,7 +613,7 @@
 					    maintainDatePlan: _this.assignTaskData.formData.planDate,
 
 				    },
-				    installMembers: memberList,
+				    maintainMembers: memberList,
 			    };
 			    assignTaskToSubmit(submitData).then(response=> {
 				    if (responseIsOK(response)) {
