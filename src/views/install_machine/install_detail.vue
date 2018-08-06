@@ -8,12 +8,12 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="客户:" >
-                        <span v-html="formData.customerInInstallRecord" ></span >
+                        <span v-html="formData.machineCustomerName" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="联系方式:" >
-                      <span v-html="formData.customerPhoneInInstallRecord" ></span >
+                      <span v-html="formData.machineCustomerPhone" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -28,7 +28,7 @@
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="出厂日期:" >
-                      <span v-html="formData.facoryDate" ></span >
+                      <span >{{formData.facoryDate|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
             </div >
@@ -95,17 +95,17 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="调试联系人:" >
-                        <span v-html="formData.machineCustomerName" ></span >
+                        <span v-html="formData.customerInInstallRecord" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="联系电话:" >
-                      <span v-html="formData.machineCustomerPhone" ></span >
+                      <span v-html="formData.customerPhoneInInstallRecord" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="地址:" >
-                      <span v-html="formData.address" ></span >
+                      <span v-html="formData.customerAddressInInstallRecord" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -115,7 +115,7 @@
                 </el-col >
                 <el-col :span="6" >
                     <el-form-item label="调试时间:" >
-                      <span v-html="formData.installActualTime" ></span >
+                      <span >{{formData.installActualTime|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
             </div >
@@ -150,7 +150,7 @@
                         </el-col >
                         <el-col :span="6" >
                             <el-form-item label="调试时间:" >
-                              <span v-html="formData.installActualTime" ></span >
+                               <span >{{formData.installActualTime|filterDateString}}</span >
                             </el-form-item >
                         </el-col >
                     </div >
@@ -221,8 +221,8 @@
 	 methods: {
 		 loadData()
 		 {
-             this.formData={};
-             _this.loading = this.$loading({
+			 this.formData = {};
+			 _this.loading = this.$loading({
 				 lock: true,
 				 text: '拼命加载中',
 				 spinner: 'el-icon-loading',

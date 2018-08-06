@@ -144,6 +144,7 @@
                             label="客户联系人" >
                     </el-table-column >
                     <el-table-column
+		                    v-if="isShowAgent"
                             align="center"
                             prop="machineAgentName"
                             label="代理商">
@@ -248,11 +249,11 @@
                             :total="totalRecords">
                     </el-pagination>
                 </div>
-                <el-dialog title="安装详情" :visible.sync="showDetailDialog" append-to-body width="75%">
+                <el-dialog title="安装详情" :visible.sync="showDetailDialog" append-to-body fullscreen>
                     <InstallDetail ref="installDetail" v-if="showDetailDialog"
                                    :machineNameplate="machineNameplate"
                     ></InstallDetail>
-                    <div slot="footer" class="dialog-footer" style="margin-bottom: 20px">
+                    <div slot="footer" class="dialog-footer" style="margin-top: 100px">
                         <el-button @click="showDetailDialog = false" icon="el-icon-back">关闭</el-button>
                     </div>
                 </el-dialog>
@@ -321,6 +322,7 @@
                     status: '',
                     selectDate: '',
                 },
+	            isShowAgent: true,
                 allMachineType: [],
                 allRoles: [],
                 loadingUI: false,
@@ -525,6 +527,7 @@
                         _this.tableData = response.data.data.list;
                         _this.totalRecords = response.data.data.total;
                         _this.startRow = response.data.data.startRow;
+	                    _this.isShowAgent = _this.condition.isAgent;
                     }
                     else {
                         showMSG(_this, isStringEmpty(response.data.message) ? "加载数据失败！" : response.data.message)

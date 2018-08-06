@@ -206,3 +206,22 @@ export function addMainTainRecorder(submitData) {
 		})
 	})
 }
+
+export function getMaintainDetail(condition) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		let keys = Object.keys(condition);
+		for (let key of keys) {
+			params.append(key, condition[key]);
+		}
+		return request({
+			url: 'install/record/getMaintainRecordInfoList',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
