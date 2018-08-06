@@ -1,82 +1,83 @@
 <template>
     <div class="root_div">
-        <el-row>
             <el-form :model="filters" label-position="right" label-width="60px">
-                <el-col :span="3">
-                    <el-form-item label="账号:">
-                        <el-input v-model="filters.account"
-                                  placeholder="账号"
-                                  auto-complete="off"
-                                  clearable></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="3">
-                    <el-form-item label="姓名:">
-                        <el-input v-model="filters.name"
-                                  placeholder="姓名"
-                                  auto-complete="off"
-                                  clearable></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="3">
-                    <el-form-item label="角色:">
-                        <el-select v-model="filters.roleId" clearable>
-                            <el-option
-                                    v-for="item in allRoles"
-                                    v-bind:value="item.id"
-                                    v-bind:label="item.roleName">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="3" :offset="1">
-                    <el-form-item label="显示代理商:" label-width="90px">
-                        <el-switch
-                                v-model="filters.isAgent"
-                                active-text="是"
-                                inactive-text="否">
-                        </el-switch>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="3">
-                    <el-form-item label="代理商:" v-if="filters.isAgent">
-                        <el-select v-model="filters.agent" clearable>
-                            <el-option
-                                    v-for="item in allAgents"
-                                    v-bind:value="item.id"
-                                    v-bind:label="item.name">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="3">
-                    <el-form-item label="在职:">
-                        <el-select v-model="filters.valid" clearable>
-                            <el-option
-                                    v-for="item in valid"
-                                    v-bind:value="item.valid"
-                                    v-bind:label="item.name">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="2" :offset="1">
-                    <el-button
-                            icon="el-icon-search"
-                            size="normal"
-                            type="primary"
-                            @click="search">搜索
+                <el-row>
+                    <el-col :span="4">
+                        <el-form-item label="账号:">
+                            <el-input v-model="filters.account"
+                                      placeholder="账号"
+                                      auto-complete="off"
+                                      clearable></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="姓名:">
+                            <el-input v-model="filters.name"
+                                      placeholder="姓名"
+                                      auto-complete="off"
+                                      clearable></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="角色:">
+                            <el-select v-model="filters.roleId" clearable>
+                                <el-option
+                                        v-for="item in allRoles"
+                                        v-bind:value="item.id"
+                                        v-bind:label="item.roleName">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="在职:">
+                            <el-select v-model="filters.valid" clearable>
+                                <el-option
+                                        v-for="item in valid"
+                                        v-bind:value="item.valid"
+                                        v-bind:label="item.name">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="2" :offset="1">
+                        <el-button
+                                icon="el-icon-search"
+                                size="normal"
+                                type="primary"
+                                @click="search">搜索
+                        </el-button>
+                    </el-col>
+                    <el-button style="float: right;"
+                               icon="el-icon-plus"
+                               size="normal"
+                               type="primary"
+                               @click="handleAdd">用户
                     </el-button>
-                </el-col>
-
-                <el-button style="float: right;"
-                           icon="el-icon-plus"
-                           size="normal"
-                           type="primary"
-                           @click="handleAdd">用户
-                </el-button>
+                </el-row>
+                <el-row v-if="currentUserAgent == 0">
+                    <el-col :span="4">
+                        <el-form-item label="显示代理商:" label-width="90px">
+                            <el-switch
+                                    v-model="filters.isAgent"
+                                    active-text="是"
+                                    inactive-text="否">
+                            </el-switch>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                        <el-form-item label="代理商:" v-if="filters.isAgent">
+                            <el-select v-model="filters.agent" clearable>
+                                <el-option
+                                        v-for="item in allAgents"
+                                        v-bind:value="item.id"
+                                        v-bind:label="item.name">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-form>
-        </el-row>
         <el-row>
             <el-table
                     v-loading="loadingUI"
@@ -192,7 +193,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="代理商：" :label-width="formLabelWidth">
-                        <el-select v-model="form.agent" @change="onChange" clearable>
+                        <el-select v-model="form.agent" @change="onChange" clearable :disabled="currentUserAgent != 0">
                             <el-option
                                     v-for="item in allAgents"
                                     v-bind:value="item.id"
@@ -261,7 +262,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="代理商：" :label-width="formLabelWidth">
-                        <el-select v-model="modifyForm.agent" @change="onChange" clearable>
+                        <el-select v-model="modifyForm.agent" @change="onChange" clearable :disabled="currentUserAgent != 0">
                             <el-option
                                     v-for="item in allAgents"
                                     v-bind:value="item.id"
@@ -352,9 +353,9 @@
                 filters: {
                     name: "",
                     account: "",
-                    isAgent: true,
                     roleId: "",
-                    groupId: "",
+                    isAgent: true,
+                    agent: "",
                     valid: "",
                 },
                 allRoles: [],
@@ -362,6 +363,7 @@
                 allMarketGroups: [],
                 valid: [{"valid": "1", "name": "在职"}, {"valid": "0", "name": "离职"}],
                 loadingUI: false,
+                currentUserAgent: 0
             }
         },
         methods: {
@@ -392,6 +394,9 @@
                 _this.loadingUI = true;
                 _this.filters.page = _this.currentPage;
                 _this.filters.size = _this.pageSize;
+                if(this.currentUserAgent != 0) {
+                    _this.filters.currentUserAgent = this.currentUserAgent;
+                }
                 selectUsers(_this.filters).then(response => {
                     if (response.data.code == 200) {
                         _this.totalRecords = response.data.data.total;
@@ -411,6 +416,7 @@
                 this.isError = false;
                 this.errorMsg = '';
                 this.addDialogVisible = true;
+                this.form.agent = this.currentUserAgent != 0 ? this.currentUserAgent : "";
             },
 
             handleEdit(item) {
@@ -538,14 +544,16 @@
             initAllAgent() {
                 getAllAgent().then(response => {
                     if (response.data.code == 200) {
-                        alert(JSON.stringify(response.data.data.list))
-                        _this.allAgents = response.data.data.list;
+                        let tmp = response.data.data.list;
+                        _this.allAgents.slice(0, _this.allAgents.length);
                         _this.allAgents.push({
                             "id":0,
                             "name":" "
                         });
-                    }
-                    else {
+                        for (let i = 0; i < tmp.length; i++) {
+                            _this.allAgents.push(tmp[i]);
+                        }
+                    } else {
                         Promise.reject("获取代理商信息错误！");
                     }
                 });
@@ -588,6 +596,7 @@
 
         },
         created: function () {
+            this.currentUserAgent = _this.$store.getters.user.user.agent;
             this.initAllRoles();
             this.initAllAgent();
             this.initMarketGroups();

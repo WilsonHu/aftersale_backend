@@ -14,8 +14,12 @@ export function getAllRole() {
 
 export function selectUsers(condition) {
     let params = new URLSearchParams();
+    let keys = Object.keys(condition);
+    for (let key of keys) {
+        params.append(key, condition[key]);
+    }
     return request({
-        url: 'user/list',
+        url: 'user/selectUsers',
         method: 'post',
         data: params
     })

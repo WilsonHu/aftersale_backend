@@ -271,7 +271,7 @@ export function resetObject(objectData) {
 		else if (typeof(objectData[key]) == "number") {
 			objectData[key] = 0;
 		}
-		else if (typeof(objectData[key]) == "arrary") {
+		else if (typeof(objectData[key]) == "array") {
 			objectData[key] = [];
 		}
 	}
