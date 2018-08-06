@@ -42,7 +42,34 @@ const APIConfig = {
         {value: 2, name: '进行中'},
         {value: 3, name: '完成待确认'},
         {value: 4, name: '已确认'},
-    ]
+    ],
+
+    /**
+     * 维修状态
+     * 0：未派单，
+     * 1：已派单（但未接单）,
+     * 2： 已接受任务，
+     * 3：维修成功(客户未确认)，
+     * 4：无法维修，维修被转派（不需要客户确认），
+     * 5.客户已确认（维修成功）。
+     * 转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
+     */
+    RepairStatusList: [
+        {value: 0, name: '未派单'},
+        {value: 1, name: '已接受'},
+        {value: 2, name: '进行中'},
+        {value: 3, name: '完成待确认'},
+        {value: 3, name: '已转派'},
+        {value: 4, name: '已确认'},
+    ],
+
+    /**
+     * 1：在保修期内，0：保修期已过， 在派单时指定。
+     */
+    InWarrantyPeriodList:[
+        {value: 0, name: '已过期'},
+        {value: 1, name: '保修期内'},
+    ],
 }
 
 export  {APIConfig}

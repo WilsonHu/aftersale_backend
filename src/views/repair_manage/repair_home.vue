@@ -7,14 +7,14 @@
                         <el-col :span="5" >
                             <el-form-item label="机器编号:" >
                                 <el-input v-model="condition.nameplate"
-                                          placeholder="订单号" clearable
+                                          placeholder="机器编号" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
                         <el-col :span="5" >
                             <el-form-item label="订单编号:" >
                                 <el-input v-model="condition.orderNum"
-                                          placeholder="订单号" clearable
+                                          placeholder="订单编号" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
@@ -68,21 +68,21 @@
 
 	                    <el-col :span="5" >
                             <el-form-item label="代理商改派:" >
-                                 <el-select v-model="condition.scope" clearable >
+                                 <el-select v-model="condition.isAgentOrder" clearable >
                                     <el-option
-		                                    v-for="item in statusList"
+		                                    v-for="item in agentOrderList"
 		                                    :value="item.value"
-		                                    :label="item.name" >
+		                                    :label="item.text" >
                                     </el-option >
                                 </el-select >
                             </el-form-item >
                         </el-col >
 	                    <el-col :span="5" >
                             <el-form-item label="维修员:" >
-                                  <el-select v-model="condition.scope" clearable >
+                                  <el-select v-model="condition.repairChargePersonName" clearable >
                                     <el-option
-		                                    v-for="item in statusList"
-		                                    :value="item.value"
+		                                    v-for="item in employeeList"
+		                                    :value="item.id"
 		                                    :label="item.name" >
                                     </el-option >
                                 </el-select >
@@ -90,20 +90,16 @@
                         </el-col >
 	                    <el-col :span="5" >
                             <el-form-item label="故障部位:" >
-                                  <el-select v-model="condition.scope" clearable >
-                                    <el-option
-		                                    v-for="item in statusList"
-		                                    :value="item.value"
-		                                    :label="item.name" >
-                                    </el-option >
-                                </el-select >
+	                            <el-input v-model="condition.issuePositionName"
+	                                      placeholder="故障部位" clearable
+	                                      auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
 	                    <el-col :span="5" >
                             <el-form-item label="保修期内:" >
-                                  <el-select v-model="condition.scope" clearable >
+                                  <el-select v-model="condition.inWarrantyPeriod" clearable >
                                     <el-option
-		                                    v-for="item in statusList"
+		                                    v-for="item in inWarrantyPeriodList"
 		                                    :value="item.value"
 		                                    :label="item.name" >
                                     </el-option >
@@ -114,15 +110,15 @@
 		                    <el-form-item label="" >
 			                    <el-select v-model="condition.scope" clearable >
 	                                <el-option
-		                                    v-for="item in statusList"
-		                                    :value="item.value"
-		                                    :label="item.name" >
+			                                v-for="item in statusList"
+			                                :value="item.value"
+			                                :label="item.name" >
 	                                </el-option >
 			                    </el-select >
 		                    </el-form-item >
 	                    </el-col >
                         <el-col :span="8" >
-                            <el-form-item label=":">
+                            <el-form-item label=":" >
                                 <el-date-picker
 		                                v-model="condition.selectDate"
 		                                type="daterange"
@@ -159,19 +155,19 @@
 
                     <el-table-column
 		                    align="center"
-		                    prop="nameplate"
+		                    prop="machineNameplate"
 		                    label="机器编号" >
                     </el-table-column >
-                    <!--<el-table-column-->
-		                    <!--align="center"-->
-		                    <!--prop="machineType"-->
-		                    <!--label="机型" >-->
-                        <!--<template scope="scope" >-->
-                            <!--<div >-->
-                                <!--{{scope.row.machineType}}-->
-                            <!--</div >-->
-                        <!--</template >-->
-                    <!--</el-table-column >-->
+	                <!--<el-table-column-->
+	                <!--align="center"-->
+	                <!--prop="machineType"-->
+	                <!--label="机型" >-->
+	                <!--<template scope="scope" >-->
+	                <!--<div >-->
+	                <!--{{scope.row.machineType}}-->
+	                <!--</div >-->
+	                <!--</template >-->
+	                <!--</el-table-column >-->
                     <el-table-column label="订单号"
                                      align="center"
                                      prop="orderNum" >
@@ -183,12 +179,12 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
-		                    prop="customerName"
+		                    prop="machineCustomerName"
 		                    label="客户" >
                     </el-table-column >
                     <el-table-column
 		                    align="center"
-		                    prop="agent"
+		                    prop="machineAgentName"
 		                    label="代理商" >
                     </el-table-column >
                     <el-table-column
@@ -231,28 +227,33 @@
                     </el-table-column >
 	                <el-table-column label="故障部位"
 	                                 align="center"
-	                                 prop="orderNum" >
+	                                 prop="issuePositionName" >
                         <template scope="scope" >
                             <div >
-                                {{scope.row.orderNum}}
+                                {{scope.row.issuePositionName}}
                             </div >
                         </template >
                     </el-table-column >
 	                <el-table-column label="保修期内"
 	                                 align="center"
-	                                 prop="orderNum" >
+	                                 prop="inWarrantyPeriod" >
                         <template scope="scope" >
-                            <div >
-                                {{scope.row.orderNum}}
+
+	                        <div v-if="scope.row.inWarrantyPeriod==1"
+	                             style="color: green" >
+                                 {{scope.row.inWarrantyPeriod|filterInWarrantyPeriod}}
+                            </div >
+	                        <div v-else style="color: red" >
+                                {{scope.row.inWarrantyPeriod|filterInWarrantyPeriod}}
                             </div >
                         </template >
                     </el-table-column >
 	                <el-table-column label="维修员"
 	                                 align="center"
-	                                 prop="orderNum" >
+	                                 prop="repairChargePersonName" >
                         <template scope="scope" >
                             <div >
-                                {{scope.row.orderNum}}
+                                {{scope.row.repairChargePersonName}}
                             </div >
                         </template >
                     </el-table-column >
@@ -270,7 +271,7 @@
 		                    label="报修日期" >
                         <template slot-scope="scope" >
                         <span >
-                            {{(scope.row.shipTime)|filterDateString}}
+                            {{(scope.row.createTime)|filterDateString}}
                         </span >
                         </template >
                     </el-table-column >
@@ -280,7 +281,7 @@
 		                    label="完成日期" >
                         <template slot-scope="scope" >
                         <span >
-                            {{(scope.row.installActualTime)|filterDateString}}
+                            {{(scope.row.repairEndTime)|filterDateString}}
                         </span >
                         </template >
                     </el-table-column >
@@ -332,7 +333,8 @@
 <script >
 import {APIConfig} from '@/config/apiConfig'
 import {Loading} from 'element-ui';
-import {getSaledMachineInfoList} from '@/api/install_machine';
+import {getRepairRecordInfoList} from '@/api/repair_manage';
+import {requestEmployeeList} from '@/api/commonApi';
 import InstallDetail from '@/views/install_machine/install_detail';
 var _this;
 export default {
@@ -354,7 +356,10 @@ export default {
 			currentPage: 1,
 			startRow: 0,
 			totalRecords: 0,
-			statusList: APIConfig.MachineStatusList,
+			statusList: APIConfig.RepairStatusList,
+			inWarrantyPeriodList: APIConfig.InWarrantyPeriodList,
+			agentOrderList: APIConfig.YESORNOList,
+			employeeList: [],
 			condition: {
 				nameplate: '',
 				orderNum: '',
@@ -363,6 +368,7 @@ export default {
 				isAgent: true,
 				agent: '',
 				status: '',
+				inWarrantyPeriod: '',
 				selectDate: '',
 			},
 			allMachineType: [],
@@ -430,6 +436,18 @@ export default {
 			}
 			return result;
 		},
+
+		filterInWarrantyPeriod(id)
+		{
+			let result = '';
+			for (let i = 0; i < _this.inWarrantyPeriodList.length; i++) {
+				if (id == _this.inWarrantyPeriodList[i].value) {
+					result = _this.inWarrantyPeriodList[i].name;
+					break;
+				}
+			}
+			return result;
+		},
 	},
 	methods: {
 		handleCurrentChange(val) {
@@ -445,20 +463,24 @@ export default {
 				orderNum: this.condition.orderNum.trim(),
 				nameplate: this.condition.nameplate.trim(),
 				machineType: this.condition.machineType,
-				query_start_time_install: '',
-				query_finish_time_install: '',
+				queryStartRepairCreateTime: '',
+				queryStartRepairEndTime: '',
 				agent: this.condition.agent,
-				customerName: this.condition.customer,
-				status: this.condition.status,
+				repairRecordCustomerName: this.condition.customer,
+				repairStatus: this.condition.status,
+				partsStatus: '',
+				repairChargePersonName: '',
+				inWarrantyPeriod: this.condition.inWarrantyPeriod,
+				issuePositionName: '',
 				page: this.currentPage,
 				size: this.pageSize,
 				isFuzzy: true,
 			};
 			if (this.condition.selectDate != null && this.condition.selectDate.length > 0) {
-				condition.query_start_time_install = this.condition.selectDate[0].format("yyyy-MM-dd");
-				condition.query_finish_time_install = this.condition.selectDate[1].format("yyyy-MM-dd");
+				condition.queryStartRepairCreateTime = this.condition.selectDate[0].format("yyyy-MM-dd");
+				condition.queryStartRepairEndTime = this.condition.selectDate[1].format("yyyy-MM-dd");
 			}
-			getSaledMachineInfoList(condition).then(response => {
+			getRepairRecordInfoList(condition).then(response => {
 				if (responseIsOK(response)) {
 					_this.tableData = response.data.data.list;
 					_this.totalRecords = response.data.data.total;
@@ -506,6 +528,13 @@ export default {
 							showMSG(_this, "getAllMachineType failed!");
 						});
 			}
+
+			//employeeList
+			requestEmployeeList().then(response => {
+				if (responseIsOK(response)) {
+					_this.employeeList = response.data.data.list;
+				}
+			})
 		},
 	},
 
