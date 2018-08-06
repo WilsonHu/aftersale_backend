@@ -41,6 +41,26 @@ export function getInstallDetail(condition) {
 	})
 }
 
+//getInstallRecordInfoList
+export function getInstallRecordInfoList(condition) {
+    return new Promise((resolve, reject) => {
+        let params = new URLSearchParams();
+        let keys = Object.keys(condition);
+        for (let key of keys) {
+            params.append(key, condition[key]);
+        }
+        return request({
+            url: 'install/record/getInstallRecordInfoList',
+            method: 'post',
+            data: params
+        }).then(response=> {
+            resolve(response);
+        }).catch(error=> {
+            reject(error);
+        })
+    })
+}
+
 export function selectLibList(condition) {
     let params = new URLSearchParams();
     params.append('page', condition.page);
@@ -60,7 +80,7 @@ export function addInstallItem(installLib) {
     return request({
         url: 'install/lib/add',
         method: 'post',
-        data: params
+        data: installLib
     })
 }
 
@@ -70,7 +90,7 @@ export function updateInstallItem(installLib) {
     return request({
         url: 'install/lib/update',
         method: 'post',
-        data: params
+        data: installLib
     })
 }
 
@@ -158,4 +178,21 @@ export function addMachineList(machineList) {
     })
 }
 
-
+export function assignTaskToSubmit(condition) {
+    return new Promise((resolve, reject) => {
+        let params = new URLSearchParams();
+        let keys = Object.keys(condition);
+        for (let key of keys) {
+            params.append(key, JSON.stringify(condition[key]));
+        }
+        return request({
+            url: 'install/record/AssignTask',
+            method: 'post',
+            data: params
+        }).then(response=> {
+            resolve(response);
+        }).catch(error=> {
+            reject(error);
+        })
+    })
+}
