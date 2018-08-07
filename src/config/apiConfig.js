@@ -4,6 +4,10 @@ const APIConfig = {
 
     EveryPageNum: 10, //每页显示记录数
 
+    USER_TYPE_STAFF: 1,
+
+    USER_TYPE_CUSTOMER: 2,
+
     YESORNOList: [
         {
             value: 0,
@@ -66,10 +70,10 @@ const APIConfig = {
     /**
      * 1：在保修期内，0：保修期已过， 在派单时指定。
      */
-    InWarrantyPeriodList:[
+    InWarrantyPeriodList: [
         {value: 0, name: '已过期'},
         {value: 1, name: '保修期内'},
     ],
 }
 
-export  {APIConfig}
+export {APIConfig}

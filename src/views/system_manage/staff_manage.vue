@@ -52,7 +52,7 @@
                                icon="el-icon-plus"
                                size="normal"
                                type="primary"
-                               @click="handleAdd">用户
+                               @click="handleAdd">员工
                     </el-button>
                 </el-row>
                 <el-row v-if="currentUserAgent == 0">
@@ -394,6 +394,7 @@
                 _this.loadingUI = true;
                 _this.filters.page = _this.currentPage;
                 _this.filters.size = _this.pageSize;
+                _this.filters.userType = APIConfig.USER_TYPE_STAFF;
                 if(this.currentUserAgent != 0) {
                     _this.filters.currentUserAgent = this.currentUserAgent;
                 }
