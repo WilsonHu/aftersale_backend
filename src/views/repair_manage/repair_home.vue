@@ -106,31 +106,29 @@
                                 </el-select >
                             </el-form-item >
                         </el-col >
-	                    <el-col :span="3" >
+	                    <el-col :span="4" >
 		                    <el-form-item label="" >
-			                    <el-select v-model="condition.scope" clearable >
-	                                <el-option
-			                                v-for="item in statusList"
-			                                :value="item.value"
-			                                :label="item.name" >
-	                                </el-option >
-			                    </el-select >
+				                    <el-select v-model="condition.dateType" placeholder="请选择" >
+									      <el-option label="报修日期" value="0" ></el-option >
+									      <el-option label="完成日期" value="1" ></el-option >
+				                    </el-select >
 		                    </el-form-item >
+
 	                    </el-col >
-                        <el-col :span="8" >
-                            <el-form-item label=":" >
-                                <el-date-picker
-		                                v-model="condition.selectDate"
-		                                type="daterange"
-		                                align="left"
-		                                unlink-panels
-		                                range-separator="—"
-		                                start-placeholder="开始日期"
-		                                end-placeholder="结束日期"
-		                                :picker-options="pickerOptions" >
-                                </el-date-picker >
-                            </el-form-item >
-                        </el-col >
+	                    <el-col :span="8" >
+	                    <el-form-item label=":" >
+	                    <el-date-picker
+			                    v-model="condition.selectDate"
+			                    type="daterange"
+			                    align="left"
+			                    unlink-panels
+			                    range-separator="—"
+			                    start-placeholder="开始日期"
+			                    end-placeholder="结束日期"
+			                    :picker-options="pickerOptions" >
+	                    </el-date-picker >
+	                    </el-form-item >
+	                    </el-col >
 
                     </el-row >
                 </el-form >
@@ -318,14 +316,34 @@
 		                    :total="totalRecords" >
                     </el-pagination >
                 </div >
-                <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body width="75%" >
-                    <install-detail :tabSwitchClick="tabContentClick" :formData="formData"
-                                    :activeTabId="activeTabId" ></install-detail >
+                <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body fullscreen >
+                    <RepairDetail :repairRecorderInfo="selectedItem"
+                                  ref="repairDetail" v-if="showDetailDialog"
+                    ></RepairDetail >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
                 </el-dialog >
-            </el-col >
+		     <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
+                    <AssignTask :showType="1" ref="assignTask" v-if="showAssignTaskDialog"
+                                :machineInfo="machineInfo"
+                                :dataChanged="dataChanged" ></AssignTask >
+                    <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
+                        <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check"
+                                   :disabled="isDisableOK" >确定
+                        </el-button >
+                        <el-button @click="showAssignTaskDialog = false" icon="el-icon-back" >关闭</el-button >
+                    </div >
+		     </el-dialog >
+		      <el-dialog title="提示" :visible.sync="showConfirmAssign"
+		                 append-to-body width="30%" >
+                    <span >当前任务状态是<span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.status|filterStatus}}</span >, 确定需要再次派单吗？</span >
+                    <span slot="footer" class="dialog-footer" >
+		              <el-button @click="showConfirmAssign = false" icon="el-icon-close" >取 消</el-button >
+		              <el-button type="primary" @click="onConShowAssign" icon="el-icon-check" >确 定</el-button >
+		            </span >
+                </el-dialog >
+	     </el-col >
       </div >
   </div >
 </template >
@@ -333,13 +351,18 @@
 <script >
 import {APIConfig} from '@/config/apiConfig'
 import {Loading} from 'element-ui';
-import {getRepairRecordInfoList} from '@/api/repair_manage';
+import {getRepairRecordInfoList, assignTaskToSubmit} from '@/api/repair_manage';
 import {requestEmployeeList} from '@/api/commonApi';
-import InstallDetail from '@/views/install_machine/install_detail';
+import RepairDetail from '@/views/repair_manage/repair_detail';
+import AssignTask from '@/views/common_component/assign_task';
+
 var _this;
 export default {
 	name: 'repair_home',
-	components: {},
+	components: {
+		RepairDetail,
+		AssignTask
+	},
 	data() {
 		_this = this;
 		return {
@@ -347,6 +370,7 @@ export default {
 			formData: {},
 			machineNameplate: '',
 			selectedItem: {},
+			machineInfo: {},
 			activeTabId: '0',
 			//detail info
 
@@ -369,12 +393,23 @@ export default {
 				agent: '',
 				status: '',
 				inWarrantyPeriod: '',
+				dateType: '',
 				selectDate: '',
 			},
 			allMachineType: [],
 			allRoles: [],
 			loadingUI: false,
 			showDetailDialog: false,
+			showAssignTaskDialog: false,
+			showConfirmAssign: false,
+			assignTaskData: {
+				formData: {
+					planDate: '',
+					customerName: '',
+				},
+				workerList: [],
+			},
+			isDisableOK: false,
 			pickerOptions: {
 				shortcuts: [{
 					text: '最近一周',
@@ -450,6 +485,94 @@ export default {
 		},
 	},
 	methods: {
+		onConShowAssign()
+		{
+			_this.showConfirmAssign = false;
+			_this.showAssignTaskDialog = true;
+			if (this.$refs.assignTask) {
+				_this.$refs.assignTask.loadData();//方法1
+			}
+		},
+		dataChanged(val){
+			_this.assignTaskData = Object.assign({}, val)
+		},
+
+		assignTask(row)
+		{
+			_this.machineInfo = {
+				factoryDate: DateMinus(_this.selectedItem.facoryDate),
+			};
+			_this.selectedItem = copyObject(row);
+			if (_this.selectedItem.status > 0) {//当前还在进行.
+				_this.showConfirmAssign = true;
+			}
+			else {
+				_this.onConShowAssign();
+			}
+
+		},
+
+		//Submit OK
+		onConfirmAssign()
+		{
+			if (this.$refs.assignTask) {
+				_this.assignTaskData = _this.$refs.assignTask.getCurrentData();
+			}
+			if (_this.assignTaskData == null || _this.assignTaskData.length < 0) {
+				showMessage(_this, "请填写完整的派单数据！")
+				return;
+			}
+			if (_this.assignTaskData.formData.chargePersonId == 0) {
+				showMessage(_this, "请选择负责人！")
+				return;
+			}
+
+			if (isStringEmpty(_this.assignTaskData.formData.planDate)) {
+				showMessage(_this, "请选择上门日期！")
+				return;
+			}
+
+
+			if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+				showMessage(_this, "请选择客户联系人！")
+				return;
+			}
+
+			if (isStringEmpty(_this.assignTaskData.workerList)) {
+				showMessage(_this, "请选择要派出的工人！")
+				return;
+			}
+
+			_this.showAssignTaskDialog = false;
+			let memberList = [];
+			_this.assignTaskData.workerList.forEach(item=> {
+				memberList.push({
+					userId: item.id,
+					repairRecordId: _this.selectedItem.id,
+				});
+			});
+			let submitData = {
+				repairRecord: {
+					id: _this.selectedItem.id,
+					repairChargePerson: _this.assignTaskData.formData.chargePersonId,
+					customer: _this.assignTaskData.formData.customerId,
+					repairPlanDate: _this.assignTaskData.formData.planDate,
+					inWarrantyPeriod: _this.assignTaskData.formData.inWarrantyPeriod,
+				},
+				repairMembers: memberList,
+			};
+			assignTaskToSubmit(submitData).then(response=> {
+				if (responseIsOK(response)) {
+					showMSG(_this, "分配任务成功！", 1)
+					_this.onSearchDetailData();
+				}
+				else {
+					showMSG(_this, isStringEmpty(response.data.message) ? "分配任务失败！" : response.data.message)
+
+				}
+			})
+		},
+
 		handleCurrentChange(val) {
 			this.currentPage = val;
 			this.search();
@@ -464,7 +587,9 @@ export default {
 				nameplate: this.condition.nameplate.trim(),
 				machineType: this.condition.machineType,
 				queryStartRepairCreateTime: '',
+				queryFinishRepairCreateTime: '',
 				queryStartRepairEndTime: '',
+				queryFinishRepairEndTime: '',
 				agent: this.condition.agent,
 				repairRecordCustomerName: this.condition.customer,
 				repairStatus: this.condition.status,
@@ -477,8 +602,13 @@ export default {
 				isFuzzy: true,
 			};
 			if (this.condition.selectDate != null && this.condition.selectDate.length > 0) {
-				condition.queryStartRepairCreateTime = this.condition.selectDate[0].format("yyyy-MM-dd");
-				condition.queryStartRepairEndTime = this.condition.selectDate[1].format("yyyy-MM-dd");
+				if (condition.dateType == 0) {//报修日期
+					condition.queryStartRepairCreateTime = this.condition.selectDate[0].format("yyyy-MM-dd");
+					condition.queryFinishRepairCreateTime = this.condition.selectDate[1].format("yyyy-MM-dd");
+				} else {//完成日期
+					condition.queryStartRepairEndTime = this.condition.selectDate[0].format("yyyy-MM-dd");
+					condition.queryFinishRepairEndTime = this.condition.selectDate[1].format("yyyy-MM-dd");
+				}
 			}
 			getRepairRecordInfoList(condition).then(response => {
 				if (responseIsOK(response)) {
@@ -493,23 +623,14 @@ export default {
 		},
 		editWithItem(item)//详情
 		{
-			_this.selectedItem = item;
-			_this.machineNameplate = item.nameplate;
-			_this.formData = {
-				customer: 'aaaa',
-				customerPhone: '1367898765',
-				agnet: 'bbbb'
-			};
-			_this.activeTabId = '0';
+			_this.selectedItem = copyObject(item);
 			_this.showDetailDialog = true;
+			if (this.$refs.repairDetail) {
+				_this.$refs.repairDetail.loadData();//方法1
+			}
 		},
 
 		tabContentClick(tab)
-		{
-
-		},
-
-		assignTask(item)//派单
 		{
 
 		},

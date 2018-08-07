@@ -59,8 +59,8 @@ const APIConfig = {
         {value: 1, name: '已接受'},
         {value: 2, name: '进行中'},
         {value: 3, name: '完成待确认'},
-        {value: 3, name: '已转派'},
-        {value: 4, name: '已确认'},
+        {value: 4, name: '已转派'},
+        {value: 5, name: '已确认'},
     ],
 
     /**

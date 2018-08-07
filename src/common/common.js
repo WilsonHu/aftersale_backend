@@ -97,7 +97,7 @@ function regIsEmail(fData) {
 
 //判断手机号是否正确
 function isPoneAvailable(phone) {
-	var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+	var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
 	if (phone.length != 11 || !myreg.test(phone)) {
 		return false;
 	} else {
@@ -134,6 +134,14 @@ function getAudioType(fileName) {
 			break;
 	}
 	return audioType;
+}
+
+function DateMinus(sDate) {
+	let sdate = new Date(sDate);
+	let now = new Date();
+	let days = now.getTime() - sdate.getTime();
+	let day = parseInt(days / (1000 * 60 * 60 * 24));
+	return day;
 }
 
 Date.prototype.format = function (format) {

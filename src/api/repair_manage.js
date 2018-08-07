@@ -21,3 +21,22 @@ export function getRepairRecordInfoList(condition) {
 		})
 	})
 }
+
+export function assignTaskToSubmit(condition) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		let keys = Object.keys(condition);
+		for (let key of keys) {
+			params.append(key, JSON.stringify(condition[key]));
+		}
+		return request({
+			url: 'repair/record/AssignTask',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
