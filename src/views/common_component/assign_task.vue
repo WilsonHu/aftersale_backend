@@ -113,7 +113,9 @@
 		    showType: 0,
 		    machineInfo: {
 			    type: Object,
-			    default: {}
+			    default: function () {
+				    return { }
+			    }
 		    },
 //		 resultData: {
 //			 type: Object,
@@ -170,7 +172,9 @@
 		    loadData()
 		    {
 			    resetObject(_this.formData);
-			    _this.formData = Object.assign({}, _this.machineInfo)
+			    if (!isStringEmpty(_this.machineInfo)) {
+				    _this.formData = Object.assign({}, _this.machineInfo)
+			    }
 			    _this.tableData = [];
 			    _this.loading = this.$loading({
 				    lock: true,

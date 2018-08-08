@@ -147,20 +147,6 @@ export function getSaledMachineInfoList(condition) {
     })
 }
 
-//requestCustomerList
-export function requestCustomerList() {
-    return new Promise((resolve, reject) => {
-        return request({
-            url: 'user/list',
-            method: 'post',
-            data: {}
-        }).then(response=> {
-            resolve(response);
-        }).catch(error=> {
-            reject(error);
-        })
-    })
-}
 
 export function addMachineList(machineList) {
     let params = new URLSearchParams();
