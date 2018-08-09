@@ -60,7 +60,7 @@
                                     <el-button
 		                                    size="small"
 		                                    icon="el-icon-delete"
-		                                    type="primary"
+		                                    type="danger"
 		                                    @click="handleDelete(scope.row)" ></el-button >
                                 </el-tooltip >
                             </template >

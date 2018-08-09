@@ -163,7 +163,7 @@
                     <el-table-column
 		                    v-if="isShowAgent"
 		                    align="center"
-		                    prop="agent"
+		                    prop="machineAgentName"
 		                    label="代理商" >
                     </el-table-column >
                     <el-table-column

@@ -68,11 +68,20 @@ const APIConfig = {
     ],
 
     /**
-     * 1：在保修期内，0：保修期已过， 在派单时指定。
+     * 0：保修期已过，1：在保修期内
      */
     InWarrantyPeriodList: [
         {value: 0, name: '已过期'},
         {value: 1, name: '保修期内'},
+    ],
+
+    /**
+     * 0：生产部，1：客户， 2: 售后
+     */
+    MachineSourceList: [
+        {value: 0, name: '生产部'},
+        {value: 1, name: '客户'},
+        {value: 2, name: '售后'},
     ],
 }
 
