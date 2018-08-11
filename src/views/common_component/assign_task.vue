@@ -286,7 +286,7 @@
 		    onSelectedChanged(selectObj)
 		    {
 			    _this.formData.customerPhone = selectObj.phone;
-			    _this.formData.address = selectObj.phone;
+			    _this.formData.address = selectObj.address;
 		    },
 	    },
 	    watch: {

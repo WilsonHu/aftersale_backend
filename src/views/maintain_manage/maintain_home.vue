@@ -142,6 +142,7 @@
                         </template >
                     </el-table-column >
                     <el-table-column label="订单号"
+                                     sortable
                                      align="center"
                                      prop="orderNum" >
                         <template scope="scope" >
@@ -173,6 +174,8 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
+		                    prop="maintainStatus"
+		                    sortable
 		                    label="保养状态" >
                         <template scope="scope" >
                             <div v-if="scope.row.maintainStatus==0"

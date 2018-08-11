@@ -125,6 +125,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column label="订单号"
+                                     sortable
                                      align="center"
                                      prop="orderNum">
                         <template scope="scope">
@@ -135,6 +136,7 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
+                            sortable
                             prop="machineCustomerName"
                             label="客户">
                     </el-table-column>
@@ -151,6 +153,8 @@
                     </el-table-column>
                     <el-table-column
                             align="center"
+                            prop="installStatus"
+                            sortable
                             label="安装状态">
                         <template scope="scope">
                             <div v-if="scope.row.installStatus==0"

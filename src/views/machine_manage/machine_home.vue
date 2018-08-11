@@ -18,17 +18,7 @@
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="5" >
-                            <el-form-item label="机型:" >
-                                <el-select v-model="condition.machineType" clearable >
-                                    <el-option
-		                                    v-for="item in allMachineType"
-		                                    :value="item.name"
-		                                    :label="item.name" >
-                                    </el-option >
-                                </el-select >
-                            </el-form-item >
-                        </el-col >
+
                         <el-col :span="3" :offset="1" >
                             <el-form-item label="显示代理商:" >
                                 <el-switch
@@ -44,6 +34,15 @@
                                           placeholder="代理商" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
+                        </el-col >
+
+	                    <el-col :span="2" :offset="3" >
+                            <el-button
+		                            icon="el-icon-search"
+		                            size="normal"
+		                            type="primary"
+		                            @click="search" >查询
+                            </el-button >
                         </el-col >
                     </el-row >
                     <el-row >
@@ -76,6 +75,17 @@
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
+	                    <el-col :span="5" >
+                            <el-form-item label="机型:" >
+                                <el-select v-model="condition.machineType" clearable >
+                                    <el-option
+		                                    v-for="item in allMachineType"
+		                                    :value="item.name"
+		                                    :label="item.name" >
+                                    </el-option >
+                                </el-select >
+                            </el-form-item >
+                        </el-col >
 
                         <el-col :span="6" >
                             <el-form-item label="日期:" >
@@ -91,20 +101,24 @@
                                 </el-date-picker >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="1" :offset="2" >
-                            <el-button
-		                            icon="el-icon-search"
-		                            size="normal"
-		                            type="primary"
-		                            @click="search" >查询
-                            </el-button >
-                        </el-col >
+
                     </el-row >
                 </el-form >
+	             <div align="right" style="margin-bottom: 16px" >
+                    <el-tooltip placement="right" >
+                        <div slot="content" >添加机器</div >
+                        <el-button
+		                        icon="el-icon-plus"
+		                        size="small"
+		                        type="primary"
+		                        @click="handleAddMachine" ></el-button >
+                    </el-tooltip >
+                </div >
                 <el-table
 		                v-loading="loadingUI"
 		                element-loading-text="获取数据中..."
 		                :data="tableData"
+		                :default-sort="{prop: 'isOldMachine', order: 'descending'}"
 		                border
 		                empty-text="暂无数据..."
 		                ref="singleTable"
@@ -122,10 +136,11 @@
 
                     <el-table-column
 		                    align="center"
-		                    prop="machineNameplate"
+		                    prop="nameplate"
 		                    label="机器编号" >
                     </el-table-column >
                     <el-table-column
+		                    sortable
 		                    align="center"
 		                    prop="machineType"
 		                    label="机型" >
@@ -146,60 +161,92 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
-		                    prop="machineCustomerName"
+		                    prop="customerName"
 		                    label="客户" >
                     </el-table-column >
                     <el-table-column
 		                    v-if="isShowAgent"
 		                    align="center"
-		                    prop="machineAgentName"
+		                    prop="agent"
 		                    label="代理商" >
                     </el-table-column >
                     <el-table-column
+		                    sortable
 		                    align="center"
+		                    prop="status"
 		                    label="机器状态" >
                         <template scope="scope" >
-                            <div v-if="scope.row.installStatus==0"
+                            <div v-if="scope.row.status==0"
                                  style="color: #686868" >
-                                {{scope.row.installStatus|filterStatus}}
+                                {{scope.row.status}}
                             </div >
-                            <div v-if="scope.row.installStatus==1"
+                            <div v-if="scope.row.status==1"
                                  style="color: #8b6c0e" >
-                                {{scope.row.installStatus|filterStatus}}
+                                {{scope.row.status|filterStatus}}
                             </div >
-                            <div v-if="scope.row.installStatus==2"
+                            <div v-if="scope.row.status==2"
                                  style="color: #13678b" >
-                                {{scope.row.installStatus|filterStatus}}
+                                {{scope.row.status|filterStatus}}
                             </div >
-                            <div v-if="scope.row.installStatus==3"
+                            <div v-if="scope.row.status==3"
                                  style="color: #198b57" >
-                                {{scope.row.installStatus|filterStatus}}
+                                {{scope.row.status|filterStatus}}
                             </div >
-                            <div v-if="scope.row.installStatus==4"
-                                 style="color: darkred" >
-                                {{scope.row.installStatus|filterStatus}}
+                            <div v-if="scope.row.status==4"
+                                 style="color: lightskyblue" >
+                                {{scope.row.status|filterStatus}}
                             </div >
-                            <div v-if="scope.row.installStatus==5"
+                            <div v-if="scope.row.status==5"
                                  style="color: indianred" >
-                                {{scope.row.installStatus|filterStatus}}
+                                {{scope.row.status|filterStatus}}
                             </div >
-                            <div v-if="scope.row.installStatus==6"
-                                 style="color: darkred" >
-                                {{scope.row.installStatus|filterStatus}}
-                            </div >
-                            <div v-if="scope.row.installStatus==7"
-                                 style="color: red" >
-                                {{scope.row.installStatus|filterStatus}}
+                            <div v-if="scope.row.status==6"
+                                 style="color: darkmagenta" >
+                                {{scope.row.status|filterStatus}}
                             </div >
                         </template >
                     </el-table-column >
 	                <el-table-column
+			                sortable
 			                align="center"
-			                prop="facoryDate"
+			                prop="oldMachineCheck"
+			                label="审核状态" >
+                        <template scope="scope" >
+	                        <div v-if="scope.row.isOldMachine==0"
+	                             style="color: black" >
+                               无
+                            </div >
+	                        <div v-else >
+	                            <span v-if="scope.row.oldMachineCheck==0"
+	                                  style="color: red" >
+	                                {{scope.row.oldMachineCheck|filterCheckStatus}}
+	                            </span >
+	                            <span v-else
+	                                  style="color: darkgreen" >
+	                                {{scope.row.oldMachineCheck|filterCheckStatus}}
+	                            </span >
+	                        </div >
+                        </template >
+                    </el-table-column >
+	                <el-table-column
+			                sortable
+			                align="center"
+			                prop="isOldMachine"
 			                label="机器来源" >
                         <template slot-scope="scope" >
                         <span >
-                            {{(scope.row.facoryDate)|filterDateString}}
+	                        <div v-if="scope.row.isOldMachine==0"
+	                             style="color: green" >
+                                {{(scope.row.isOldMachine)|filterMachineSource}}
+                            </div >
+                            <div v-if="scope.row.isOldMachine==1"
+                                 style="color: burlywood" >
+                                {{scope.row.isOldMachine|filterMachineSource}}
+                            </div >
+                            <div v-if="scope.row.isOldMachine==2"
+                                 style="color: #8b6c0e" >
+                                {{scope.row.isOldMachine|filterMachineSource}}
+                            </div >
                         </span >
                         </template >
                     </el-table-column >
@@ -222,7 +269,7 @@
 		                                size="mini"
 		                                type="primary"
 		                                icon="el-icon-view"
-		                                @click="editWithItem(scope.row)" >
+		                                @click="editWithItem(scope.row,1)" >
                                 </el-button >
                             </el-tooltip >
                             <el-tooltip placement="top" content="审核" >
@@ -230,7 +277,7 @@
 		                                size="mini"
 		                                type="success"
 		                                icon="el-icon-check"
-		                                @click="editWithItem(scope.row)" >
+		                                @click="editWithItem(scope.row,2)" >
                                 </el-button >
                             </el-tooltip >
                         </template >
@@ -247,7 +294,11 @@
                     </el-pagination >
                 </div >
             </el-col >
-
+			<el-dialog title="机器信息" :visible.sync="showMachineDialog" append-to-body fullscreen >
+                    <MachineInfo ref="machineComponent" v-if="showMachineDialog"
+                                 :machineInfoData="machineInfoData"
+                                 :onSubmitData="onSubmitMachine" ></MachineInfo >
+		     </el-dialog >
         </div >
   </div >
 </template >
@@ -256,11 +307,15 @@
  import {APIConfig} from '@/config/apiConfig'
  import {Loading} from 'element-ui';
  import {resetObject} from '@/utils'
- import {getInstallRecordInfoList} from '@/api/install_machine';
+ import {getSaledMachineInfoList} from '@/api/install_machine';
+ import {addMachine, updateMachine} from '@/api/machine_manage';
+ import MachineInfo from '@/views/machine_manage/machine_info';
  var _this;
  export default {
 	 name: 'machine_home',
-	 components: {},
+	 components: {
+		 MachineInfo,
+	 },
 	 data() {
 		 _this = this;
 		 return {
@@ -270,7 +325,7 @@
 			 currentPage: 1,
 			 startRow: 0,
 			 totalRecords: 0,
-			 statusList: APIConfig.InstallStatusList,
+			 statusList: APIConfig.MachineStatusList,
 			 condition: {
 				 nameplate: '',
 				 orderNum: '',
@@ -285,7 +340,10 @@
 			 allMachineType: [],
 			 allRoles: [],
 			 loadingUI: false,
-			 machineSourceList:APIConfig.MachineSourceList,
+			 machineSourceList: APIConfig.MachineSourceList,
+			 machineCheckStatusList: APIConfig.MachineCheckStatusList,
+			 showMachineDialog: false,
+			 machineInfoData: {},
 			 pickerOptions: {
 				 shortcuts: [{
 					 text: '最近一周',
@@ -317,6 +375,29 @@
 	 },
 
 	 filters: {
+		 filterCheckStatus(status)
+		 {
+			 let result = _this.machineCheckStatusList[0].name;
+			 for (let i = 0; i < _this.machineCheckStatusList.length; i++) {
+				 if (status == _this.machineCheckStatusList[i].value) {
+					 result = _this.machineCheckStatusList[i].name;
+					 break;
+				 }
+			 }
+			 return result;
+		 },
+
+		 filterMachineSource(sourceType)
+		 {
+			 let result = _this.machineSourceList[0].name;
+			 for (let i = 0; i < _this.machineSourceList.length; i++) {
+				 if (sourceType == _this.machineSourceList[i].value) {
+					 result = _this.machineSourceList[i].name;
+					 break;
+				 }
+			 }
+			 return result;
+		 },
 		 filterDateString(strDate)
 		 {
 			 if (isUndefined(strDate) || isNull(strDate) || strDate.length == 0) {
@@ -350,6 +431,7 @@
 		 },
 	 },
 	 methods: {
+
 		 handleCurrentChange(val) {
 			 this.currentPage = val;
 			 this.search();
@@ -377,7 +459,7 @@
 				 condition.query_start_time_install = this.condition.selectDate[0].format("yyyy-MM-dd");
 				 condition.query_finish_time_install = this.condition.selectDate[1].format("yyyy-MM-dd");
 			 }
-			 getInstallRecordInfoList(condition).then(response => {
+			 getSaledMachineInfoList(condition).then(response => {
 				 if (responseIsOK(response)) {
 					 _this.tableData = response.data.data.list;
 					 _this.totalRecords = response.data.data.total;
@@ -389,9 +471,80 @@
 				 }
 			 })
 		 },
-		 editWithItem(item)//详情
+		 handleAddMachine()
 		 {
-			 _this.selectedItem = item;
+			 _this.machineInfoData = {};
+			 _this.machineInfoData.showType = "0";// 0-add，1-edit,2-check
+			 _this.showMachineDialog = true;
+		 },
+		 editWithItem(item, showType)//详情
+		 {
+			 _this.selectedItem = copyObject(item);
+			 _this.machineInfoData = copyObject(item)
+			 _this.machineInfoData.showType = showType;// 0-add，1-edit,2-check
+			 _this.showMachineDialog = true;
+
+		 },
+
+		 onSubmitMachine(item)
+		 {
+			 if (item != null) {
+				 let machine = {
+					 nameplate: item.nameplate,
+					 orderNum: item.orderNum,
+					 address: item.address,
+					 machineType: item.machineType,
+					 needleNum: item.needleNum,
+					 xDistance: item.xDistance,
+					 yDistance: item.yDistance,
+					 headDistance: item.headDistance,
+					 headNum: item.headNum,
+					 //isOldMachine:2,
+					 //oldMachineCheck:0,
+					 customer: item.customer,
+				 };
+				 //submit
+				 if (_this.machineInfoData.showType == "0") {//add
+					 machine.isOldMachine = "2";
+					 machine.oldMachineCheck = "0";
+					 machine.status = 1;
+					 addMachine(machine).then(response=> {
+						 if (responseIsOK(response)) {
+							 showMessage(_this, "添加成功!", 1);
+							 this.search();
+						 }
+						 else {
+							 showMessage(_this, "添加失败!" + response.data.message);
+						 }
+					 });
+				 }
+				 else if (_this.machineInfoData.showType == "1") {//edit
+					 machine.id = item.id;
+					 updateMachine(machine).then(response=> {
+						 if (responseIsOK(response)) {
+							 showMessage(_this, "修改成功!", 1);
+							 this.search();
+						 }
+						 else {
+							 showMessage(_this, "修改失败!" + response.data.message);
+						 }
+					 });
+				 }
+				 else if (_this.machineInfoData.showType == "2") {//check
+					 machine.oldMachineCheck = item.oldMachineCheck;
+					 machine.id = item.id;
+					 updateMachine(machine).then(response=> {
+						 if (responseIsOK(response)) {
+							 showMessage(_this, "审核成功!", 1);
+							 this.search();
+						 }
+						 else {
+							 showMessage(_this, "审核失败!" + response.data.message);
+						 }
+					 });
+				 }
+			 }
+			 _this.showMachineDialog = false;
 
 		 },
 
@@ -426,6 +579,7 @@
 	width: 100%;
 	height: 85vh;
 }
+
 .el-select {
 	width: 100%;
 }

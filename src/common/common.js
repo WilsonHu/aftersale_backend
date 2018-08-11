@@ -55,22 +55,10 @@ function getCurrentDay() {
 
 //验证数据是否改动过
 function validateIsDifferent(obj1, obj2) {
-	var isDifferent = false;
-	for (var i in obj1) {
-		var item = obj1[i];
-		if (typeof (obj1[item]) == "function") {
-			continue;
-		} else if (typeof (obj1[item]) == "number") {
-			if (obj1[item].toString() != obj2[item].toString()) {
-				isDifferent = true;
-				break;
-			}
-		} else if (obj1[item] != obj2[item]) {
-			isDifferent = true;
-			break;
-		}
+	if (obj1 == null || obj2 == null) {
+		return true;
 	}
-	return isDifferent;
+	return JSON.stringify(obj1) != JSON.stringify(obj2);
 }
 
 function isInteger(obj) {

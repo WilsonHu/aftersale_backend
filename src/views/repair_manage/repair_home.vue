@@ -167,6 +167,7 @@
 	                <!--</template >-->
 	                <!--</el-table-column >-->
                     <el-table-column label="订单号"
+                                     sortable
                                      align="center"
                                      prop="orderNum" >
                         <template scope="scope" >
@@ -177,6 +178,7 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
+		                    sortable
 		                    prop="machineCustomerName"
 		                    label="客户" >
                     </el-table-column >
@@ -187,6 +189,8 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
+		                    prop="status"
+		                    sortable
 		                    label="状态" >
                         <template scope="scope" >
                             <div v-if="scope.row.status==0"
@@ -233,6 +237,7 @@
                         </template >
                     </el-table-column >
 	                <el-table-column label="保修期内"
+	                                 sortable
 	                                 align="center"
 	                                 prop="inWarrantyPeriod" >
                         <template scope="scope" >
@@ -247,6 +252,7 @@
                         </template >
                     </el-table-column >
 	                <el-table-column label="维修员"
+	                                 sortable
 	                                 align="center"
 	                                 prop="repairChargePersonName" >
                         <template scope="scope" >

@@ -83,6 +83,10 @@ const APIConfig = {
         {value: 1, name: '客户'},
         {value: 2, name: '售后'},
     ],
+    MachineCheckStatusList:[
+        {value: 0, name: '未通过'},
+        {value: 1, name: '通过'},
+    ],
 }
 
 export {APIConfig}
