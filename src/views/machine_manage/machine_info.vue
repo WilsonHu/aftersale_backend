@@ -174,6 +174,10 @@
 	 methods: {
 		 onSave()
 		 {
+             if (_this.formData.isOldMachine == "0") {
+                 _this.onSubmitData(null);
+                 return
+             }
 			 if (isStringEmpty(_this.formData.nameplate)) {
 				 showMessage(_this, "机器编号不能空！")
 				 return;
