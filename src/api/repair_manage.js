@@ -40,3 +40,61 @@ export function assignTaskToSubmit(condition) {
 		})
 	})
 }
+
+export function getIssuePositionList() {
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'issue/position/list/list',
+			method: 'post',
+			data: {}
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+export function addIssuePosition(data) {
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'issue/position/list/add',
+			method: 'post',
+			data: data
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+export function updateIssuePosition(data) {
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'issue/position/list/update',
+			method: 'post',
+			data: data
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+export function deleteIssuePosition(id) {
+	let params = new URLSearchParams();
+	params.append('id', id);
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'issue/position/list/delete',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}

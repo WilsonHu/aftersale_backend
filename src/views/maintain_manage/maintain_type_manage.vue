@@ -209,7 +209,7 @@
                 this.isAdd = false;
                 this.addContentform = copyObjectByJSON(item);
                 this.addDialogVisible = true;
-                this.contentformTitle = this.isAdd ? `增加调试内容` : `编辑调试内容`;
+                this.contentformTitle = this.isAdd ? `增加保养类型` : `编辑保养类型`;
             },
 
             handleDelete(item) {

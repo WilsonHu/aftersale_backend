@@ -11,6 +11,7 @@ export default {
     repair_manage:'维修管理',
     repair_home:'维修主页',
     repair_detail:'维修详情',
+    repair_issue_position:"故障部位",
 
     maintain_manage:'保养管理',
     maintain_home:'保养主页',

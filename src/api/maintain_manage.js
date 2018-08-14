@@ -95,10 +95,6 @@ export function selectLibList(condition) {
 	for (let key of keys) {
 		params.append(key, condition[key]);
 	}
-	// params.append('page', condition.page);
-	// params.append('size', condition.size);
-	// params.append('maintainType', condition.maintainType);
-	// params.append('maintainLibName', condition.maintainLibName);
 	return request({
 		url: 'maintain/lib/selectLibList',
 		method: 'post',

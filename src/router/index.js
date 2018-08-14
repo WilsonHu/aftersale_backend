@@ -138,14 +138,14 @@ export const asyncRouterMap = [
 				path: 'repairHome',
 				component: _import('repair_manage/repair_home'),
 				name: 'repair_home',
-				meta: {title: 'repair_home', noCache: true,icon: 'repair'}
+				meta: {title: 'repair_home', noCache: true,}
 			},
-			// {
-			// 	path: 'repairDetail',
-			// 	component: _import('repair_manage/repair_detail'),
-			// 	name: 'repair_detail',
-			// 	meta: {title: 'repair_detail', noCache: true,}
-			// },
+			{
+				path: 'repairIssuePosition',
+				component: _import('repair_manage/repair_issue_position'),
+				name: 'repair_issue_position',
+				meta: {title: 'repair_issue_position', noCache: true,}
+			},
 		]
 	},
     {

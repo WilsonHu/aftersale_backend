@@ -46,19 +46,16 @@
                         </el-col >
                     </el-row >
                     <el-row >
-
-	                    <el-col :span="5" >
-                            <el-form-item label="范围:" >
-                                <el-select v-model="condition.scope" clearable >
-                                    <el-option
-		                                    v-for="item in statusList"
-		                                    :value="item.value"
-		                                    :label="item.name" >
-                                    </el-option >
-                                </el-select >
+	                   <el-col :span="5" >
+                            <el-form-item label="显示代理商:" >
+                                <el-switch
+		                                v-model="condition.isAgent"
+		                                active-text="是"
+		                                inactive-text="否" >
+                                </el-switch >
                             </el-form-item >
                         </el-col >
-	                    <el-col :span="5" >
+	                    <el-col :span="5" v-show="condition.isAgent">
                             <el-form-item label="代理商:" >
                                  <el-input v-model="condition.agent"
                                            placeholder="代理商" clearable
