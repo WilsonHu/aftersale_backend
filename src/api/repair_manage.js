@@ -41,6 +41,44 @@ export function assignTaskToSubmit(condition) {
 	})
 }
 
+export function assignTaskAgain(condition) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		let keys = Object.keys(condition);
+		for (let key of keys) {
+			params.append(key, JSON.stringify(condition[key]));
+		}
+		return request({
+			url: 'repair/record/AssignTaskAgain',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+export function assignTaskForward(condition) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		let keys = Object.keys(condition);
+		for (let key of keys) {
+			params.append(key, JSON.stringify(condition[key]));
+		}
+		return request({
+			url: 'repair/record/AssignTaskForward',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
 export function getIssuePositionList() {
 	return new Promise((resolve, reject) => {
 		return request({

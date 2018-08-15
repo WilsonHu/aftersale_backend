@@ -3,6 +3,7 @@
  */
 
 import request from '@/utils/request'
+import store from '@/store'
 
 
 //getSaledMachineInfoList
@@ -64,7 +65,8 @@ export function selectUsers(condition) {
 //查询客户集合 -5:客户 -6:客户的联系人
 export function requestCustomerList() {
 	let params = new URLSearchParams();
-	params.append("type", "5");
+	params.append("agentId", store.getters.user.user.agent)
+	params.append("roleId", "5");
 	return new Promise((resolve, reject) => {
 		return request({
 			url: 'user/getUsersByType',
@@ -82,7 +84,8 @@ export function requestCustomerList() {
 //查询员工集合 type=3
 export function requestEmployeeList() {
 	let params = new URLSearchParams();
-	params.append("type", "3");
+	params.append("agentId", store.getters.user.user.agent)
+	params.append("roleId", "3");
 	return new Promise((resolve, reject) => {
 		return request({
 			url: 'user/getUsersByType',

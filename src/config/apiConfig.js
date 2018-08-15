@@ -32,18 +32,18 @@ const APIConfig = {
 
     //保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
     MaintainStatusList: [
-        {value: 0, name: '未开始'},
+        {value: 0, name: '待分配'},
         {value: 1, name: '已分配'},
-        {value: 2, name: '进行中'},
+        {value: 2, name: '已接受'},
         {value: 3, name: '完成待确认'},
         {value: 4, name: '已确认'},
     ],
 
     //保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
     InstallStatusList: [
-        {value: 0, name: '未开始'},
+        {value: 0, name: '待分配'},
         {value: 1, name: '已分配'},
-        {value: 2, name: '进行中'},
+        {value: 2, name: '已接受'},
         {value: 3, name: '完成待确认'},
         {value: 4, name: '已确认'},
     ],
@@ -60,11 +60,13 @@ const APIConfig = {
      */
     RepairStatusList: [
         {value: 0, name: '未派单'},
-        {value: 1, name: '已接受'},
-        {value: 2, name: '进行中'},
-        {value: 3, name: '完成待确认'},
-        {value: 4, name: '已转派'},
-        {value: 5, name: '已确认'},
+        {value: 1, name: '已派单'},
+        {value: 2, name: '已接受'},
+        {value: 3, name: '失败'},
+        {value: 4, name: '已再派'},
+        {value: 5, name: '已转派'},
+        {value: 6, name: '完成待确认'},
+        {value: 7, name: '客户确认'},
     ],
 
     /**

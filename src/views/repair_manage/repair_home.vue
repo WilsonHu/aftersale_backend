@@ -55,7 +55,7 @@
                                 </el-switch >
                             </el-form-item >
                         </el-col >
-	                    <el-col :span="5" v-show="condition.isAgent">
+	                    <el-col :span="5" v-show="condition.isAgent" >
                             <el-form-item label="代理商:" >
                                  <el-input v-model="condition.agent"
                                            placeholder="代理商" clearable
@@ -203,11 +203,11 @@
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==3"
-                                 style="color: #198b57" >
+                                 style="color: red" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==4"
-                                 style="color: darkred" >
+                                 style="color: orange" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==5"
@@ -215,11 +215,11 @@
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==6"
-                                 style="color: darkred" >
+                                 style="color: #13ce66" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==7"
-                                 style="color: red" >
+                                 style="color: #198b57" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                         </template >
@@ -262,13 +262,20 @@
 	                                 align="center"
 	                                 prop="orderNum" >
                         <template scope="scope" >
-                            <div >
-                                {{scope.row.orderNum}}
-                            </div >
+	                        <div >
+	                            <span v-if="scope.row.forwardInfo=='1'" >
+		                            是
+	                            </span >
+		                        <span v-else >
+	                                否
+	                            </span >
+	                        </div >
                         </template >
                     </el-table-column >
                     <el-table-column
 		                    align="center"
+		                    sortable
+		                    prop="createTime"
 		                    label="报修日期" >
                         <template slot-scope="scope" >
                         <span >
@@ -278,7 +285,8 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
-		                    prop="processCreateTime"
+		                    sortable
+		                    prop="repairEndTime"
 		                    label="完成日期" >
                         <template slot-scope="scope" >
                         <span >
@@ -287,7 +295,7 @@
                         </template >
                     </el-table-column >
 
-                    <el-table-column width="150"
+                    <el-table-column width="200"
                                      label="操作" align="center" >
                         <template scope="scope" style="text-align: center" >
                             <el-tooltip placement="top" content="详情" >
@@ -298,12 +306,22 @@
 		                                @click="editWithItem(scope.row)" >
                                 </el-button >
                             </el-tooltip >
-                            <el-tooltip placement="top" content="派单" >
+                            <el-tooltip placement="top" content="派单"
+                                        v-show="(scope.row.status<=3)&&!(scope.row.forwardInfo==1 && $store.getters.user.user.agent > 0)" >
                                 <el-button
 		                                size="mini"
-		                                type="primary"
+		                                type="success"
 		                                icon="el-icon-news"
 		                                @click="assignTask(scope.row)" >
+                                </el-button >
+                            </el-tooltip >
+	                        <el-tooltip placement="top" content="转派"
+	                                    v-show="scope.row.status == 3 && scope.row.machineAgentName != ''&&scope.row.forwardInfo!=1" >
+                                <el-button
+		                                size="mini"
+		                                type="danger"
+		                                icon="el-icon-refresh"
+		                                @click="forwardTask(scope.row)" >
                                 </el-button >
                             </el-tooltip >
                         </template >
@@ -319,14 +337,22 @@
 		                    :total="totalRecords" >
                     </el-pagination >
                 </div >
-                <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body fullscreen >
+		     <el-dialog title="确认转派" :visible.sync="showConfirmForward"
+		                append-to-body width="30%" >
+                    <span >当前任务状态是<span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.status|filterStatus}}</span >, 确定需要转派本次维修吗？</span >
+                    <span slot="footer" class="dialog-footer" >
+		              <el-button @click="showConfirmForward = false" icon="el-icon-close" >取 消</el-button >
+		              <el-button type="primary" @click="onConForward" icon="el-icon-check" >确 定</el-button >
+		            </span >
+		     </el-dialog >
+		     <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body fullscreen >
                     <RepairDetail :repairRecorderInfo="selectedItem"
                                   ref="repairDetail" v-if="showDetailDialog"
                     ></RepairDetail >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
-                </el-dialog >
+		     </el-dialog >
 		     <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
                     <AssignTask :showType="1" ref="assignTask" v-if="showAssignTaskDialog"
                                 :machineInfo="machineInfo"
@@ -338,23 +364,28 @@
                         <el-button @click="showAssignTaskDialog = false" icon="el-icon-back" >关闭</el-button >
                     </div >
 		     </el-dialog >
-		      <el-dialog title="提示" :visible.sync="showConfirmAssign"
-		                 append-to-body width="30%" >
+		     <el-dialog title="提示" :visible.sync="showConfirmAssign"
+		                append-to-body width="30%" >
                     <span >当前任务状态是<span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.status|filterStatus}}</span >, 确定需要再次派单吗？</span >
                     <span slot="footer" class="dialog-footer" >
 		              <el-button @click="showConfirmAssign = false" icon="el-icon-close" >取 消</el-button >
 		              <el-button type="primary" @click="onConShowAssign" icon="el-icon-check" >确 定</el-button >
 		            </span >
-                </el-dialog >
+		     </el-dialog >
 	     </el-col >
       </div >
-  </div >
+	</div >
 </template >
 
 <script >
 import {APIConfig} from '@/config/apiConfig'
 import {Loading} from 'element-ui';
-import {getRepairRecordInfoList, assignTaskToSubmit} from '@/api/repair_manage';
+import {
+		getRepairRecordInfoList,
+		assignTaskToSubmit,
+		assignTaskAgain,
+		assignTaskForward,
+} from '@/api/repair_manage';
 import {requestEmployeeList} from '@/api/commonApi';
 import RepairDetail from '@/views/repair_manage/repair_detail';
 import AssignTask from '@/views/common_component/assign_task';
@@ -413,6 +444,8 @@ export default {
 				workerList: [],
 			},
 			isDisableOK: false,
+			showConfirmForward: false,
+
 			pickerOptions: {
 				shortcuts: [{
 					text: '最近一周',
@@ -487,9 +520,53 @@ export default {
 			return result;
 		},
 	},
+	computed: {
+		isShowAssignButton(item)
+		{
+			if (item.forwardInfo == 1 && _this.$store.getters.user.user.agent > 0) {
+				return false;
+			}
+			if (item.status > 3) {
+				return false;
+			}
+			return true;
+		},
+		isShowAssignForwardButton(item)
+		{
+			if (item.status == 3 && item.machineAgentName != '') {
+				return true;
+			}
+			return false;
+		},
+	},
+
 	methods: {
+		onConForward()//确定转派
+		{
+			_this.showConfirmForward = false;
+			let submitData = {
+				oldId: _this.selectedItem.id,
+				repairRecord: {
+					machineNameplate: _this.selectedItem.machineNameplate,
+					repairRequestInfo: _this.selectedItem.repairRequestInfo,
+					inWarrantyPeriod: _this.selectedItem.inWarrantyPeriod,
+				},
+			};
+			assignTaskForward(submitData).then(response=> {
+				if (responseIsOK(response)) {
+					showMSG(_this, "转派成功！", 1)
+					_this.onSearchDetailData();
+				}
+				else {
+					showMSG(_this, isStringEmpty(response.data.message) ? "转派失败！" : response.data.message)
+				}
+			})
+		},
 		onConShowAssign()
 		{
+			if (!_this.machineInfo.factoryDate) {
+				_this.machineInfo.factoryDate = DateMinus(_this.selectedItem.facoryDate)
+			}
 			_this.showConfirmAssign = false;
 			_this.showAssignTaskDialog = true;
 			if (this.$refs.assignTask) {
@@ -506,13 +583,30 @@ export default {
 				factoryDate: DateMinus(_this.selectedItem.facoryDate),
 			};
 			_this.selectedItem = copyObject(row);
-			if (_this.selectedItem.status > 0) {//当前还在进行.
+			/*
+			 * 0：未派单，
+			 * 1：已派单（但未接单）,
+			 * 2：已接受（进行中，可以再派），
+			 * 3：失败，(可以 再派，代理商可以 转派)
+			 * 4：已再派，
+			 * 5：已转派，
+			 * 6：已完成(客户未确认)，
+			 * 7. 客户确认（维修成功）
+			 */
+			if (_this.selectedItem.status == 2) {
 				_this.showConfirmAssign = true;
 			}
 			else {
 				_this.onConShowAssign();
 			}
 
+		},
+
+
+		forwardTask(item)
+		{
+			_this.selectedItem = copyObject(item);
+			_this.showConfirmForward = true;
 		},
 
 		//Submit OK
@@ -525,7 +619,7 @@ export default {
 				showMessage(_this, "请填写完整的派单数据！")
 				return;
 			}
-			if (_this.assignTaskData.formData.chargePersonId == 0) {
+			if (isUndefined(_this.assignTaskData.formData.chargePersonId) || _this.assignTaskData.formData.chargePersonId == 0) {
 				showMessage(_this, "请选择负责人！")
 				return;
 			}
@@ -556,7 +650,7 @@ export default {
 			});
 			let submitData = {
 				repairRecord: {
-					id: _this.selectedItem.id,
+					//id: _this.selectedItem.id,
 					repairChargePerson: _this.assignTaskData.formData.chargePersonId,
 					customer: _this.assignTaskData.formData.customerId,
 					repairPlanDate: _this.assignTaskData.formData.planDate,
@@ -564,16 +658,37 @@ export default {
 				},
 				repairMembers: memberList,
 			};
-			assignTaskToSubmit(submitData).then(response=> {
-				if (responseIsOK(response)) {
-					showMSG(_this, "分配任务成功！", 1)
-					_this.onSearchDetailData();
-				}
-				else {
-					showMSG(_this, isStringEmpty(response.data.message) ? "分配任务失败！" : response.data.message)
 
-				}
-			})
+			//再派 status为2或3,生成新的一条记录
+			if (_this.selectedItem.status > 1 && _this.selectedItem.status < 4) {
+				submitData.oldId = _this.selectedItem.id;
+				submitData.repairRecord.machineNameplate = _this.selectedItem.machineNameplate;
+				submitData.repairRecord.repairRequestInfo = _this.selectedItem.repairRequestInfo;
+
+				assignTaskAgain(submitData).then(response=> {
+					if (responseIsOK(response)) {
+						showMSG(_this, "再派单成功！", 1)
+						_this.onSearchDetailData();
+					}
+					else {
+						showMSG(_this, isStringEmpty(response.data.message) ? "再派单失败！" : response.data.message)
+
+					}
+				})
+			}
+			else {//正常派单，更改当前记录
+				submitData.repairRecord.id = _this.selectedItem.id;
+				assignTaskToSubmit(submitData).then(response=> {
+					if (responseIsOK(response)) {
+						showMSG(_this, "派单成功！", 1)
+						_this.onSearchDetailData();
+					}
+					else {
+						showMSG(_this, isStringEmpty(response.data.message) ? "派单失败！" : response.data.message)
+
+					}
+				})
+			}
 		},
 
 		handleCurrentChange(val) {

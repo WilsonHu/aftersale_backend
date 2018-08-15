@@ -34,7 +34,7 @@
             </div >
         </div >
 
-        <div class="panel panel-primary" >
+         <div class="panel panel-primary" >
             <div class="panel-heading" style="text-align: left" >
                 <h3 class="panel-title" >机器信息</h3 >
             </div >
@@ -76,9 +76,9 @@
                     </el-form-item >
                 </el-col >
             </div >
-        </div >
+         </div >
 
-        <div class="panel panel-primary" >
+         <div class="panel panel-primary" >
             <div class="panel-heading" style="text-align: left" >
                 <h3 class="panel-title" >维修详情</h3 >
             </div >
@@ -104,7 +104,35 @@
                     </el-form-item >
                 </el-col >
             </div >
-        </div >
+         </div >
+
+         <div class="panel panel-primary" >
+            <div class="panel-heading" style="text-align: left" >
+                <h3 class="panel-title" >报修内容</h3 >
+            </div >
+            <div class="panel-body" style="margin-left: -20px" >
+                <el-col :span="6" >
+                    <el-form-item label="标题:" >
+                        <span v-html="formData.customerNameInRepairRecord" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="分类:" >
+                      <span v-html="formData.customerPhoneInRepairRecord" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="问题描述:" >
+                      <span v-html="formData.customerAddressInRepairRecord" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="报修时间:" >
+                      <span >{{formData.createTime|filterDateString}}</span >
+                    </el-form-item >
+                </el-col >
+            </div >
+         </div >
 
         <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
             <el-tab-pane label="报修内容" >

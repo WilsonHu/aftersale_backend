@@ -114,7 +114,7 @@
 		    machineInfo: {
 			    type: Object,
 			    default: function () {
-				    return { }
+				    return {}
 			    }
 		    },
 //		 resultData: {
@@ -185,7 +185,14 @@
 			    requestEmployeeList().then(response => {
 				    if (responseIsOK(response)) {
 					    if (response.data.data.list.length > 0) {
-						    _this.tableData = response.data.data.list;
+						    let dataList = response.data.data.list;
+//						    if (_this.$store.getters.user.user.agent > 0) {
+//							    //agent filter, only show the related user for current agent
+//							    _this.tableData = dataList.filter(p=>p.agent == _this.$store.getters.user.user.agent);
+//						    } else {
+//							    _this.tableData = dataList;
+//						    }
+						    _this.tableData = dataList;
 					    }
 				    }
 				    else {
@@ -233,7 +240,12 @@
 			    requestCustomerList().then(response=> {
 				    if (responseIsOK(response)) {
 					    _this.customerList = [];
-					    for (let item of response.data.data.list) {
+					    let dataList = response.data.data.list;
+//					    if (_this.$store.getters.user.user.agent > 0) {
+//						    //agent filter, only show the related user for current agent
+//						    dataList = dataList.filter(p=>p.agent == _this.$store.getters.user.user.agent);
+//					    }
+					    for (let item of dataList) {
 						    _this.customerList.push(Object.assign({
 							    value: item.name,
 							    id: item.id,
@@ -294,6 +306,10 @@
 			    _this.dataChanged(_this.getCurrentData());
 		    },
 		    multipleSelection: function (val) {
+			    if (_this.multipleSelection.length == 1) {
+				    _this.multipleSelection[0].checked = true;
+				    _this.formData.chargePersonId = _this.multipleSelection[0].id;
+			    }
 			    _this.dataChanged(_this.getCurrentData());
 		    },
 	    },
