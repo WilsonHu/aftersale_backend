@@ -8,7 +8,7 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="客户:" >
-                        <span v-html="formData.machineCustomerName" ></span >
+                        <span class="MainInfo" v-html="formData.machineCustomerName" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -26,11 +26,6 @@
                       <span v-html="formData.machineAgentPhone" ></span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6" >
-                    <el-form-item label="出厂日期:" >
-                      <span >{{formData.facoryDate|filterDateString}}</span >
-                    </el-form-item >
-                </el-col >
             </div >
         </div >
 
@@ -41,7 +36,7 @@
             <div class="panel-body" style="margin-left: -20px" >
                 <el-col :span="6" >
                     <el-form-item label="机器编号:" >
-                        <span v-html="formData.machineNameplate" ></span >
+                        <span class="MainInfo" v-html="formData.machineNameplate" ></span >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -75,32 +70,80 @@
                       <span v-html="formData.yDistance" ></span >
                     </el-form-item >
                 </el-col >
+
+                <el-col :span="6" >
+                    <el-form-item label="出厂日期:" >
+                      <span >{{formData.facoryDate|filterDateString}}</span >
+                    </el-form-item >
+                </el-col >
             </div >
          </div >
 
          <div class="panel panel-primary" >
             <div class="panel-heading" style="text-align: left" >
-                <h3 class="panel-title" >维修详情</h3 >
+                <h3 class="panel-title" >维修信息</h3 >
             </div >
             <div class="panel-body" style="margin-left: -20px" >
+                <el-row >
+                    <el-col :span="6" >
+                        <el-form-item label="维修联系人:" >
+                            <span v-html="formData.customerNameInRepairRecord" ></span >
+                        </el-form-item >
+                    </el-col >
+                    <el-col :span="6" >
+                        <el-form-item label="联系电话:" >
+                          <span v-html="formData.customerPhoneInRepairRecord" ></span >
+                        </el-form-item >
+                    </el-col >
+                    <el-col :span="6" >
+                        <el-form-item label="地址:" >
+                          <span v-html="formData.customerAddressInRepairRecord" ></span >
+                        </el-form-item >
+                    </el-col >
+                    <el-col :span="6" >
+                        <el-form-item label="报修时间:" >
+                          <span >{{formData.createTime|filterDateString}}</span >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
+                <el-row >
+
+
+                </el-row >
                 <el-col :span="6" >
-                    <el-form-item label="维修联系人:" >
-                        <span v-html="formData.customerNameInRepairRecord" ></span >
-                    </el-form-item >
-                </el-col >
-                <el-col :span="6" >
-                    <el-form-item label="联系电话:" >
-                      <span v-html="formData.customerPhoneInRepairRecord" ></span >
-                    </el-form-item >
-                </el-col >
-                <el-col :span="6" >
-                    <el-form-item label="地址:" >
-                      <span v-html="formData.customerAddressInRepairRecord" ></span >
-                    </el-form-item >
-                </el-col >
-                <el-col :span="6" >
-                    <el-form-item label="报修时间:" >
-                      <span >{{formData.createTime|filterDateString}}</span >
+                    <el-form-item label="维修结果:" >
+                        <div v-if="formData.status==0"
+                             style="color: #686868" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==1"
+                                 style="color: #8b6c0e" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==2"
+                                 style="color: #13678b" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==3"
+                                 style="color: red" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==4"
+                                 style="color: orange" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==5"
+                                 style="color: indianred" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==6"
+                                 style="color: #13ce66" >
+                                {{formData.status|filterStatus}}
+                            </div >
+                            <div v-if="formData.status==7"
+                                 style="color: #198b57" >
+                                {{formData.status|filterStatus}}
+                            </div >
                     </el-form-item >
                 </el-col >
             </div >
@@ -111,54 +154,176 @@
                 <h3 class="panel-title" >报修内容</h3 >
             </div >
             <div class="panel-body" style="margin-left: -20px" >
-                <el-col :span="6" >
-                    <el-form-item label="标题:" >
-                        <span v-html="formData.customerNameInRepairRecord" ></span >
-                    </el-form-item >
-                </el-col >
-                <el-col :span="6" >
-                    <el-form-item label="分类:" >
-                      <span v-html="formData.customerPhoneInRepairRecord" ></span >
-                    </el-form-item >
-                </el-col >
-                <el-col :span="6" >
-                    <el-form-item label="问题描述:" >
-                      <span v-html="formData.customerAddressInRepairRecord" ></span >
-                    </el-form-item >
-                </el-col >
+
                 <el-col :span="6" >
                     <el-form-item label="报修时间:" >
                       <span >{{formData.createTime|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
+                <el-col :span="22" >
+                        <el-form-item label="报修问题:" >
+                             <span style="font-size: 20px;font-weight: bold" >{{formData.repairRequestTitle}}</span >
+                        </el-form-item >
+                </el-col >
+                <el-col :span="22" >
+                        <el-form-item label="文字描述:" >
+                          <!--<el-input v-model="formData.repairRequestContent"-->
+                          <!--disabled-->
+                          <!--type="textarea"-->
+                          <!--:rows="6" clearable style="font-size: 18px" ></el-input >-->
+	                        <span v-html="formData.repairRequestContent" ></span >
+                        </el-form-item >
+                </el-col >
+                <el-col :span="22" >
+                        <el-form-item label="图片描述:" >
+                             <div v-for="itemPicture in formData.repairRequestPictures"
+                                  style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
+                                <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
+                                    <img :src="itemPicture.image|converterUrl" class="img-responsive" alt="Chania"
+                                         style="width:300px;height: 200px; margin: 3px;" >
+	                                </img>
+                                </div >
+                            </div >
+                        </el-form-item >
+                </el-col >
+                <el-col :span="22" >
+                        <el-form-item label="声音描述:" >
+                             <audio id="audioId" autoplay="true" controls="controls"
+                                    style="margin-left: -6px;visibility: hidden" >
+                                    <source :src="voiceInfo.voiceUrl" :type="voiceInfo.voiceType" >
+	                             <!--<source src="song.mp3" type="audio/mp3" />-->
+                             </audio >
+                            <el-col :span="2" v-for="(item,index) in formData.repairRequestVoice" >
+                                        <span :style="{'border-color': onSelectVoice(index)}"
+                                              @click="onPlayVoice(item,index)" >
+                                             <svg-icon :icon-class="onSelectIcon(index)"
+                                                       @click="onPlayVoice(item,index)"
+                                                       data-toggle="tooltip" data-placement="top"
+                                                       :title="item|converterUrl"
+                                                       style="width:100px;height: 100px; margin: 3px; cursor:hand; "
+                                             />
+                                        </span >
+                            </el-col >
+                        </el-form-item >
+                </el-col >
+
             </div >
          </div >
 
-        <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
-            <el-tab-pane label="报修内容" >
-                <div class="panel panel-primary" >
-                    <div class="panel-heading" style="text-align: left" >
-                        <h3 class="panel-title" >报修内容</h3 >
-                    </div >
-                    <div class="panel-body" style="margin-left: -20px" >
+         <div class="panel panel-primary" >
+            <div class="panel-heading" style="text-align: left" >
+                <h3 class="panel-title" >维修结果</h3 >
+            </div >
+            <div class="panel-body" >
+                <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
+                    <el-tab-pane label="代理商维修" name="0" >
                         <el-col :span="6" >
-                            <el-form-item label="报修员:" >
-                              <span v-html="formData.repairChargePersonName" ></span >
+                            <el-form-item label="维修负责人:" >
+                                <span v-html="formData.repairChargePersonName" ></span >
                             </el-form-item >
                         </el-col >
                         <el-col :span="6" >
-                            <el-form-item label="报修时间:" >
-                                <span >{{formData.createTime|filterDateString}}</span >
+                            <el-form-item label="联系电话:" >
+                              <span v-html="formData.repairChargePersonPhone" ></span >
                             </el-form-item >
                         </el-col >
-                    </div >
-                </div >
-            </el-tab-pane >
-            <el-tab-pane label="代理商维修" >代理商维修</el-tab-pane >
-            <el-tab-pane label="信胜维修" >信胜维修</el-tab-pane >
-            <el-tab-pane label="客户评价" >客户评价</el-tab-pane >
-        </el-tabs >
+                        <el-col :span="6" >
+                            <el-form-item label="开始时间:" >
+                              <span >{{formData.repairStartTime|filterDateString}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="6" >
+                            <el-form-item label="完成时间:" >
+                              <span >{{formData.repairEndTime|filterDateString}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="22" >
+                            <el-form-item label="维修员描述:" >
+                              <span >{{formData.repairActualIssueDescription}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="22" >
+                            <el-form-item label="解决方案:" >
+                              <span >{{formData.repairActualMethod}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="6" >
+                            <el-form-item label="故障部位:" >
+                              <span >{{formData.issuePositionName}}</span >
+                            </el-form-item >
+                        </el-col >
 
+                    </el-tab-pane >
+                    <el-tab-pane label="信胜维修" name="1" >
+                        <el-col :span="6" >
+                            <el-form-item label="维修负责人:" >
+                                <span v-html="formData.repairChargePersonName" ></span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="6" >
+                            <el-form-item label="联系电话:" >
+                              <span v-html="formData.repairChargePersonPhone" ></span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="6" >
+                            <el-form-item label="开始时间:" >
+                              <span >{{formData.repairStartTime|filterDateString}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="6" >
+                            <el-form-item label="完成时间:" >
+                              <span >{{formData.repairEndTime|filterDateString}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="22" >
+                            <el-form-item label="维修员描述:" >
+                              <span >{{formData.repairActualIssueDescription}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="22" >
+                            <el-form-item label="解决方案:" >
+                              <span >{{formData.repairActualMethod}}</span >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="6" >
+                            <el-form-item label="故障部位:" >
+                              <span >{{formData.issuePositionName}}</span >
+                            </el-form-item >
+                        </el-col >
+                    </el-tab-pane >
+                    <el-tab-pane label="客户评价" name="2" >
+                        <el-col :span="22" >
+                            <el-form-item label="用户评分:" >
+                                <div style="font-size: 20px;font-weight: bold" >
+                                    <div v-for="item in skillStars"
+                                         style="float: left;" >
+                                             <svg-icon :icon-class="onStarLoad(item)"
+                                                       data-toggle="tooltip" data-placement="top"
+                                                       :title="item.score"
+                                                       style="width:30px;height: 30px; margin: 3px;"
+                                             />
+                                    </div >
+                                    <div class="control-label"
+                                         style="float: left; margin-left: 10px;font-weight: bold;" >
+                                        {{formData.repairFeedbackCustomerMark==""?0:formData.repairFeedbackCustomerMark}}分
+                                    </div >
+                                </div >
+                            </el-form-item >
+
+
+                        </el-col >
+                        <el-col :span="22" >
+                             <el-form-item label="用户评论:" >
+                                <div class="control-label" style="float: left; margin-left: 10px;font-weight: bold;" >
+                                    {{formData.repairFeedbackCustomerSuggestion}}
+                                </div >
+                            </el-form-item >
+                        </el-col >
+                    </el-tab-pane >
+                </el-tabs >
+
+            </div >
+         </div >
     </el-form >
   </div >
 </template >
@@ -166,6 +331,8 @@
 <script >
  import {APIConfig} from '@/config/apiConfig'
  import {resetObject} from '@/utils'
+ import {loadServerScore} from '@/api/commonApi'
+
  var _this;
  export default {
 	 name: 'RepairDetail',
@@ -186,20 +353,95 @@
 			 loading: {},
 			 formData: {},
 			 activeTabId: 0,
+			 statusList: APIConfig.RepairStatusList,
+			 voiceInfo: {
+				 voiceIndex: -1,
+				 voiceUrl: "",
+				 voiceType: "audio/mp3",
+			 },
+			 skillStars: {},
 		 }
 	 },
 	 filters: {
+		 converterUrl: function (url) {
+			 return APIConfig.request_server_url + url;
+		 },
 		 filterDateString(strDate)
 		 {
 			 var resDate = new Date(strDate);
 			 return resDate.format("yyyy-MM-dd");
 		 },
+		 filterStatus(id)
+		 {
+			 let result = _this.statusList[0].name;
+			 for (let i = 0; i < _this.statusList.length; i++) {
+				 if (id == _this.statusList[i].value) {
+					 result = _this.statusList[i].name;
+					 break;
+				 }
+			 }
+			 return result;
+		 },
 	 },
 	 methods: {
+		 onStarLoad(item)
+		 {
+			 if (item.starMode == 1) {
+				 return "star_half";
+			 }
+			 if (item.starMode == 2) {
+				 return "star_full";
+			 }
+			 return "star_none";
+		 },
+		 showAgentResult()
+		 {
+			 let result = true;
+			 return result;
+		 },
+		 showSinsimResult()
+		 {
+			 let result = true;
+			 return result;
+		 },
+		 onSelectIcon(index)
+		 {
+			 let icon = "voice";
+			 if (this.voiceInfo.voiceIndex == index) {
+				 icon = "voice_fill";
+			 }
+			 return icon;
+		 },
+		 onSelectVoice: function (index) {
+			 if (this.voiceInfo.voiceIndex == index) {
+				 return "#2b669a";
+			 } else {
+				 return '#d9edf7';
+			 }
+		 },
+
+		 onPlayVoice: function (url, index) {
+			 var player = document.getElementById("audioId")
+			 if (url == null) {
+				 return;
+			 }
+			 if (player.paused || this.voiceInfo.voiceIndex != index) {
+				 this.voiceInfo.voiceUrl = APIConfig.request_server_url + url;
+				 this.voiceInfo.voiceIndex = index;
+				 this.voiceInfo.voiceType = getAudioType(url);
+				 player.load();//play audio
+			 }
+			 else {
+				 player.pause();//stop audio
+			 }
+
+		 },
 		 loadData()
 		 {
 			 this.formData = {};
 			 this.formData = copyObject(_this.repairRecorderInfo);
+			 this.skillStars = loadServerScore(_this.formData.repairFeedbackCustomerMark);
+			 //console.log(`formData: ${JSON.stringify(this.formData)}`);
 		 },
 		 tabSwitchClick(tab)
 		 {
@@ -220,6 +462,11 @@
 	padding: 20px;
 	width: 100%;
 	height: 85vh;
+}
+
+.MainInfo {
+	font-weight: bold;
+	color: #2b542c;
 }
 
 span {

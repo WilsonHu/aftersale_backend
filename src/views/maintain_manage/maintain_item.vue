@@ -84,7 +84,7 @@
         <el-dialog title="添加" :visible.sync="addTabDialogVisible" width="40%" >
             <el-form :model="addTabform" style="font-size: 18px" >
                 <el-col :span="24" >
-                    <el-form-item label="安装项名称：" :label-width="formLabelWidth" style="width: 80%" >
+                    <el-form-item label="保养项名称：" :label-width="formLabelWidth" style="width: 80%" >
                         <el-input v-model="addTabform.name" clearable style="font-size: 18px" ></el-input >
                     </el-form-item >
                 </el-col >

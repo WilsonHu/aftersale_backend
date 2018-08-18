@@ -349,9 +349,9 @@
                     <RepairDetail :repairRecorderInfo="selectedItem"
                                   ref="repairDetail" v-if="showDetailDialog"
                     ></RepairDetail >
-                    <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
-                        <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
-                    </div >
+                    <!--<div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >-->
+                        <!--<el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >-->
+                    <!--</div >-->
 		     </el-dialog >
 		     <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
                     <AssignTask :showType="1" ref="assignTask" v-if="showAssignTaskDialog"

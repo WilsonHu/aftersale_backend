@@ -98,3 +98,41 @@ export function requestEmployeeList() {
 		})
 	})
 }
+
+var DEFAULTSCORE = 5;
+export function loadServerScore(scoreData) {
+	if (scoreData == "" || scoreData == null) {
+		scoreData = 0;
+	}
+	var scores = Number(scoreData);
+	var list = [];
+	for (let i = 0; i < DEFAULTSCORE; i++) {
+		list.push({
+			score: i + 1,
+			starMode: 0,
+		})
+	}
+	var allStar = 0;
+	var halfStar = 0;
+	var defaultStar = 0;
+
+	if (isInteger(scores)) {
+		allStar = scores;
+		defaultStar = DEFAULTSCORE - allStar;
+		halfStar = 0;
+	} else {
+		allStar = Math.floor(scores);
+		defaultStar = DEFAULTSCORE - (allStar + 1);
+		halfStar = 1;
+	}
+	for (let i = 0; i < allStar; i++) {
+		list[i].starMode = 2;//全星
+	}
+	for (let i = 0; i < halfStar; i++) {
+		list[allStar + i].starMode = 1;//半星
+	}
+	for (let i = 0; i < defaultStar; i++) {
+		list[allStar + halfStar].starMode = 0;//默认星
+	}
+	return list;
+}
