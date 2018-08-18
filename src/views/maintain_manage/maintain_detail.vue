@@ -123,23 +123,33 @@
 
         <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
             <el-tab-pane label="保养内容" >
-                <div class="panel panel-primary" >
+                <el-row >
+                    <el-col :span="6" >
+                        <el-form-item label="保养项:" >
+                            <span v-html="formData.maintainLibName" ></span >
+                        </el-form-item >
+                    </el-col >
+                    <el-col :span="6" >
+                        <el-form-item label="保养时间:" >
+                            <span >{{formData.maintainDateActual|filterDateString}}</span >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
+                <div class="panel panel-primary" v-for="item in maintainCotentList"
+                     style="font-weight: bold;font-size: 20px;" >
                     <div class="panel-heading" style="text-align: left" >
-                        <h3 class="panel-title" >基本项</h3 >
+                        <span class="panel-title" >{{item.typeName}}</span >
                     </div >
-                    <div class="panel-body" style="margin-left: -20px" >
-                        <el-col :span="6" >
-                            <el-form-item label="保养员:" >
-                              <span v-html="formData.maintainChargePersonName" ></span >
-                            </el-form-item >
-                        </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="保养时间:" >
-                                <span >{{formData.maintainDateActual|filterDateString}}</span >
-                            </el-form-item >
+                    <div class="panel-body" >
+                        <el-col :span="20" v-for="itemContent in item.contentList" >
+                            <svg-icon :icon-class="showCheckBox(itemContent.isChecked)"
+                                      style="width:30px;height: 30px; margin-left: 3px;margin-top: 5px;"
+                            />
+                            <span style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.content}}</span >
                         </el-col >
                     </div >
                 </div >
+
             </el-tab-pane >
             <el-tab-pane label="代理商保养" >代理商保养</el-tab-pane >
             <el-tab-pane label="信胜保养" >信胜保养</el-tab-pane >
@@ -152,7 +162,8 @@
 
 <script >
  import {APIConfig} from '@/config/apiConfig'
- import {getMaintainDetail} from '@/api/install_machine';
+ import {selectLibList} from '@/api/maintain_manage';
+ import {loadServerScore} from '@/api/commonApi'
  import {resetObject} from '@/utils'
  var _this;
 
@@ -178,6 +189,18 @@
 			 loading: {},
 			 formData: {},
 			 activeTabId: 0,
+			 maintainLibList: [],
+			 maintainCotentList: [
+				 {
+					 type: 0,
+					 typeName: "sdfsdfs",
+					 contentList: [{
+						 content: "dfsdf",
+						 isChecked: false,
+					 }
+					 ],
+				 },
+			 ],
 		 }
 	 },
 	 filters: {
@@ -188,28 +211,47 @@
 		 },
 	 },
 	 methods: {
+		 showCheckBox(ischeck)
+		 {
+			 return ischeck ? 'checkbox_checked' : 'checkbox_unchecked';
+		 },
 		 loadData()
 		 {
 			 this.formData = {};
-//			 _this.loading = this.$loading({
-//				 lock: true,
-//				 text: '拼命加载中',
-//				 spinner: 'el-icon-loading',
-//				 background: 'rgba(0, 0, 0, 0.7)'
-//			 });
 			 if (_this.machineNameplate != null) {
 				 this.formData = copyObject(_this.maintainRecorderInfo);
+				 //console.log(`formData: \n${JSON.stringify(_this.maintainRecorderInfo)}`);
 			 }
 		 },
 		 tabSwitchClick(tab)
 		 {
 			 console.log("tabSwitchClick:" + tab);
+		 },
 
+		 loadMaintainLib()
+		 {
+			 selectLibList({
+				 maintainType: "1",//所有子项
+				 maintainLibName: _this.formData.maintainLibName,
+				 page: '',
+				 size: '',
+			 }).then(response=> {
+				 if (responseIsOK(response)) {
+					 _this.mainTainLibList = response.data.data.list;
+					 _this.mainTainLibList.forEach(p=> {
+						 
+                     })
+				 }
+				 else {
+					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				 }
+			 })
 		 },
 	 },
 
 	 mounted(){
 		 _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
+		 _this.loadMaintainLib();
 //		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
 //			 _this.loadData();
 //			 console.log('监听成功')

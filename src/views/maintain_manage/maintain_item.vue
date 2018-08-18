@@ -45,6 +45,16 @@
                                 </div >
                             </template >
                         </el-table-column >
+
+	                    <el-table-column
+			                    align="center"
+			                    label="保养类型" >
+                            <template scope="scope" >
+                                <div >
+                                    {{filterMaintainType(scope.row.maintainType)}}
+                                </div >
+                            </template >
+                        </el-table-column >
                         <el-table-column
 		                        label="操作" width="150" align="center" >
                             <template scope="scope" style="text-align: center" >
@@ -103,6 +113,17 @@
                                   :rows="5" clearable style="font-size: 18px" ></el-input >
                     </el-form-item >
                 </el-col >
+	            <el-col :span="24" >
+                    <el-form-item label="保养类型：" :label-width="formLabelWidth" style="width: 100%" >
+	                    <el-select v-model="addContentform.maintainType" clearable >
+                                    <el-option
+		                                    v-for="item in maintainTypeList"
+		                                    :value="item.id"
+		                                    :label="item.maintainTypeName" >
+                                    </el-option >
+	                    </el-select >
+                    </el-form-item >
+                </el-col >
             </el-form >
             <div slot="footer" class="dialog-footer" >
                 <el-button @click="addDialogVisible = false" size="small" >取 消</el-button >
@@ -137,7 +158,8 @@
 		 addMaintainLib,
 		 updateMaintainLib,
 		 deleteMaintainLib,
-		 deleteMaintainLibByCondition
+		 deleteMaintainLibByCondition,
+		 getMaintainTypeList,
  } from '@/api/maintain_manage'
 
  var _this;
@@ -170,9 +192,22 @@
 			 contentformTitle: `添加保养内容`,
 			 deleteContentConfirmDialog: false,
 			 deleteTabConfirmDialog: false,
+			 maintainTypeList: [],
 		 };
 	 },
 	 methods: {
+
+		 filterMaintainType(id)
+		 {
+			 let result = _this.maintainTypeList[0].maintainTypeName;
+			 for (let i = 0; i < _this.maintainTypeList.length; i++) {
+				 if (id == _this.maintainTypeList[i].id) {
+					 result = _this.maintainTypeList[i].maintainTypeName;
+					 break;
+				 }
+			 }
+			 return result;
+		 },
 		 onConfirmDeleteTab()
 		 {
 			 this.deleteTabConfirmDialog = false;
@@ -286,11 +321,15 @@
 				 showMessage(this, "保养内容不能为空！")
 				 return;
 			 }
+			 if (isStringEmpty(this.addContentform.maintainType)) {
+				 showMessage(this, "请选择保养类型！")
+				 return;
+			 }
 			 var activeTab = _this.getCurrentActiveTab();
 			 var item = {
 				 maintainLibName: activeTab.name,
 				 maintainContent: this.addContentform.maintainContent,
-				 maintainType: "1",
+				 maintainType: this.addContentform.maintainType,
 			 }
 			 if (this.isAdd) {
 				 addMaintainLib(item).then(response => {
@@ -354,7 +393,7 @@
 		 onSearchBaseData()
 		 {
 			 let condition = {
-				 maintainType: "0",
+				 maintainType: "",
 				 maintainLibName: '',
 				 page: '',
 				 size: '',
@@ -409,8 +448,25 @@
 			 })
 		 },
 
+		 loadMaintainType()
+		 {
+			 getMaintainTypeList({
+				 page: '',
+				 size: '',
+			 }).then(response => {
+				 if (responseIsOK(response)) {
+					 _this.maintainTypeList = response.data.data.list;
+				 }
+				 else {
+					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				 }
+			 })
+
+		 },
+
 		 initData()
 		 {
+			 _this.loadMaintainType();
 			 _this.onSearchBaseData();
 		 },
 

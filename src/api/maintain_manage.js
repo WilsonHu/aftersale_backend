@@ -25,13 +25,17 @@ export function getMaintainRecordInfoList(condition) {
 
 
 //maintain_type
-export function getMaintainTypeList() {
+export function getMaintainTypeList(condition) {
 	let params = new URLSearchParams();
+	let keys = Object.keys(condition);
+	for (let key of keys) {
+		params.append(key, condition[key]);
+	}
 	return new Promise((resolve, reject) => {
 		return request({
 			url: 'maintain/type/list',
 			method: 'post',
-			data: ''
+			data: params
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {

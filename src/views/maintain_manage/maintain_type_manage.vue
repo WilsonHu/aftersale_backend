@@ -218,7 +218,11 @@
             },
             onSearchDetailData()
             {
-                getMaintainTypeList().then(response => {
+                let condition={
+                    page: this.currentPage,
+                    size: this.pageSize,
+                };
+                getMaintainTypeList(condition).then(response => {
                     if (responseIsOK(response)) {
                         _this.totalRecords = response.data.data.total;
                         _this.startRow = response.data.data.startRow;
