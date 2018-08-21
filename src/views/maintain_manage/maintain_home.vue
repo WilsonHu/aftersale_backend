@@ -508,7 +508,7 @@
 			    resetObject(_this.formData);
 			    if (_this.mainTainLibList.length == 0) {
 				    let condition = {
-					    maintainType: "0",
+					    maintainType: "",
 					    maintainLibName: '',
 				    };
 				    selectLibList(condition).then(response=> {

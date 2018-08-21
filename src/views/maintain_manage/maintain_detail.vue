@@ -122,7 +122,7 @@
         </div >
 
         <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
-            <el-tab-pane label="保养内容" >
+            <el-tab-pane label="保养内容" name="0">
                 <el-row >
                     <el-col :span="6" >
                         <el-form-item label="保养项:" >
@@ -138,11 +138,11 @@
                 <div class="panel panel-primary" v-for="item in maintainCotentList"
                      style="font-weight: bold;font-size: 20px;" >
                     <div class="panel-heading" style="text-align: left" >
-                        <span class="panel-title" >{{item.typeName}}</span >
+                        <span class="panel-title" >{{item.maintainType|filterMaintainTypeName}}</span >
                     </div >
                     <div class="panel-body" >
                         <el-col :span="20" v-for="itemContent in item.contentList" >
-                            <svg-icon :icon-class="showCheckBox(itemContent.isChecked)"
+                            <svg-icon :icon-class="showCheckBox(itemContent.checkValue)"
                                       style="width:30px;height: 30px; margin-left: 3px;margin-top: 5px;"
                             />
                             <span style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.content}}</span >
@@ -151,9 +151,37 @@
                 </div >
 
             </el-tab-pane >
-            <el-tab-pane label="代理商保养" >代理商保养</el-tab-pane >
-            <el-tab-pane label="信胜保养" >信胜保养</el-tab-pane >
-            <el-tab-pane label="客户评价" >客户评价</el-tab-pane >
+            <el-tab-pane label="代理商保养" name="1">代理商保养</el-tab-pane >
+            <el-tab-pane label="信胜保养" name="2">信胜保养</el-tab-pane >
+            <el-tab-pane label="客户评价" name="3" >
+                <el-col :span="22" >
+                    <el-form-item label="用户评分:" >
+                        <div style="font-size: 20px;font-weight: bold" >
+                            <div v-for="item in skillStars"
+                                 style="float: left;" >
+                                     <svg-icon :icon-class="onStarLoad(item)"
+                                               data-toggle="tooltip" data-placement="top"
+                                               :title="item.score"
+                                               style="width:30px;height: 30px; margin: 3px;"
+                                     />
+                            </div >
+                            <div class="control-label"
+                                 style="float: left; margin-left: 10px;font-weight: bold;" >
+                                {{formData.maintainFeedbackCustomerMark==""?0:formData.maintainFeedbackCustomerMark}} 分
+                            </div >
+                        </div >
+                    </el-form-item >
+
+
+                </el-col >
+                <el-col :span="22" >
+                     <el-form-item label="用户评论:" >
+                        <div class="control-label" style="float: left; margin-left: 10px;font-weight: bold;" >
+                            {{formData.maintainFeedbackCustomerSuggestion}}
+                        </div >
+                    </el-form-item >
+                </el-col >
+            </el-tab-pane >
         </el-tabs >
 
     </el-form >
@@ -162,7 +190,7 @@
 
 <script >
  import {APIConfig} from '@/config/apiConfig'
- import {selectLibList} from '@/api/maintain_manage';
+ import {selectLibList, getMaintainTypeList} from '@/api/maintain_manage';
  import {loadServerScore} from '@/api/commonApi'
  import {resetObject} from '@/utils'
  var _this;
@@ -191,16 +219,17 @@
 			 activeTabId: 0,
 			 maintainLibList: [],
 			 maintainCotentList: [
-				 {
-					 type: 0,
-					 typeName: "sdfsdfs",
-					 contentList: [{
-						 content: "dfsdf",
-						 isChecked: false,
-					 }
-					 ],
-				 },
+//				 {
+//					 maintainType: 0,
+//					 contentList: [{
+//						 content: "dfsdf",
+//						 isChecked: false,
+//					 }
+//					 ],
+//				 },
 			 ],
+			 maintainTypeList: [],
+             skillStars: {},
 		 }
 	 },
 	 filters: {
@@ -209,11 +238,33 @@
 			 var resDate = new Date(strDate);
 			 return resDate.format("yyyy-MM-dd");
 		 },
+
+		 filterMaintainTypeName(id)
+		 {
+			 let result = '';
+			 for (let i = 0; i < _this.maintainTypeList.length; i++) {
+				 if (id == _this.maintainTypeList[i].id) {
+					 result = _this.maintainTypeList[i].maintainTypeName;
+					 break;
+				 }
+			 }
+			 return result;
+		 },
 	 },
 	 methods: {
+         onStarLoad(item)
+         {
+             if (item.starMode == 1) {
+                 return "star_half";
+             }
+             if (item.starMode == 2) {
+                 return "star_full";
+             }
+             return "star_none";
+         },
 		 showCheckBox(ischeck)
 		 {
-			 return ischeck ? 'checkbox_checked' : 'checkbox_unchecked';
+			 return ischeck == 1 ? 'checkbox_checked' : 'checkbox_unchecked';
 		 },
 		 loadData()
 		 {
@@ -222,10 +273,31 @@
 				 this.formData = copyObject(_this.maintainRecorderInfo);
 				 //console.log(`formData: \n${JSON.stringify(_this.maintainRecorderInfo)}`);
 			 }
+			 try {
+				 _this.maintainCotentList = JSON.parse(this.formData.maintainInfo);
+			 } catch (e) {
+				 console.log(e);
+			 }
 		 },
 		 tabSwitchClick(tab)
 		 {
 			 console.log("tabSwitchClick:" + tab);
+		 },
+
+		 loadMaintainTypeList()
+		 {
+			 let condition = {
+				 page: '',
+				 size: '',
+			 };
+			 getMaintainTypeList(condition).then(response => {
+				 if (responseIsOK(response)) {
+					 _this.maintainTypeList = response.data.data.list;
+				 }
+				 else {
+					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				 }
+			 })
 		 },
 
 		 loadMaintainLib()
@@ -239,8 +311,28 @@
 				 if (responseIsOK(response)) {
 					 _this.mainTainLibList = response.data.data.list;
 					 _this.mainTainLibList.forEach(p=> {
-						 
-                     })
+						 let isFound = false;
+						 for (let item of _this.maintainCotentList) {
+							 if (item.maintainType == p.maintainType) {
+								 item.contentList.push({
+									 content: p.maintainContent,
+									 checkValue: 0,
+								 })
+								 isFound = true;
+							 }
+						 }
+						 if (!isFound) {
+							 let data = {
+								 maintainType: p.maintainType,
+								 contentList: [],
+							 }
+							 data.contentList.push({
+								 content: p.maintainContent,
+								 checkValue: 0,
+							 });
+							 _this.maintainCotentList.push(data);
+						 }
+					 })
 				 }
 				 else {
 					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
@@ -250,8 +342,12 @@
 	 },
 
 	 mounted(){
+		 _this.loadMaintainTypeList();
 		 _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
-		 _this.loadMaintainLib();
+		 if (_this.maintainCotentList.length == 0) {
+			 _this.loadMaintainLib();
+		 }
+         this.skillStars = loadServerScore(_this.formData.maintainFeedbackCustomerMark);
 //		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
 //			 _this.loadData();
 //			 console.log('监听成功')
