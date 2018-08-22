@@ -118,46 +118,119 @@
                       <span >{{formData.installActualTime|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
+                <el-row >
+                    <el-col :span="22" >
+                        <el-form-item label="安装负责人:" >
+                            <el-tag class="tagClass" type="success" >
+                                {{formData.installChargePersonName}}
+                            </el-tag >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
+                <el-row >
+                    <el-col >
+                        <el-form-item label="安装人员:" >
+                            <el-tag
+                                    v-for="user in installMembers"
+                                    :key="user.name"
+                                    class="tagClass" type="info" >
+                                {{user.name}}
+                            </el-tag >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
+                <el-row >
+                    <el-col :span="6" >
+                        <el-form-item label="调试结果:" >
+                            <div v-if="formData.installStatus==0"
+                                 style="color: #686868" class="status_class" >
+                                    {{formData.installStatus|filterStatus}}
+                            </div >
+                            <div v-if="formData.installStatus==1"
+                                 style="color: #8b6c0e" class="status_class" >
+                                    {{formData.installStatus|filterStatus}}
+                            </div >
+                            <div v-if="formData.installStatus==2"
+                                 style="color: #13678b" class="status_class" >
+                                {{formData.installStatus|filterStatus}}
+                            </div >
+                            <div v-if="formData.installStatus==3"
+                                 style="color: #198b57" class="status_class" >
+                                {{formData.installStatus|filterStatus}}
+                            </div >
+                            <div v-if="formData.installStatus==4"
+                                 style="color: darkred" class="status_class" >
+                                {{formData.installStatus|filterStatus}}
+                            </div >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
             </div >
         </div >
 
         <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
             <el-tab-pane label="调试内容" >
-                <div class="panel panel-primary" >
-                    <div class="panel-heading" style="text-align: left" >
-                        <h3 class="panel-title" >基本项</h3 >
-                    </div >
-                    <div class="panel-body" style="margin-left: -20px" >
-                        <el-col :span="6" >
-                            <el-form-item label="调试联系人:" >
-                                <span v-html="formData.machineCustomerName" ></span >
-                            </el-form-item >
-                        </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="联系电话:" >
-                              <span v-html="formData.machineCustomerPhone" ></span >
-                            </el-form-item >
-                        </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="地址:" >
-                              <span v-html="formData.address" ></span >
-                            </el-form-item >
-                        </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="调试员:" >
-                              <span v-html="formData.installChargePersonName" ></span >
-                            </el-form-item >
-                        </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="调试时间:" >
-                               <span >{{formData.installActualTime|filterDateString}}</span >
-                            </el-form-item >
-                        </el-col >
+                <div v-if="installCotentList.length>0" >
+                    <div class="panel panel-primary" v-for="item in installCotentList"
+                         style="font-weight: bold;font-size: 20px;" >
+                        <div class="panel-heading" style="text-align: left" >
+                            <span class="panel-title" >{{item.installLibName}}</span >
+                        </div >
+                        <div class="panel-body" >
+                            <el-col :span="20" v-for="itemContent in item.contentList" >
+                                <span v-if="isShowContent(itemContent)"
+                                      style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.installContent}}</span >
+                                <el-form-item :label="itemContent.installContent" v-else >
+                                    <span >: {{itemContent.installValue}}</span >
+                                </el-form-item >
+                            </el-col >
+                        </div >
                     </div >
                 </div >
+                <span v-else >
+                        暂无内容
+                </span >
           </el-tab-pane >
-          <el-tab-pane label="调试总结" >调试总结</el-tab-pane >
-          <el-tab-pane label="客户评价" >客户评价</el-tab-pane >
+          <el-tab-pane label="调试总结" >
+              <el-col :span="22" >
+                    <el-form-item label="安装员备注:" >
+                      <span v-html="formData.installResult" ></span >
+                    </el-form-item >
+              </el-col >
+          </el-tab-pane >
+          <el-tab-pane label="客户评价" >
+              <el-col :span="22" >
+                    <el-form-item label="用户评分:" >
+                        <div style="font-size: 20px;font-weight: bold" >
+                            <div v-for="item in skillStars"
+                                 style="float: left;" >
+                                     <svg-icon :icon-class="onStarLoad(item)"
+                                               data-toggle="tooltip" data-placement="top"
+                                               :title="item.score"
+                                               style="width:30px;height: 30px; margin: 3px;"
+                                     />
+                            </div >
+                            <div class="control-label" v-if="formData.installFeedbackCustomerMark!=''"
+                                 style="float: left; margin-left: 10px;font-weight: bold;" >
+                                         {{formData.installFeedbackCustomerMark}} 分
+                            </div >
+                            <div class="control-label" v-else
+                                 style="float: left; margin-left: 10px;font-weight: bold;" >
+                                        暂无评分
+                            </div >
+                        </div >
+                    </el-form-item >
+
+
+                </el-col >
+                <el-col :span="22" >
+                     <el-form-item label="用户评论:" >
+                        <div class="control-label" style="float: left; margin-left: 10px;font-weight: bold;" >
+                            {{formData.installFeedbackCustomerSuggestion}}
+                        </div >
+                    </el-form-item >
+                </el-col >
+          </el-tab-pane >
         </el-tabs >
 
     </el-form >
@@ -166,8 +239,10 @@
 
 <script >
  import {APIConfig} from '@/config/apiConfig'
- import {getInstallDetail} from '@/api/install_machine';
+ import {getInstallDetail, getInstallMembers} from '@/api/install_machine';
  import {resetObject} from '@/utils'
+ import {loadServerScore, getStarMode} from '@/api/commonApi'
+
  var _this;
 
  export default {
@@ -177,26 +252,17 @@
 			 type: String,
 			 default: ''
 		 },
-//		 formData: {
-//			 type: Object,
-//			 default: {}
-//		 },
-//		 activeTabId: {
-//			 type: String,
-//			 default: ''
-//		 },
-//		 tabSwitchClick: {
-//			 type: Function,
-//			 default: null
-//		 }
 	 },
 	 data() {
 		 _this = this;
 		 return {
-			 statusList: APIConfig.MachineStatusList,
+			 statusList: APIConfig.InstallStatusList,
 			 loading: {},
 			 formData: {},
 			 activeTabId: 0,
+			 installCotentList: [],
+			 skillStars: [],
+			 installMembers: [],
 		 }
 	 },
 	 filters: {
@@ -219,6 +285,31 @@
 		 },
 	 },
 	 methods: {
+		 onStarLoad(item)
+		 {
+			 return getStarMode(item.starMode);
+		 },
+		 isShowContent(item)
+		 {
+			 return isUndefined(item.installValue);
+		 },
+		 loadMembers()
+		 {
+			 _this.installMembers = [];
+			 let condition = {
+				 page: '',
+				 size: '',
+				 installRecordId: _this.formData.id,
+			 };
+			 getInstallMembers(condition).then(response => {
+				 if (responseIsOK(response)) {
+					 _this.installMembers = response.data.data.list;
+				 }
+				 else {
+					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				 }
+			 })
+		 },
 		 loadData()
 		 {
 			 this.formData = {};
@@ -236,6 +327,13 @@
 					 if (responseIsOK(response)) {
 						 if (response.data.data.list.length > 0) {
 							 _this.formData = response.data.data.list[0];
+							 try {
+								 _this.installCotentList = JSON.parse(this.formData.installInfo);
+								 _this.loadMembers();
+							 } catch (e) {
+								 console.log(e);
+								 _this.installCotentList = [];
+							 }
 						 }
 					 }
 					 else {
@@ -256,6 +354,7 @@
 
 	 mounted(){
 		 _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
+		 _this.skillStars = loadServerScore(_this.formData.maintainFeedbackCustomerMark);
 //		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
 //			 _this.loadData();
 //			 console.log('监听成功')
@@ -276,5 +375,14 @@ span {
 	width: 100%;
 	alignment: left;
 	text-align: left;
+}
+.tagClass {
+    margin-left: 5px;
+    width: 200px;
+}
+
+.status_class {
+	font-size: 18px;
+	font-weight: bold;
 }
 </style >

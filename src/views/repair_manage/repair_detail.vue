@@ -106,10 +106,7 @@
                         </el-form-item >
                     </el-col >
                 </el-row >
-                <el-row >
 
-
-                </el-row >
                 <el-col :span="6" >
                     <el-form-item label="维修结果:" >
                         <div v-if="formData.status==0"
@@ -219,7 +216,9 @@
                     <el-tab-pane label="代理商维修" name="0" v-if="isShowAgent" >
                         <el-col :span="6" >
                             <el-form-item label="维修负责人:" >
-                                <span v-html="formData.repairChargePersonName" ></span >
+                                <el-tag class="tagClass" type="success" >
+                                    {{formData.repairChargePersonName}}
+                                </el-tag >
                             </el-form-item >
                         </el-col >
                         <el-col :span="6" >
@@ -237,6 +236,17 @@
                               <span >{{formData.repairEndTime|filterDateString}}</span >
                             </el-form-item >
                         </el-col >
+                        <el-row >
+                            <el-col >
+                                <el-form-item label="维修人员:" >
+                                    <el-tag class="tagClass" type="info"
+                                            v-for="member in repairMembers"
+                                            :key="member.name">
+                                        {{member.name}}
+                                    </el-tag >
+                                </el-form-item >
+                            </el-col >
+                        </el-row >
                         <el-col :span="22" >
                             <el-form-item label="维修员描述:" >
                               <span >{{formData.repairActualIssueDescription}}</span >
@@ -257,7 +267,9 @@
                     <el-tab-pane label="信胜维修" name="1" v-if="isShowSinsim" >
                         <el-col :span="6" >
                             <el-form-item label="维修负责人:" >
-                                <span v-html="formData.repairChargePersonName" ></span >
+                                <el-tag class="tagClass" type="success" >
+                                    {{formData.repairChargePersonName}}
+                                </el-tag >
                             </el-form-item >
                         </el-col >
                         <el-col :span="6" >
@@ -275,6 +287,17 @@
                               <span >{{formData.repairEndTime|filterDateString}}</span >
                             </el-form-item >
                         </el-col >
+                        <el-row >
+                            <el-col >
+                                <el-form-item label="维修人员:" >
+                                     <el-tag class="tagClass" type="info"
+                                             v-for="user in repairMembers"
+                                             :key="user.name">
+                                        {{user.name}}
+                                     </el-tag >
+                                </el-form-item >
+                            </el-col >
+                        </el-row >
                         <el-col :span="22" >
                             <el-form-item label="维修员描述:" >
                               <span >{{formData.repairActualIssueDescription}}</span >
@@ -303,9 +326,13 @@
                                                        style="width:30px;height: 30px; margin: 3px;"
                                              />
                                     </div >
-                                    <div class="control-label"
+                                    <div class="control-label" v-if="formData.repairFeedbackCustomerMark!=''"
                                          style="float: left; margin-left: 10px;font-weight: bold;" >
-                                        {{formData.repairFeedbackCustomerMark==""?0:formData.repairFeedbackCustomerMark}}分
+                                        {{formData.repairFeedbackCustomerMark}}分
+                                    </div >
+                                    <div class="control-label" v-else
+                                         style="float: left; margin-left: 10px;font-weight: bold;" >
+                                        暂无评分
                                     </div >
                                 </div >
                             </el-form-item >
@@ -331,7 +358,8 @@
 <script >
  import {APIConfig} from '@/config/apiConfig'
  import {resetObject} from '@/utils'
- import {loadServerScore} from '@/api/commonApi'
+ import {getRepairMembers} from '@/api/repair_manage';
+ import {loadServerScore, getStarMode} from '@/api/commonApi'
  import store from '@/store';
 
  var _this;
@@ -361,6 +389,7 @@
 				 voiceType: "audio/mp3",
 			 },
 			 skillStars: {},
+			 repairMembers: [],
 		 }
 	 },
 	 computed: {
@@ -371,6 +400,7 @@
 				 {
 					 res = _this.formData.forwardInfo == 0 //1-代理商改派过来的，属于sinsim
 				 }
+				 _this.activeTabId = res ? "0" : "1";
 				 return res;
 			 },
 		 },
@@ -414,13 +444,7 @@
 	 methods: {
 		 onStarLoad(item)
 		 {
-			 if (item.starMode == 1) {
-				 return "star_half";
-			 }
-			 if (item.starMode == 2) {
-				 return "star_full";
-			 }
-			 return "star_none";
+			 return getStarMode(item.starMode);
 		 },
 		 onSelectIcon(index)
 		 {
@@ -454,11 +478,29 @@
 			 }
 
 		 },
+		 loadMembers()
+		 {
+			 _this.repairMembers = [];
+			 let condition = {
+				 page: '',
+				 size: '',
+				 repairRecordId: _this.formData.id,
+			 };
+			 getRepairMembers(condition).then(response => {
+				 if (responseIsOK(response)) {
+					 _this.repairMembers = response.data.data.list;
+				 }
+				 else {
+					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				 }
+			 })
+		 },
 		 loadData()
 		 {
 			 this.formData = {};
 			 this.formData = copyObject(_this.repairRecorderInfo);
 			 this.skillStars = loadServerScore(_this.formData.repairFeedbackCustomerMark);
+			 _this.loadMembers();
 			 //console.log(`formData: ${JSON.stringify(this.formData)}`);
 		 },
 		 tabSwitchClick(tab)
@@ -485,6 +527,11 @@
 .MainInfo {
 	font-weight: bold;
 	color: #2b542c;
+}
+
+.tagClass {
+	margin-left: 5px;
+	width: 200px;
 }
 
 span {

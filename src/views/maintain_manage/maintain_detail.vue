@@ -118,6 +118,7 @@
                       <span >{{formData.maintainDateActual|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
+
             </div >
         </div >
 
@@ -135,26 +136,32 @@
                         </el-form-item >
                     </el-col >
                 </el-row >
-                <div class="panel panel-primary" v-for="item in maintainCotentList"
-                     style="font-weight: bold;font-size: 20px;" >
-                    <div class="panel-heading" style="text-align: left" >
-                        <span class="panel-title" >{{item.maintainType|filterMaintainTypeName}}</span >
-                    </div >
-                    <div class="panel-body" >
-                        <el-col :span="20" v-for="itemContent in item.contentList" >
-                            <svg-icon :icon-class="showCheckBox(itemContent.checkValue)"
-                                      style="width:30px;height: 30px; margin-left: 3px;margin-top: 5px;"
-                            />
-                            <span style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.content}}</span >
-                        </el-col >
+                <div v-if="maintainCotentList.length>0" >
+                    <div class="panel panel-primary" v-for="item in maintainCotentList"
+                         style="font-weight: bold;font-size: 20px;" >
+                        <div class="panel-heading" style="text-align: left" >
+                            <span class="panel-title" >{{item.maintainType|filterMaintainTypeName}}</span >
+                        </div >
+                        <div class="panel-body" >
+                            <el-col :span="20" v-for="itemContent in item.contentList" >
+                                <svg-icon :icon-class="showCheckBox(itemContent.checkValue)"
+                                          style="width:30px;height: 30px; margin-left: 3px;margin-top: 5px;"
+                                />
+                                <span style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.content}}</span >
+                            </el-col >
+                        </div >
                     </div >
                 </div >
-
+                <span v-else >
+                    暂无内容
+                </span >
             </el-tab-pane >
             <el-tab-pane label="代理商保养" name="1" v-if="isShowAgent" >
                 <el-col :span="6" >
-                    <el-form-item label="维修负责人:" >
-                        <span v-html="formData.maintainChargePersonName" ></span >
+                    <el-form-item label="保养负责人:" >
+                        <el-tag class="tagClass" type="success" >
+                                {{formData.maintainChargePersonName}}
+                        </el-tag >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -172,6 +179,16 @@
                       <span >{{formData.maintainDatePlan|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
+                <el-row >
+                    <el-col >
+                        <el-form-item label="保养人员:" >
+                            <el-tag :key="member.name"
+                                    v-for="member in maintainMembers" class="tagClass" type="info">
+                                {{member.name}}
+                            </el-tag >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
                 <el-col :span="22" >
                     <el-form-item label="保养建议:" >
                       <span >{{formData.maintainSuggestion}}</span >
@@ -204,8 +221,10 @@
             </el-tab-pane >
             <el-tab-pane label="信胜保养" name="2" v-if="isShowSinsim" >
                 <el-col :span="6" >
-                    <el-form-item label="维修负责人:" >
-                        <span v-html="formData.maintainChargePersonName" ></span >
+                    <el-form-item label="保养负责人:" >
+                         <el-tag class="tagClass" type="success" >
+                                {{formData.maintainChargePersonName}}
+                        </el-tag >
                     </el-form-item >
                 </el-col >
                 <el-col :span="6" >
@@ -223,6 +242,16 @@
                       <span >{{formData.maintainDatePlan|filterDateString}}</span >
                     </el-form-item >
                 </el-col >
+                <el-row >
+                    <el-col >
+                        <el-form-item label="保养人员:" >
+                            <el-tag :key="user.name"
+                                    v-for="user in maintainMembers" class="tagClass" type="info">
+                                {{user.name}}
+                            </el-tag >
+                        </el-form-item >
+                    </el-col >
+                </el-row >
                 <el-col :span="22" >
                     <el-form-item label="保养建议:" >
                       <span >{{formData.maintainSuggestion}}</span >
@@ -265,9 +294,13 @@
                                                style="width:30px;height: 30px; margin: 3px;"
                                      />
                             </div >
-                            <div class="control-label"
+                            <div class="control-label" v-if="formData.maintainFeedbackCustomerMark!=''"
                                  style="float: left; margin-left: 10px;font-weight: bold;" >
-                                {{formData.maintainFeedbackCustomerMark==""?0:formData.maintainFeedbackCustomerMark}} 分
+                                        {{formData.maintainFeedbackCustomerMark}}分
+                            </div >
+                            <div class="control-label" v-else
+                                 style="float: left; margin-left: 10px;font-weight: bold;" >
+                                        暂无评分
                             </div >
                         </div >
                     </el-form-item >
@@ -290,8 +323,8 @@
 
 <script >
  import {APIConfig} from '@/config/apiConfig'
- import {selectLibList, getMaintainTypeList} from '@/api/maintain_manage';
- import {loadServerScore} from '@/api/commonApi'
+ import {selectLibList, getMaintainTypeList, getMaintainMembers} from '@/api/maintain_manage';
+ import {loadServerScore, getStarMode} from '@/api/commonApi'
  import {resetObject} from '@/utils';
  import store from '@/store';
  var _this;
@@ -332,6 +365,7 @@
 			 maintainTypeList: [],
 			 skillStars: {},
 			 statusList: APIConfig.MaintainStatusList,
+			 maintainMembers: [],
 		 }
 	 },
 	 filters: {
@@ -367,6 +401,7 @@
 	 computed: {
 		 isShowAgent: {//property
 			 get: function () {//getter
+				 _this.activeTabId = !isStringEmpty(_this.formData.machineAgentName) ? "0" : "1";
 				 return !isStringEmpty(_this.formData.machineAgentName);//代理商完成
 			 },
 		 },
@@ -376,21 +411,15 @@
 					 return false;
 				 }
 				 else {
-                     return isStringEmpty(_this.formData.machineAgentName);//非代理商完成
-                 }
+					 return isStringEmpty(_this.formData.machineAgentName);//非代理商完成
+				 }
 			 },
 		 },
 	 },
 	 methods: {
 		 onStarLoad(item)
 		 {
-			 if (item.starMode == 1) {
-				 return "star_half";
-			 }
-			 if (item.starMode == 2) {
-				 return "star_full";
-			 }
-			 return "star_none";
+			 return getStarMode(item.starMode);
 		 },
 		 showCheckBox(ischeck)
 		 {
@@ -407,6 +436,8 @@
 				 _this.maintainCotentList = JSON.parse(this.formData.maintainInfo);
 			 } catch (e) {
 				 console.log(e);
+				 _this.maintainCotentList = [];
+
 			 }
 		 },
 		 tabSwitchClick(tab)
@@ -423,6 +454,24 @@
 			 getMaintainTypeList(condition).then(response => {
 				 if (responseIsOK(response)) {
 					 _this.maintainTypeList = response.data.data.list;
+				 }
+				 else {
+					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				 }
+			 })
+		 },
+
+		 loadMaintainMembers()
+		 {
+			 _this.maintainMembers = [];
+			 let condition = {
+				 page: '',
+				 size: '',
+				 maintainRecordId: _this.formData.id,
+			 };
+			 getMaintainMembers(condition).then(response => {
+				 if (responseIsOK(response)) {
+					 _this.maintainMembers = response.data.data.list;
 				 }
 				 else {
 					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
@@ -477,6 +526,7 @@
 		 if (_this.maintainCotentList.length == 0) {
 			 _this.loadMaintainLib();
 		 }
+		 _this.loadMaintainMembers();
 		 this.skillStars = loadServerScore(_this.formData.maintainFeedbackCustomerMark);
 //		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
 //			 _this.loadData();
@@ -498,6 +548,11 @@ span {
 	width: 100%;
 	alignment: left;
 	text-align: left;
+}
+
+.tagClass {
+	margin-left: 5px;
+	width: 200px;
 }
 
 .status_class {

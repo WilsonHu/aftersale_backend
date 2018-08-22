@@ -136,3 +136,14 @@ export function loadServerScore(scoreData) {
 	}
 	return list;
 }
+
+export function getStarMode(mode)
+{
+	if (mode == 1) {
+		return "star_half";
+	}
+	if (mode == 2) {
+		return "star_full";
+	}
+	return "star_none";
+}
