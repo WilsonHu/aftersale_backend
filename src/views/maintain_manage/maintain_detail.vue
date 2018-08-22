@@ -122,7 +122,7 @@
         </div >
 
         <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
-            <el-tab-pane label="保养内容" name="0">
+            <el-tab-pane label="保养内容" name="0" >
                 <el-row >
                     <el-col :span="6" >
                         <el-form-item label="保养项:" >
@@ -151,8 +151,108 @@
                 </div >
 
             </el-tab-pane >
-            <el-tab-pane label="代理商保养" name="1">代理商保养</el-tab-pane >
-            <el-tab-pane label="信胜保养" name="2">信胜保养</el-tab-pane >
+            <el-tab-pane label="代理商保养" name="1" v-if="isShowAgent" >
+                <el-col :span="6" >
+                    <el-form-item label="维修负责人:" >
+                        <span v-html="formData.maintainChargePersonName" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="联系电话:" >
+                      <span v-html="formData.maintainChargePersonPhone" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="保养时间:" >
+                      <span >{{formData.maintainDateActual|filterDateString}}</span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="计划时间:" >
+                      <span >{{formData.maintainDatePlan|filterDateString}}</span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="22" >
+                    <el-form-item label="保养建议:" >
+                      <span >{{formData.maintainSuggestion}}</span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="保养结果:" >
+                        <div v-if="formData.maintainStatus==0"
+                             style="color: #686868" class="status_class" >
+                                {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==1"
+                             style="color: #8b6c0e" class="status_class" >
+                                {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==2"
+                             style="color: #13678b" class="status_class" >
+                            {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==3"
+                             style="color: #198b57" class="status_class" >
+                            {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==4"
+                             style="color: darkred" class="status_class" >
+                            {{formData.maintainStatus|filterStatus}}
+                        </div >
+                    </el-form-item >
+                </el-col >
+            </el-tab-pane >
+            <el-tab-pane label="信胜保养" name="2" v-if="isShowSinsim" >
+                <el-col :span="6" >
+                    <el-form-item label="维修负责人:" >
+                        <span v-html="formData.maintainChargePersonName" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="联系电话:" >
+                      <span v-html="formData.maintainChargePersonPhone" ></span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="保养时间:" >
+                      <span >{{formData.maintainDateActual|filterDateString}}</span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="计划时间:" >
+                      <span >{{formData.maintainDatePlan|filterDateString}}</span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="22" >
+                    <el-form-item label="保养建议:" >
+                      <span >{{formData.maintainSuggestion}}</span >
+                    </el-form-item >
+                </el-col >
+                <el-col :span="6" >
+                    <el-form-item label="保养结果:" >
+                        <div v-if="formData.maintainStatus==0"
+                             style="color: #686868" class="status_class" >
+                                {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==1"
+                             style="color: #8b6c0e" class="status_class" >
+                                {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==2"
+                             style="color: #13678b" class="status_class" >
+                            {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==3"
+                             style="color: #198b57" class="status_class" >
+                            {{formData.maintainStatus|filterStatus}}
+                        </div >
+                        <div v-if="formData.maintainStatus==4"
+                             style="color: darkred" class="status_class" >
+                            {{formData.maintainStatus|filterStatus}}
+                        </div >
+                    </el-form-item >
+                </el-col >
+            </el-tab-pane >
             <el-tab-pane label="客户评价" name="3" >
                 <el-col :span="22" >
                     <el-form-item label="用户评分:" >
@@ -192,7 +292,8 @@
  import {APIConfig} from '@/config/apiConfig'
  import {selectLibList, getMaintainTypeList} from '@/api/maintain_manage';
  import {loadServerScore} from '@/api/commonApi'
- import {resetObject} from '@/utils'
+ import {resetObject} from '@/utils';
+ import store from '@/store';
  var _this;
 
  export default {
@@ -229,10 +330,22 @@
 //				 },
 			 ],
 			 maintainTypeList: [],
-             skillStars: {},
+			 skillStars: {},
+			 statusList: APIConfig.MaintainStatusList,
 		 }
 	 },
 	 filters: {
+		 filterStatus(id)
+		 {
+			 let result = _this.statusList[0].name;
+			 for (let i = 0; i < _this.statusList.length; i++) {
+				 if (id == _this.statusList[i].value) {
+					 result = _this.statusList[i].name;
+					 break;
+				 }
+			 }
+			 return result;
+		 },
 		 filterDateString(strDate)
 		 {
 			 var resDate = new Date(strDate);
@@ -251,17 +364,34 @@
 			 return result;
 		 },
 	 },
+	 computed: {
+		 isShowAgent: {//property
+			 get: function () {//getter
+				 return !isStringEmpty(_this.formData.machineAgentName);//代理商完成
+			 },
+		 },
+		 isShowSinsim: {
+			 get: function () {//getter
+				 if (store.getters.user.user.agent > 0) {
+					 return false;
+				 }
+				 else {
+                     return isStringEmpty(_this.formData.machineAgentName);//非代理商完成
+                 }
+			 },
+		 },
+	 },
 	 methods: {
-         onStarLoad(item)
-         {
-             if (item.starMode == 1) {
-                 return "star_half";
-             }
-             if (item.starMode == 2) {
-                 return "star_full";
-             }
-             return "star_none";
-         },
+		 onStarLoad(item)
+		 {
+			 if (item.starMode == 1) {
+				 return "star_half";
+			 }
+			 if (item.starMode == 2) {
+				 return "star_full";
+			 }
+			 return "star_none";
+		 },
 		 showCheckBox(ischeck)
 		 {
 			 return ischeck == 1 ? 'checkbox_checked' : 'checkbox_unchecked';
@@ -347,7 +477,7 @@
 		 if (_this.maintainCotentList.length == 0) {
 			 _this.loadMaintainLib();
 		 }
-         this.skillStars = loadServerScore(_this.formData.maintainFeedbackCustomerMark);
+		 this.skillStars = loadServerScore(_this.formData.maintainFeedbackCustomerMark);
 //		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
 //			 _this.loadData();
 //			 console.log('监听成功')
@@ -368,5 +498,10 @@ span {
 	width: 100%;
 	alignment: left;
 	text-align: left;
+}
+
+.status_class {
+	font-size: 18px;
+	font-weight: bold;
 }
 </style >

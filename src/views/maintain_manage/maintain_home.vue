@@ -299,9 +299,9 @@
                                     :machineNameplate="machineNameplate"
                                     :maintainRecorderInfo="selectedItem"
                     ></MaintainDetail >
-                    <div slot="footer" class="dialog-footer" style="margin-top: 100px;" >
-                        <el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >
-                    </div >
+                    <!--<div slot="footer" class="dialog-footer" style="margin-top: 100px;" >-->
+                        <!--<el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >-->
+                    <!--</div >-->
                 </el-dialog >
                 <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
                     <AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
@@ -392,34 +392,7 @@
 			    showSelectMachineDialog: false,
 			    selectedMachine: {},
 			    mainTainLibList: [],
-
-			    pickerOptions: {
-				    shortcuts: [{
-					    text: '最近一周',
-					    onClick(picker) {
-						    const end = new Date();
-						    const start = new Date();
-						    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-						    picker.$emit('pick', [start, end]);
-					    }
-				    }, {
-					    text: '最近一个月',
-					    onClick(picker) {
-						    const end = new Date();
-						    const start = new Date();
-						    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-						    picker.$emit('pick', [start, end]);
-					    }
-				    }, {
-					    text: '最近三个月',
-					    onClick(picker) {
-						    const end = new Date();
-						    const start = new Date();
-						    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-						    picker.$emit('pick', [start, end]);
-					    }
-				    }]
-			    },
+			    pickerOptions: APIConfig.DateOptions,
 		    }
 	    },
 

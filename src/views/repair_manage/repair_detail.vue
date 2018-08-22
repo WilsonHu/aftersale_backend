@@ -216,7 +216,7 @@
             </div >
             <div class="panel-body" >
                 <el-tabs type="border-card" v-model="activeTabId" @tab-click="tabSwitchClick" >
-                    <el-tab-pane label="代理商维修" name="0" >
+                    <el-tab-pane label="代理商维修" name="0" v-if="isShowAgent" >
                         <el-col :span="6" >
                             <el-form-item label="维修负责人:" >
                                 <span v-html="formData.repairChargePersonName" ></span >
@@ -254,7 +254,7 @@
                         </el-col >
 
                     </el-tab-pane >
-                    <el-tab-pane label="信胜维修" name="1" >
+                    <el-tab-pane label="信胜维修" name="1" v-if="isShowSinsim" >
                         <el-col :span="6" >
                             <el-form-item label="维修负责人:" >
                                 <span v-html="formData.repairChargePersonName" ></span >
@@ -332,6 +332,7 @@
  import {APIConfig} from '@/config/apiConfig'
  import {resetObject} from '@/utils'
  import {loadServerScore} from '@/api/commonApi'
+ import store from '@/store';
 
  var _this;
  export default {
@@ -361,6 +362,33 @@
 			 },
 			 skillStars: {},
 		 }
+	 },
+	 computed: {
+		 isShowAgent: {//property
+			 get: function () {//getter
+				 let res = false;
+				 if (!isStringEmpty(_this.formData.machineAgentName))//机器是代理商
+				 {
+					 res = _this.formData.forwardInfo == 0 //1-代理商改派过来的，属于sinsim
+				 }
+				 return res;
+			 },
+		 },
+		 isShowSinsim: {
+			 get: function () {//getter
+				 let res = true;
+				 if (store.getters.user.user.agent > 0) {
+					 res = false;
+				 }
+				 else {
+					 if (!isStringEmpty(_this.formData.machineAgentName))//机器是代理商
+					 {
+						 res = _this.formData.forwardInfo > 0 //1-代理商改派过来的，属于sinsim
+					 }
+				 }
+				 return res;
+			 },
+		 },
 	 },
 	 filters: {
 		 converterUrl: function (url) {
@@ -393,16 +421,6 @@
 				 return "star_full";
 			 }
 			 return "star_none";
-		 },
-		 showAgentResult()
-		 {
-			 let result = true;
-			 return result;
-		 },
-		 showSinsimResult()
-		 {
-			 let result = true;
-			 return result;
 		 },
 		 onSelectIcon(index)
 		 {
