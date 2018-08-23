@@ -1,14 +1,16 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <github-corner></github-corner>
       <div class="info-container">
         <span class="display_name">{{name}}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">editor : dashboard</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">Not implement</span>
       </div>
     </div>
     <div>
-      <img class="emptyGif" :src="emptyGif">
+      <span>
+        没权限访问
+      </span>
+      <!--<img class="emptyGif" :src="emptyGif">-->
     </div>
   </div>
 </template>

@@ -392,7 +392,7 @@
 			    showSelectMachineDialog: false,
 			    selectedMachine: {},
 			    mainTainLibList: [],
-			    pickerOptions: APIConfig.DateOptions,
+			    pickerOptions: APIConfig.DateRangeOptions,
 		    }
 	    },
 

@@ -63,10 +63,15 @@ export function selectUsers(condition) {
 }
 
 //查询客户集合 -5:客户 -6:客户的联系人
-export function requestCustomerList() {
+//注意agentId参数，是机器的代理商，如果是sinsim则为0
+export function requestCustomerList(condition) {
 	let params = new URLSearchParams();
-	params.append("agentId", store.getters.user.user.agent)
-	params.append("roleId", "5");
+	if (condition) {
+		let keys = Object.keys(condition);
+		for (let key of keys) {
+			params.append(key, condition[key]);
+		}
+	}
 	return new Promise((resolve, reject) => {
 		return request({
 			url: 'user/getUsersByType',
@@ -82,13 +87,13 @@ export function requestCustomerList() {
 
 
 //查询员工集合 type=3
+//员工跟登录的角色相关代理商只能查代理商的员工。sinsim查sinsim的员工
 export function requestEmployeeList() {
 	let params = new URLSearchParams();
 	params.append("agentId", store.getters.user.user.agent)
-	params.append("roleId", "3");
 	return new Promise((resolve, reject) => {
 		return request({
-			url: 'user/getUsersByType',
+			url: 'user/getStaffByParam',
 			method: 'post',
 			data: params
 		}).then(response=> {

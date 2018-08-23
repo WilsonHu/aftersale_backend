@@ -127,6 +127,7 @@
  import {APIConfig} from '@/config/apiConfig'
  import {resetObject} from '@/utils'
  import {requestEmployeeList, requestCustomerList} from '@/api/commonApi'
+ import store from '@/store'
  var _this;
 
  export default {
@@ -174,10 +175,10 @@
 	 methods: {
 		 onSave()
 		 {
-             if (_this.formData.isOldMachine == "0") {
-                 _this.onSubmitData(null);
-                 return
-             }
+			 if (_this.formData.isOldMachine == "0") {
+				 _this.onSubmitData(null);
+				 return
+			 }
 			 if (isStringEmpty(_this.formData.nameplate)) {
 				 showMessage(_this, "机器编号不能空！")
 				 return;
@@ -243,7 +244,13 @@
 		 },
 
 		 initCustomerList() {
-			 requestCustomerList().then(response=> {
+			 //查询出当前登录角色拥有的客户
+			 //代理商或sinsim
+			 let condition = {
+				 "agentId": store.getters.user.user.agent,
+				 "roleId": APIConfig.UserType.Customer,
+			 }
+			 requestCustomerList(condition).then(response=> {
 				 if (responseIsOK(response)) {
 					 _this.customerList = [];
 					 for (let item of response.data.data.list) {

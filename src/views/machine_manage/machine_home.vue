@@ -344,7 +344,7 @@
 			 machineCheckStatusList: APIConfig.MachineCheckStatusList,
 			 showMachineDialog: false,
 			 machineInfoData: {},
-			 pickerOptions: APIConfig.DateOptions,
+			 pickerOptions: APIConfig.DateRangeOptions,
 		 }
 	 },
 

@@ -78,13 +78,47 @@
                     </span >
                 </template >
             </el-table-column >
-            <el-table-column
-		            align="center"
-		            prop="taskCount"
-		            label="当前任务" >
+	        <el-table-column
+			        align="center"
+			        prop="installTaskCount"
+			        label="安装任务" >
                 <template scope="scope" >
-                    <span >
-                        {{scope.row.taskCount}}
+                    <span :style="scope.row.installTaskCount>0?'color:red':'color:green'"
+                          style="font-weight: bold;font-size: 18px" >
+                        {{scope.row.installTaskCount}}
+                    </span >
+                </template >
+            </el-table-column >
+	        <el-table-column
+			        align="center"
+			        prop="maintainTaskCount"
+			        label="保养任务" >
+                <template scope="scope" >
+                    <span :style="scope.row.maintainTaskCount>0?'color:red':'color:green'"
+                          style="font-weight: bold;font-size: 18px" >
+                        {{scope.row.maintainTaskCount}}
+                    </span >
+                </template >
+            </el-table-column >
+	        <el-table-column
+			        align="center"
+			        prop="repairTaskCount"
+			        label="维修任务" >
+                <template scope="scope" >
+                    <span :style="scope.row.repairTaskCount>0?'color:red':'color:green'"
+                          style="font-weight: bold;font-size: 18px" >
+                        {{scope.row.repairTaskCount}}
+                    </span >
+                </template >
+            </el-table-column >
+	        <el-table-column
+			        align="center"
+			        prop="totalTaskCount"
+			        label="当前任务总数" >
+                <template scope="scope" >
+                    <span :style="scope.row.totalTaskCount>0?'color:red':'color:green'"
+                          style="font-weight: bold;font-size: 18px" >
+                        {{scope.row.totalTaskCount}}
                     </span >
                 </template >
             </el-table-column >
@@ -137,28 +171,7 @@
 			    tableData: [],
 			    multipleSelection: [],
 			    customerList: [],
-			    pickerOptions: {
-				    shortcuts: [{
-					    text: '今天',
-					    onClick(picker) {
-						    picker.$emit('pick', new Date());
-					    }
-				    }, {
-					    text: '昨天',
-					    onClick(picker) {
-						    const date = new Date();
-						    date.setTime(date.getTime() - 3600 * 1000 * 24);
-						    picker.$emit('pick', date);
-					    }
-				    }, {
-					    text: '一周前',
-					    onClick(picker) {
-						    const date = new Date();
-						    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-						    picker.$emit('pick', date);
-					    }
-				    }]
-			    },
+			    pickerOptions: APIConfig.DateOptions,
 		    }
 	    },
 	    filters: {
@@ -186,12 +199,6 @@
 				    if (responseIsOK(response)) {
 					    if (response.data.data.list.length > 0) {
 						    let dataList = response.data.data.list;
-//						    if (_this.$store.getters.user.user.agent > 0) {
-//							    //agent filter, only show the related user for current agent
-//							    _this.tableData = dataList.filter(p=>p.agent == _this.$store.getters.user.user.agent);
-//						    } else {
-//							    _this.tableData = dataList;
-//						    }
 						    _this.tableData = dataList;
 					    }
 				    }
@@ -236,8 +243,13 @@
 			    }
 		    },
 
+		    //派单选中客户联系人
 		    initCustomerList() {
-			    requestCustomerList().then(response=> {
+			    let condition = {
+				    "customerCompany": "",//TODO 需要此参数
+				    "roleId": APIConfig.UserType.CustomerContacter,
+			    }
+			    requestCustomerList(condition).then(response=> {
 				    if (responseIsOK(response)) {
 					    _this.customerList = [];
 					    let dataList = response.data.data.list;

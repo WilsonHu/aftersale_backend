@@ -267,6 +267,8 @@
     import {getNotInstallMachineList, addMachineList} from '@/api/install_machine'
     import {requestCustomerList} from '@/api/commonApi';
     import {resetObject} from '@/utils'
+    import store from '@/store'
+
     var _this;
     export default {
 	    name: 'assign_machine',
@@ -302,28 +304,7 @@
 			    allMachineType: [],
 			    allRoles: [],
 			    loadingUI: false,
-			    pickerOptions: {
-				    shortcuts: [{
-					    text: '今天',
-					    onClick(picker) {
-						    picker.$emit('pick', new Date());
-					    }
-				    }, {
-					    text: '昨天',
-					    onClick(picker) {
-						    const date = new Date();
-						    date.setTime(date.getTime() - 3600 * 1000 * 24);
-						    picker.$emit('pick', date);
-					    }
-				    }, {
-					    text: '一周前',
-					    onClick(picker) {
-						    const date = new Date();
-						    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-						    picker.$emit('pick', date);
-					    }
-				    }]
-			    },
+			    pickerOptions: APIConfig.DateOptions,
 		    }
 	    },
 	    computed: {
@@ -485,8 +466,14 @@
 				    }
 			    })
 		    },
+
+		    //获取当前角色的所有客户
 		    initCustomerList() {
-			    requestCustomerList().then(response=> {
+			    let condition = {
+				    "agentId": store.getters.user.user.agent,
+				    "roleId": APIConfig.UserType.Customer,
+			    }
+			    requestCustomerList(condition).then(response=> {
 				    if (responseIsOK(response)) {
 					    _this.customerList = [];
 					    for (let item of response.data.data.list) {
