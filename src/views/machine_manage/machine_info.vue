@@ -106,7 +106,7 @@
 	            </div >
 	        </div >
 			<el-row >
-				 <el-col :span="6" >
+				 <el-col :span="8" >
 	                    <el-form-item label="审核结果:" v-show="formData.showType==2" >
 		                    <el-radio-group v-model="formData.oldMachineCheck" >
 			                    <el-radio-button label="0" >不通过</el-radio-button >

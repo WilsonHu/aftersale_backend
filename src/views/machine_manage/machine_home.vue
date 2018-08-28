@@ -272,7 +272,7 @@
 		                                @click="editWithItem(scope.row,1)" >
                                 </el-button >
                             </el-tooltip >
-                            <el-tooltip placement="top" content="审核" >
+                            <el-tooltip placement="top" content="审核" v-show="scope.row.isOldMachine!=0">
                                 <el-button
 		                                size="mini"
 		                                type="success"
@@ -294,7 +294,7 @@
                     </el-pagination >
                 </div >
             </el-col >
-			<el-dialog title="机器信息" :visible.sync="showMachineDialog" append-to-body fullscreen >
+			<el-dialog title="机器信息" :visible.sync="showMachineDialog" append-to-body width="60%" >
                     <MachineInfo ref="machineComponent" v-if="showMachineDialog"
                                  :machineInfoData="machineInfoData"
                                  :onSubmitData="onSubmitMachine" ></MachineInfo >
