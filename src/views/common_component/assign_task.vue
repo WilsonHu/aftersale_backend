@@ -19,7 +19,7 @@
                         </el-form-item >
                     </el-col >
                     <el-col :span="8" >
-                        <el-form-item label="已发货:" v-show="showType!=0" >
+                        <el-form-item label="已发货:" v-show="isNeedShow()" >
                             <span >{{formData.factoryDate}}天</span >
                         </el-form-item >
                     </el-col >
@@ -41,7 +41,7 @@
                             </el-date-picker >
                         </el-form-item >
                     </el-col >
-                     <el-col :span="8" v-show="showType!=0" >
+                     <el-col :span="8" v-show="isNeedShow()" >
                        <el-form-item label="保修期内:" >
                                   <el-select v-model="formData.inWarrantyPeriod" clearable >
                                       <el-option
@@ -182,6 +182,11 @@
 		    },
 	    },
 	    methods: {
+		    isNeedShow()
+		    {
+			    return _this.showType == APIConfig.AssignTaskType.REPAIR
+		    },
+
 		    loadData()
 		    {
 			    resetObject(_this.formData);
@@ -246,17 +251,13 @@
 		    //派单选中客户联系人
 		    initCustomerList() {
 			    let condition = {
-				    "customerCompany": "",//TODO 需要此参数
+				    "customerCompany": _this.machineInfo.machineCustomerCompanyId,
 				    "roleId": APIConfig.UserType.CustomerContacter,
 			    }
 			    requestCustomerList(condition).then(response=> {
 				    if (responseIsOK(response)) {
 					    _this.customerList = [];
 					    let dataList = response.data.data.list;
-//					    if (_this.$store.getters.user.user.agent > 0) {
-//						    //agent filter, only show the related user for current agent
-//						    dataList = dataList.filter(p=>p.agent == _this.$store.getters.user.user.agent);
-//					    }
 					    for (let item of dataList) {
 						    _this.customerList.push(Object.assign({
 							    value: item.name,

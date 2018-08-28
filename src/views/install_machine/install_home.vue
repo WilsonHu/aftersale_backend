@@ -263,7 +263,7 @@
                 </el-dialog>
 
                 <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%">
-                    <AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
+                    <AssignTask :showType="assignTaskType" ref="assignTask" v-if="showAssignTaskDialog"
                                 :dataChanged="dataChanged"></AssignTask>
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px">
                         <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check"
@@ -341,6 +341,7 @@
                     },
                     workerList: [],
                 },
+                assignTaskType: APIConfig.AssignTaskType.INSTALL,
                 pickerOptions: APIConfig.DateRangeOptions,
             }
         },

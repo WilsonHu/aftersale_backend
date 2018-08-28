@@ -57,6 +57,13 @@ const APIConfig = {
 			}
 		}]
 	},
+
+	AssignTaskType: {
+		INSTALL: 0,
+		MAINTAIN: 1,
+		REPAIR: 2,
+	},
+
 	UserType: {
 		SuperAdmin: 1,
 		Admin: 2,

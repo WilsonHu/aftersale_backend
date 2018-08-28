@@ -299,12 +299,12 @@
                                     :machineNameplate="machineNameplate"
                                     :maintainRecorderInfo="selectedItem"
                     ></MaintainDetail >
-                    <!--<div slot="footer" class="dialog-footer" style="margin-top: 100px;" >-->
-                        <!--<el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >-->
-                    <!--</div >-->
+	                <!--<div slot="footer" class="dialog-footer" style="margin-top: 100px;" >-->
+	                <!--<el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >-->
+	                <!--</div >-->
                 </el-dialog >
                 <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
-                    <AssignTask :showType="0" ref="assignTask" v-if="showAssignTaskDialog"
+                    <AssignTask :showType="assignTaskType" ref="assignTask" v-if="showAssignTaskDialog"
                                 :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check"
@@ -392,6 +392,7 @@
 			    showSelectMachineDialog: false,
 			    selectedMachine: {},
 			    mainTainLibList: [],
+			    assignTaskType: APIConfig.AssignTaskType.MAINTAIN,
 			    pickerOptions: APIConfig.DateRangeOptions,
 		    }
 	    },

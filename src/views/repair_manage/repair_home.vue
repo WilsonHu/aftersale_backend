@@ -354,7 +354,7 @@
                     <!--</div >-->
 		     </el-dialog >
 		     <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
-                    <AssignTask :showType="1" ref="assignTask" v-if="showAssignTaskDialog"
+                    <AssignTask :showType="assignTaskType" ref="assignTask" v-if="showAssignTaskDialog"
                                 :machineInfo="machineInfo"
                                 :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
@@ -445,7 +445,7 @@ export default {
 			},
 			isDisableOK: false,
 			showConfirmForward: false,
-
+			assignTaskType: APIConfig.AssignTaskType.REPAIR,
 			pickerOptions:APIConfig.DateRangeOptions,
 		}
 	},
