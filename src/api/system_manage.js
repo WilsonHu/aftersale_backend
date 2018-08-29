@@ -41,3 +41,43 @@ export function updateUser(condition) {
         data: condition
     })
 }
+
+export function addAgent(condition) {
+	return request({
+		url: 'agent/add',
+		method: 'post',
+		data: condition
+	})
+}
+
+export function updateAgent(condition) {
+	return request({
+		url: 'agent/update',
+		method: 'post',
+		data: condition
+	})
+}
+
+export function deleteAgent(id) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		params.append('id', id);
+		return request({
+			url: 'agent/delete',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
+export function getAgentList(condition) {
+	return request({
+		url: 'agent/list',
+		method: 'post',
+		data: condition
+	})
+}
