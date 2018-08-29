@@ -154,6 +154,14 @@ const APIConfig = {
 		{value: 0, name: '未通过'},
 		{value: 1, name: '通过'},
 	],
+
+	 SendBackStatusList: [
+		{value: 0, name: '无'},
+		{value: 1, name: '待寄回'},
+		{value: 2, name: '寄回中'},
+		{value: 3, name: '已寄回'},
+
+	],
 }
 
 export {APIConfig}
