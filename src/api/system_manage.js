@@ -81,3 +81,22 @@ export function getAgentList(condition) {
 		data: condition
 	})
 }
+
+export function findByName(condition) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		let keys = Object.keys(condition);
+		for (let key of keys) {
+			params.append(key, condition[key]);
+		}
+		return request({
+			url: 'agent/findByName',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}

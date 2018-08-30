@@ -1,5 +1,26 @@
 <template >
   <div class="root_div" >
+	    <el-form :model="condition" label-position="right" label-width="60px" >
+            <el-row >
+                <el-col :span="4" >
+                    <el-form-item label="代理商:" >
+                        <el-input v-model="condition.name"
+                                  placeholder="代理商名称"
+                                  auto-complete="off"
+                                  clearable ></el-input >
+                    </el-form-item >
+                </el-col >
+
+                <el-col :span="2" :offset="18" >
+                    <el-button
+		                    icon="el-icon-search"
+		                    size="normal"
+		                    type="primary"
+		                    @click="search" >搜索
+                    </el-button >
+                </el-col >
+            </el-row >
+        </el-form >
         <div align="right" style="margin-bottom: 16px" >
             <el-tooltip placement="right" >
                 <div slot="content" >增加代理商</div >
@@ -125,7 +146,7 @@
 
 <script >
  var _this;
- import {addAgent, updateAgent, deleteAgent, getAgentList} from '@/api/system_manage';
+ import {addAgent, updateAgent, deleteAgent, findByName} from '@/api/system_manage';
  import {getAllAgent} from '@/api/agent';
  import {Loading} from 'element-ui';
  import {APIConfig} from '@/config/apiConfig';
@@ -148,6 +169,9 @@
 			 selectedItem: [],
 			 isAdd: true,
 			 addDialogVisible: false,
+			 condition: {
+				 name: '',
+			 },
 			 addContentform: {
 				 name: '',
 				 address: '',
@@ -264,8 +288,10 @@
 			 let condition = {
 				 page: this.currentPage,
 				 size: this.pageSize,
+				 name: this.condition.name,
+				 isFuzzy: true,
 			 };
-			 getAgentList(condition).then(response => {
+			 findByName(condition).then(response => {
 				 if (responseIsOK(response)) {
 					 _this.totalRecords = response.data.data.total;
 					 _this.startRow = response.data.data.startRow;
@@ -276,18 +302,16 @@
 				 }
 			 })
 		 },
-
-		 initData()
+		 search()
 		 {
 			 _this.onSearchDetailData();
 		 },
-
 	 },
 	 created: function () {
 
 	 },
 	 mounted: function () {
-		 this.initData();
+		 this.search();
 	 }
  }
 </script >
