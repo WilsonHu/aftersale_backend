@@ -180,7 +180,7 @@ export function updatePartsInfo(data) {
 	// params.append("partsInfo", data);
 	return new Promise((resolve, reject) => {
 		return request({
-			url: 'parts/info/updateInfo',
+			url: 'parts/info/updateStatus',
 			method: 'post',
 			data: data
 		}).then(response=> {

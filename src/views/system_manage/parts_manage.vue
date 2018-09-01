@@ -266,7 +266,7 @@ import {
 		getPartsInfoList,
 		updatePartsInfo,
 } from '@/api/repair_manage';
-
+import store from '@/store';
 var _this;
 
 export default {
@@ -352,16 +352,12 @@ export default {
 			let partsInfo = {
 				id: _this.selectedItem.id,
 				partsStatus: APIConfig.SendBackStatusList[3].value,
+				sendbackConfirmedPerson: store.getters.user.user.id,
 			};
 			updatePartsInfo(partsInfo).then(response => {
 				if (responseIsOK(response)) {
 					showMSG(_this, "确认成功！", 1);
-					for (let tableItem of _this.tableData) {
-						if (tableItem.id == partsInfo.id) {
-							tableItem.partsStatus = partsInfo.partsStatus;
-							break;
-						}
-					}
+					_this.search();
 				}
 				else {
 					showMSG(_this, isStringEmpty(response.data.message) ? "确认失败！" : response.data.message)
