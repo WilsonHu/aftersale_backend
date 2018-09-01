@@ -182,22 +182,24 @@
 			    }
 			    else {
 				    item.id = this.addContentform.id;
-			    }
-			    updateIssuePosition(item).then(response => {
-				    if (responseIsOK(response)) {
-					    for (let tableItem of _this.tableData) {
-						    if (tableItem.id == _this.addContentform.id) {
-							    tableItem.name = _this.addContentform.name;
+				    updateIssuePosition(item).then(response => {
+					    if (responseIsOK(response)) {
+						    for (let tableItem of _this.tableData) {
+							    if (tableItem.id == _this.addContentform.id) {
+								    tableItem.name = _this.addContentform.name;
+								    break;
+							    }
 						    }
-					    }
-					    _this.addContentform.name = "";//reset
-					    _this.addDialogVisible = false;
-					    showMSG(_this, "修改成功！", 1)
+						    _this.addContentform.name = "";//reset
+						    _this.addDialogVisible = false;
+						    showMSG(_this, "修改成功！", 1)
 				    }
-				    else {
-					    showMSG(_this, isStringEmpty(response.data.message) ? "提交失败！" : response.data.message)
-				    }
-			    })
+					    else {
+							    showMSG(_this, isStringEmpty(response.data.message) ? "提交失败！" : response.data.message)
+						    }
+					    })
+			    }
+
 		    },
 
 		    handleTabClick(tab, event)

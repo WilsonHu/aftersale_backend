@@ -294,7 +294,7 @@
                     </el-pagination >
                 </div >
             </el-col >
-			<el-dialog title="机器信息" :visible.sync="showMachineDialog" append-to-body width="60%" >
+			<el-dialog title="机器信息" :visible.sync="showMachineDialog" append-to-body width="80%" >
                     <MachineInfo ref="machineComponent" v-if="showMachineDialog"
                                  :machineInfoData="machineInfoData"
                                  :onSubmitData="onSubmitMachine" ></MachineInfo >

@@ -117,7 +117,7 @@
 			</el-row >
 		</el-form >
 
-		<div slot="footer" class="dialog-footer" style="margin-top: 60px;margin-bottom:50px;text-align: right;" >
+		<div slot="footer" class="dialog-footer" style="margin-bottom:50px;text-align: right;" >
 			<el-button type="success" @click="onSave" icon="el-icon-check" >确定</el-button >
 		</div >
   </div >

@@ -174,3 +174,19 @@ export function getPartsInfoList(condition) {
 		})
 	})
 }
+
+export function updatePartsInfo(data) {
+	// let params = new URLSearchParams();
+	// params.append("partsInfo", data);
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'parts/info/updateInfo',
+			method: 'post',
+			data: data
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}

@@ -245,7 +245,14 @@
                     </el-pagination >
                 </div >
             </el-col >
-
+		<el-dialog title="提示" :visible.sync="confirmCheckDialog"
+		           append-to-body width="30%" >
+            <span >确定要确认收货吗？</span >
+            <span slot="footer" class="dialog-footer" >
+              <el-button @click="confirmCheckDialog = false" icon="el-icon-close" >取 消</el-button >
+              <el-button type="primary" @click="onConfirmCheckOK" icon="el-icon-check" >确 定</el-button >
+            </span >
+        </el-dialog >
         </div >
   </div >
 </template >
@@ -257,6 +264,7 @@ import {resetObject} from '@/utils';
 import {requestEmployeeList} from '@/api/commonApi';
 import {
 		getPartsInfoList,
+		updatePartsInfo,
 } from '@/api/repair_manage';
 
 var _this;
@@ -293,6 +301,8 @@ export default {
 			loadingUI: false,
 			showMachineDialog: false,
 			machineInfoData: {},
+			selectedItem: {},
+			confirmCheckDialog: false,
 			pickerOptions: APIConfig.DateRangeOptions,
 		}
 	},
@@ -333,10 +343,36 @@ export default {
 
 		onConfrim(item)
 		{
+			this.selectedItem = copyObjectByJSON(item);
+			_this.confirmCheckDialog = true;
+		},
+		onConfirmCheckOK()
+		{
+			_this.confirmCheckDialog = false;
+			let partsInfo = {
+				id: _this.selectedItem.id,
+				partsStatus: APIConfig.SendBackStatusList[3].value,
+			};
+			updatePartsInfo(partsInfo).then(response => {
+				if (responseIsOK(response)) {
+					showMSG(_this, "确认成功！", 1);
+					for (let tableItem of _this.tableData) {
+						if (tableItem.id == partsInfo.id) {
+							tableItem.partsStatus = partsInfo.partsStatus;
+							break;
+						}
+					}
+				}
+				else {
+					showMSG(_this, isStringEmpty(response.data.message) ? "确认失败！" : response.data.message)
+				}
+
+			});
 
 		},
 		editWithItem(item)
 		{
+			this.selectedItem = copyObjectByJSON(item);
 
 		},
 		search(){
