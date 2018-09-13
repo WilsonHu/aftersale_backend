@@ -105,7 +105,7 @@
                         </el-col >
 	                    <el-col :span="4" >
 		                    <el-form-item label="" >
-				                    <el-select v-model="condition.dateType" placeholder="请选择" >
+				                    <el-select v-model="condition.dateType" placeholder="请选择" clearable >
 									      <el-option label="报修日期" value="0" ></el-option >
 									      <el-option label="完成日期" value="1" ></el-option >
 				                    </el-select >
@@ -115,6 +115,7 @@
 	                    <el-col :span="8" >
 	                    <el-form-item label=":" >
 	                    <el-date-picker
+			                    clearable
 			                    v-model="condition.selectDate"
 			                    type="daterange"
 			                    align="left"
@@ -226,11 +227,13 @@
                     </el-table-column >
 	                <el-table-column label="故障部位"
 	                                 align="center"
-	                                 prop="issuePositionName" >
+	                >
                         <template scope="scope" >
-                            <div >
-                                {{scope.row.issuePositionName}}
-                            </div >
+	                         <el-tag class="tagClass" type="success"
+	                                 v-for="item in splitToArray(scope.row.issuePositionList)"
+	                                 :key="item" >
+                                        {{item|filterIssuePosition}}
+	                         </el-tag >
                         </template >
                     </el-table-column >
 	                <el-table-column label="保修期内"
@@ -349,9 +352,9 @@
                     <RepairDetail :repairRecorderInfo="selectedItem"
                                   ref="repairDetail" v-if="showDetailDialog"
                     ></RepairDetail >
-                    <!--<div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >-->
-                        <!--<el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >-->
-                    <!--</div >-->
+			     <!--<div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >-->
+			     <!--<el-button @click="showDetailDialog = false" icon="el-icon-back" >关闭</el-button >-->
+			     <!--</div >-->
 		     </el-dialog >
 		     <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="75%" >
                     <AssignTask :showType="assignTaskType" ref="assignTask" v-if="showAssignTaskDialog"
@@ -381,6 +384,7 @@
 import {APIConfig} from '@/config/apiConfig'
 import {Loading} from 'element-ui';
 import {
+		getIssuePositionList,
 		getRepairRecordInfoList,
 		assignTaskToSubmit,
 		assignTaskAgain,
@@ -443,13 +447,29 @@ export default {
 				},
 				workerList: [],
 			},
+			issuePositionList: [],
 			isDisableOK: false,
 			showConfirmForward: false,
 			assignTaskType: APIConfig.AssignTaskType.REPAIR,
-			pickerOptions:APIConfig.DateRangeOptions,
+			pickerOptions: APIConfig.DateRangeOptions,
 		}
 	},
 	filters: {
+		filterIssuePosition(id)
+		{
+			if (_this.issuePositionList.length == 0) {
+				return "";
+			}
+			let result = _this.issuePositionList[0].name;
+			for (let i = 0; i < _this.issuePositionList.length; i++) {
+				if (id == _this.issuePositionList[i].id) {
+					result = _this.issuePositionList[i].name;
+					break;
+				}
+			}
+			return result;
+		},
+
 		filterDateString(strDate)
 		{
 			if (isUndefined(strDate) || isNull(strDate) || strDate.length == 0) {
@@ -515,6 +535,9 @@ export default {
 	},
 
 	methods: {
+		splitToArray(strObj){
+			return strObj.split(",");
+		},
 		onConForward()//确定转派
 		{
 			_this.showConfirmForward = false;
@@ -722,11 +745,6 @@ export default {
 			}
 		},
 
-		tabContentClick(tab)
-		{
-
-		},
-
 		initData()
 		{
 			if (_this.$store.getters.commonData.machineTypeList.length > 0) {
@@ -741,6 +759,12 @@ export default {
 							showMSG(_this, "getAllMachineType failed!");
 						});
 			}
+
+			getIssuePositionList({}).then(response => {
+				if (responseIsOK(response)) {
+					_this.issuePositionList = response.data.data.list;
+				}
+			})
 
 			//employeeList
 			requestEmployeeList().then(response => {
@@ -769,5 +793,10 @@ export default {
 
 .el-select {
 	width: 100%;
+}
+
+.tagClass {
+	margin-left: 5px;
+	width: 100px;
 }
 </style >

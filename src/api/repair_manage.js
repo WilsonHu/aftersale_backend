@@ -79,12 +79,17 @@ export function assignTaskForward(condition) {
 	})
 }
 
-export function getIssuePositionList() {
+export function getIssuePositionList(condition) {
+	let params = new URLSearchParams();
+	let keys = Object.keys(condition);
+	for (let key of keys) {
+		params.append(key, JSON.stringify(condition[key]));
+	}
 	return new Promise((resolve, reject) => {
 		return request({
 			url: 'issue/position/list/list',
 			method: 'post',
-			data: {}
+			data: params
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {
