@@ -245,14 +245,19 @@
                     </el-pagination >
                 </div >
             </el-col >
-		<el-dialog title="提示" :visible.sync="confirmCheckDialog"
-		           append-to-body width="30%" >
+		  <el-dialog title="查看" :visible.sync="showDetailDialog" append-to-body fullscreen >
+                    <RepairPartsDetail :repairRecorderInfo="repairPartsData"
+                                       ref="repairPartsDetail" v-if="showDetailDialog"
+                    ></RepairPartsDetail >
+		  </el-dialog >
+		  <el-dialog title="提示" :visible.sync="confirmCheckDialog"
+		             append-to-body width="30%" >
             <span >确定要确认收货吗？</span >
             <span slot="footer" class="dialog-footer" >
               <el-button @click="confirmCheckDialog = false" icon="el-icon-close" >取 消</el-button >
               <el-button type="primary" @click="onConfirmCheckOK" icon="el-icon-check" >确 定</el-button >
             </span >
-        </el-dialog >
+		  </el-dialog >
         </div >
   </div >
 </template >
@@ -265,13 +270,17 @@ import {requestEmployeeList} from '@/api/commonApi';
 import {
 		getPartsInfoList,
 		updatePartsInfo,
+		getRepairRecordInfoList,
 } from '@/api/repair_manage';
+import RepairPartsDetail from '@/views/repair_manage/repair_parts_detail';
 import store from '@/store';
 var _this;
 
 export default {
 	name: 'parts_manage',
-	components: {},
+	components: {
+		RepairPartsDetail
+	},
 	data() {
 		_this = this;
 		return {
@@ -295,6 +304,8 @@ export default {
 				confirmPerson: "",
 				selectDate: '',
 			},
+			showDetailDialog: false,
+			repairPartsData: {},
 			isShowAgent: true,
 			allMachineType: [],
 			allRoles: [],
@@ -369,7 +380,22 @@ export default {
 		editWithItem(item)
 		{
 			this.selectedItem = copyObjectByJSON(item);
-
+			let condition = {
+				repairActualInfoId: this.selectedItem.repairActualInfoId,
+				isFuzzy: false,
+			}
+			_this.repairPartsData = {};
+			getRepairRecordInfoList(condition).then(response => {
+				if (responseIsOK(response)) {
+					if (response.data.data.list.length > 0) {
+						_this.repairPartsData = Object.assign(this.selectedItem, response.data.data.list[0]);
+					}
+				}
+				_this.showDetailDialog = true;
+				if (this.$refs.repairPartsDetail) {
+					_this.$refs.repairPartsDetail.loadData();//方法1
+				}
+			})
 		},
 		search(){
 			this.onSearchDetailData();
@@ -405,7 +431,7 @@ export default {
 					_this.tableData = response.data.data.list;
 					_this.totalRecords = response.data.data.total;
 					_this.startRow = response.data.data.startRow;
-					console.log(JSON.stringify(_this.tableData));
+					//console.log(JSON.stringify(_this.tableData));
 				}
 				else {
 					showMSG(_this, isStringEmpty(response.data.message) ? "加载数据失败！" : response.data.message)
