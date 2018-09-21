@@ -219,28 +219,33 @@
 
         <el-dialog title="编辑用户" :visible.sync="modifyDialogVisible" width="60%">
             <el-form :model="modifyForm">
-                <el-col :span="8">
+                <el-col :span="6">
                     <el-form-item label="账号：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.account" @change="onChange"
                                   :disabled="modifyForm.account == 'admin'"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                     <el-form-item label="姓名：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.name" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                     <el-form-item label="联系方式：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.phone" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <!--<el-col :span="12">-->
-                <!--<el-form-item label="确认密码：" :label-width="formLabelWidth">-->
-                <!--<el-input v-model="modifyForm.confirmpwd" @change="onChange"></el-input>-->
-                <!--</el-form-item>-->
-                <!--</el-col>-->
-                <el-col :span="8">
+                <el-col :span="6">
+                    <el-form-item label="公司名称：" :label-width="formLabelWidth">
+                        <el-input v-model="modifyForm.customerCompany" @change="onChange"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="地址：" :label-width="formLabelWidth">
+                        <el-input v-model="modifyForm.address" @change="onChange"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
                     <el-form-item label="角色：" :label-width="formLabelWidth">
                         <el-select v-model="modifyForm.roleId" @change="onChange">
                             <el-option
@@ -251,7 +256,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                     <el-form-item label="代理商：" :label-width="formLabelWidth">
                         <el-select v-model="modifyForm.agent" @change="onChange" clearable :disabled="currentUserAgent != 0">
                             <el-option
@@ -269,7 +274,7 @@
                       :closable="false"
                       show-icon>
             </el-alert>
-            <div slot="footer" class="dialog-footer" style="margin-bottom: 20px">
+            <div slot="footer" class="dialog-footer" style="margin-bottom: 20px;margin-top: 100px">
                 <el-button @click="modifyDialogVisible = false" icon="el-icon-close" type="danger">取 消</el-button>
                 <el-button type="primary" @click="onEidt" icon="el-icon-check">确 定</el-button>
             </div>
@@ -411,6 +416,8 @@
                 this.modifyForm.phone = item.phone;
                 this.modifyForm.roleId = item.roleId;
                 this.modifyForm.valid = item.valid;
+                this.modifyForm.customerCompany = item.customerCompany;
+                this.modifyForm.address = item.address;
                 this.isError = this.validateForm(this.modifyForm, true);
                 this.modifyDialogVisible = true;
             },
@@ -458,6 +465,10 @@
                 if (!iserror && isStringEmpty(formObj.phone)) {
                     iserror = true;
                     this.errorMsg = '联系方式不能为空';
+                }
+                if (!iserror && isStringEmpty(formObj.customerCompany)) {
+                    iserror = true;
+                    this.errorMsg = '公司名称不能为空';
                 }
 
                 if (!iserror && !isPoneAvailable(formObj.phone)) {
