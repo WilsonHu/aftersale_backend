@@ -561,8 +561,9 @@ export default {
 		},
 		onConShowAssign()
 		{
+			_this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
 			if (!_this.machineInfo.factoryDate) {
-				_this.machineInfo.factoryDate = DateMinus(_this.selectedItem.facoryDate)
+				_this.machineInfo.factoryDate = DateMinus(_this.selectedItem.facoryDate);
 			}
 			_this.showConfirmAssign = false;
 			_this.showAssignTaskDialog = true;

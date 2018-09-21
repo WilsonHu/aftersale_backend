@@ -97,8 +97,8 @@ const APIConfig = {
 
 	//保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
 	MaintainStatusList: [
-		{value: 0, name: '待分配'},
-		{value: 1, name: '已分配'},
+		{value: 0, name: '待派单'},
+		{value: 1, name: '已派单'},
 		{value: 2, name: '已接受'},
 		{value: 3, name: '完成待确认'},
 		{value: 4, name: '已确认'},
@@ -106,8 +106,8 @@ const APIConfig = {
 
 	//保养状态 0：待分配，1：已分配(但未接单）2：已接受任务，3：保养完成(客户未确认)，4：客户已确认保养结果
 	InstallStatusList: [
-		{value: 0, name: '待分配'},
-		{value: 1, name: '已分配'},
+		{value: 0, name: '待派单'},
+		{value: 1, name: '已派单'},
 		{value: 2, name: '已接受'},
 		{value: 3, name: '完成待确认'},
 		{value: 4, name: '已确认'},

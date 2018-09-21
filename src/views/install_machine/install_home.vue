@@ -302,6 +302,7 @@
 
                 <el-dialog title="派单" :visible.sync="showAssignTaskDialog" append-to-body width="70%" >
                     <AssignTask :showType="assignTaskType" ref="assignTask" v-if="showAssignTaskDialog"
+                                :machineInfo="machineInfo"
                                 :dataChanged="dataChanged" ></AssignTask >
                     <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
                         <el-button type="primary" @click="onConfirmAssign" icon="el-icon-check"
@@ -387,6 +388,7 @@
 			    installLibList: [],
 			    installLib: '',
 			    showInstallDialog: false,
+			    machineInfo: {},
 			    assignTaskType: APIConfig.AssignTaskType.INSTALL,
 			    pickerOptions: APIConfig.DateRangeOptions,
 		    }
@@ -489,6 +491,7 @@
 		    assignTask(row)
 		    {
 			    _this.selectedItem = copyObject(row);
+			    _this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
 			    if (_this.selectedItem.maintainStatus > 0) {//当前有保养还在进行.
 				    _this.showConfirmAssign = true;
 			    }
