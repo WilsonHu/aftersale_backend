@@ -492,7 +492,10 @@
 		    {
 			    _this.selectedItem = copyObject(row);
 			    _this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
-			    if (_this.selectedItem.maintainStatus > 0) {//当前有保养还在进行.
+                _this.machineInfo.customerId= _this.selectedItem.machineCustomerId
+                _this.machineInfo.customerName= _this.selectedItem.machineCustomerName
+
+                if (_this.selectedItem.maintainStatus > 0) {//当前有保养还在进行.
 				    _this.showConfirmAssign = true;
 			    }
 			    else {
@@ -528,11 +531,11 @@
 				    return;
 			    }
 
-
-			    if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
-				    showMessage(_this, "请选择客户联系人！")
-				    return;
-			    }
+//
+//			    if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+//				    showMessage(_this, "请选择客户联系人！")
+//				    return;
+//			    }
 
 			    if (isStringEmpty(_this.assignTaskData.workerList)) {
 				    showMessage(_this, "请选择要派出的工人！")
@@ -547,6 +550,7 @@
 					    installRecordId: _this.selectedItem.id,
 				    });
 			    });
+
 			    let submitData = {
 				    installRecord: {
 					    id: _this.selectedItem.id,
@@ -557,6 +561,9 @@
 				    },
 				    installMembers: memberList,
 			    };
+                if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+                    submitData.customer=_this.selectedItem.machineCustomerId
+                }
 			    assignTaskToSubmit(submitData).then(response=> {
 				    if (responseIsOK(response)) {
 					    showMSG(_this, "分配任务成功！", 1)

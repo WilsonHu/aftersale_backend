@@ -562,6 +562,8 @@ export default {
 		onConShowAssign()
 		{
 			_this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
+            _this.machineInfo.customerId= _this.selectedItem.machineCustomerId
+            _this.machineInfo.customerName= _this.selectedItem.machineCustomerName
 			if (!_this.machineInfo.factoryDate) {
 				_this.machineInfo.factoryDate = DateMinus(_this.selectedItem.facoryDate);
 			}
@@ -628,10 +630,10 @@ export default {
 			}
 
 
-			if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
-				showMessage(_this, "请选择客户联系人！")
-				return;
-			}
+//			if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+//				showMessage(_this, "请选择客户联系人！")
+//				return;
+//			}
 
 			if (isStringEmpty(_this.assignTaskData.workerList)) {
 				showMessage(_this, "请选择要派出的工人！")
@@ -656,7 +658,9 @@ export default {
 				},
 				repairMembers: memberList,
 			};
-
+            if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+                submitData.customer=_this.selectedItem.machineCustomerId
+            }
 			//再派 status为2或3,生成新的一条记录
 			if (_this.selectedItem.status > 1 && _this.selectedItem.status < 4) {
 				submitData.oldId = _this.selectedItem.id;
