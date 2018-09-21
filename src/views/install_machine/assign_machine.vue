@@ -470,7 +470,7 @@
 		    //获取当前角色的所有客户
 		    initCustomerList() {
 			    let condition = {
-				    "agentId": store.getters.user.user.agent,
+//				    "agentId": store.getters.user.user.agent,
 				    "roleId": APIConfig.UserType.Customer,
 			    }
 			    requestCustomerList(condition).then(response=> {

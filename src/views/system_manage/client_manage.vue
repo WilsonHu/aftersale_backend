@@ -292,7 +292,7 @@
 
 <script>
     var _this;
-    import {getAllRole, selectUsers, addStaff,updateUser} from '@/api/system_manage';
+    import {getAllRole, selectUsers, addStaff,updateUser,deleteUser} from '@/api/system_manage';
     import {getAllAgent} from '@/api/agent';
     import {APIConfig} from '@/config/apiConfig';
 
@@ -431,23 +431,15 @@
 
             onConfirmDelete: function () {
                 _this.deleteConfirmVisible = false;
-                // $.ajax({
-                //     url: HOST + "user/delete",
-                //     type: 'POST',
-                //     dataType: 'json',
-                //     data: {"id":this.selectedItem.id},
-                //     success: function (data) {
-                //         if (data.code == 200) {
-                //             _this.onSelectUsers();
-                //             showMessage(_this, '删除成功', 1);
-                //         } else {
-                //             showMessage(_this, '删除失败', 0);
-                //         }
-                //     },
-                //     error: function (data) {
-                //         showMessage(_this, '服务器访问出错', 0);
-                //     }
-                // })
+                deleteUser(this.selectedItem.id).then(response => {
+                    if (responseIsOK(response)) {
+                        showMSG(_this, "删除客户成功！", 1);
+                        _this.deleteConfirmVisible = false;
+                        this.onSelectUsers();
+                    } else {
+                        showMessage(_this, isStringEmpty(response.data.message) ? "添加客户失败！" : response.data.message);
+                    }
+                })
             },
 
             validateForm(formObj, isEdit) {

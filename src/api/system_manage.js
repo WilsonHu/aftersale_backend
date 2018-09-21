@@ -74,6 +74,22 @@ export function deleteAgent(id) {
 	})
 }
 
+export function deleteUser(id) {
+	return new Promise((resolve, reject) => {
+		let params = new URLSearchParams();
+		params.append('id', id);
+		return request({
+			url: 'user/delete',
+			method: 'post',
+			data: params
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
 export function getAgentList(condition) {
 	return request({
 		url: 'agent/list',
