@@ -207,6 +207,20 @@ export function addMainTainRecorder(submitData) {
 	})
 }
 
+export function updateMaintainInfo(submitData) {
+	return new Promise((resolve, reject) => {
+		return request({
+			url: 'maintain/record/updateMaintainInfo',
+			method: 'post',
+			data: submitData
+		}).then(response=> {
+			resolve(response);
+		}).catch(error=> {
+			reject(error);
+		})
+	})
+}
+
 export function getMaintainDetail(condition) {
 	return new Promise((resolve, reject) => {
 		let params = new URLSearchParams();

@@ -156,11 +156,21 @@
 			                 align="center"
 			                 prop="installInfo"
 			                 label="安装项" >
-		                  <template slot-scope="scope" >
-	                        <span >
-	                            {{filterInstallInfo(scope.row.installInfo)}}
-	                        </span >
-                        </template >
+		                 <template scope="scope" >
+			                 <div
+			                      :disabled="scope.row.installStatus>2"
+			                      @click="editInstall(scope.row)"
+			                      style="font-weight: bold;"
+			                      class="btn btn-link">
+	                              <span style="color: red"
+                                      v-if="scope.row.installInfo==''||scope.row.installInfo==null" >
+                                      点击设置
+                                  </span >
+	                              <span v-else >
+	                                  {{filterInstallInfo(scope.row.installInfo)}}
+	                              </span >
+			                 </div >
+                          </template >
                     </el-table-column >
                     <el-table-column
 		                    align="center"
@@ -186,18 +196,6 @@
                             </div >
                             <div v-if="scope.row.installStatus==4"
                                  style="color: darkred" >
-                                {{scope.row.installStatus|filterStatus}}
-                            </div >
-                            <div v-if="scope.row.installStatus==5"
-                                 style="color: indianred" >
-                                {{scope.row.installStatus|filterStatus}}
-                            </div >
-                            <div v-if="scope.row.installStatus==6"
-                                 style="color: darkred" >
-                                {{scope.row.installStatus|filterStatus}}
-                            </div >
-                            <div v-if="scope.row.installStatus==7"
-                                 style="color: red" >
                                 {{scope.row.installStatus|filterStatus}}
                             </div >
                         </template >
@@ -243,14 +241,6 @@
 		                                @click="editWithItem(scope.row)" >
                                 </el-button >
                             </el-tooltip >
-                            <el-tooltip placement="top" content="编辑" >
-                                <el-button
-		                                size="mini"
-		                                type="info"
-		                                icon="el-icon-edit"
-		                                @click="editInstall(scope.row)" >
-                                </el-button >
-                            </el-tooltip >
                             <el-tooltip placement="top" content="派单" >
                                 <el-button
 		                                size="mini"
@@ -272,7 +262,7 @@
 		                    :total="totalRecords" >
                     </el-pagination >
                 </div >
-                 <el-dialog title="安装项选择" :visible.sync="showInstallDialog" append-to-body >
+	            <el-dialog title="安装项选择" :visible.sync="showInstallDialog" append-to-body >
                     <el-form label-position="right" label-width="90px" >
 	                    <el-row >
 	                        <el-col :span="8" >
@@ -465,6 +455,11 @@
 		    },
 		    onConInstall()
 		    {
+		    	if(isStringEmpty(_this.installLib))
+			    {
+				    showMSG(_this, "安装项不能为空！")
+			    	return;
+			    }
 			    _this.showInstallDialog = false;
 			    let data = {
 				    installRecord: JSON.stringify(_this.selectedItem),
@@ -477,7 +472,6 @@
 				    }
 				    else {
 					    showMSG(_this, isStringEmpty(response.data.message) ? "操作失败！" : response.data.message)
-
 				    }
 			    })
 
@@ -492,10 +486,10 @@
 		    {
 			    _this.selectedItem = copyObject(row);
 			    _this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
-                _this.machineInfo.customerId= _this.selectedItem.machineCustomerId
-                _this.machineInfo.customerName= _this.selectedItem.machineCustomerName
+			    _this.machineInfo.customerId = _this.selectedItem.machineCustomerId
+			    _this.machineInfo.customerName = _this.selectedItem.machineCustomerName
 
-                if (_this.selectedItem.maintainStatus > 0) {//当前有保养还在进行.
+			    if (_this.selectedItem.maintainStatus > 0) {//当前有保养还在进行.
 				    _this.showConfirmAssign = true;
 			    }
 			    else {
@@ -561,9 +555,9 @@
 				    },
 				    installMembers: memberList,
 			    };
-                if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
-                    submitData.customer=_this.selectedItem.machineCustomerId
-                }
+			    if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+				    submitData.customer = _this.selectedItem.machineCustomerId
+			    }
 			    assignTaskToSubmit(submitData).then(response=> {
 				    if (responseIsOK(response)) {
 					    showMSG(_this, "分配任务成功！", 1)
@@ -656,7 +650,12 @@
 			    };
 			    selectLibList(condition).then(response => {
 				    if (responseIsOK(response)) {
-					    _this.installLibList = response.data.data.list;
+					    _this.installLibList = [];
+					    for (let item of response.data.data.list) {
+						    if (item.installLibName != "基础项") {
+							    _this.installLibList.push(item);
+						    }
+					    }
 				    }
 			    })
 		    }
