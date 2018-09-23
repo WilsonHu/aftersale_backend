@@ -183,7 +183,7 @@
                     <el-col >
                         <el-form-item label="保养人员:" >
                             <el-tag :key="member.name"
-                                    v-for="member in maintainMembers" class="tagClass" type="info">
+                                    v-for="member in maintainMembers" class="tagClass" type="info" >
                                 {{member.name}}
                             </el-tag >
                         </el-form-item >
@@ -246,7 +246,7 @@
                     <el-col >
                         <el-form-item label="保养人员:" >
                             <el-tag :key="user.name"
-                                    v-for="user in maintainMembers" class="tagClass" type="info">
+                                    v-for="user in maintainMembers" class="tagClass" type="info" >
                                 {{user.name}}
                             </el-tag >
                         </el-form-item >
@@ -401,7 +401,7 @@
 	 computed: {
 		 isShowAgent: {//property
 			 get: function () {//getter
-				 _this.activeTabId = !isStringEmpty(_this.formData.machineAgentName) ? "0" : "1";
+				 _this.activeTabId = !isStringEmpty(_this.formData.machineAgentName) ? "1" : "2";
 				 return !isStringEmpty(_this.formData.machineAgentName);//代理商完成
 			 },
 		 },

@@ -68,6 +68,15 @@
 		            prop="agent"
 		            label="代理商" >
             </el-table-column >
+	        <el-table-column
+			         align="center"
+			         label="出厂日期">
+                        <template slot-scope="scope">
+                        <span>
+                            {{(scope.row.facoryDate)|filterDateString}}
+                        </span>
+                        </template>
+                    </el-table-column>
             <el-table-column
 		            align="center"
 		            label="选择" >
