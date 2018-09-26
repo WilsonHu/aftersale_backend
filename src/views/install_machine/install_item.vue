@@ -153,7 +153,7 @@
 			    //分页
 			    totalRecords: 0,
 			    totalPage: 1,
-			    pageSize: APIConfig.EveryPageNum,//每一页的num
+			    pageSize: 5,//APIConfig.EveryPageNum,//每一页的num
 			    currentPage: 1,
 			    startRow: 1,
 			    selectedItem: [],
@@ -235,7 +235,7 @@
 		    handleCurrentChange(val)
 		    {
 			    this.currentPage = val;
-			    this.initData();
+			    _this.onSearchDetailData();
 		    },
 
 		    addTabOK()
@@ -327,6 +327,12 @@
 		    },
 		    handleTabClick(tab, event)
 		    {
+			    this.currentPage = 1;
+			    _this.editableTabs.forEach((itemTab, index) => {
+				    if (itemTab.id === this.activeId) {
+					    _this.editableTabs[index].tableData = [];
+				    }
+			    });
 			    _this.onSearchDetailData();
 		    },
 
@@ -397,7 +403,7 @@
 					    _this.totalRecords = response.data.data.total;
 					    _this.startRow = response.data.data.startRow;
 					    _this.editableTabs.forEach((tab, index) => {
-						    if (tab.id === this.activeId) {
+						    if (tab.id === _this.activeId) {
 							    _this.editableTabs[index].tableData = response.data.data.list;
 						    }
 					    });

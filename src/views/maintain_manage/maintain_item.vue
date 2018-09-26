@@ -271,7 +271,7 @@
 		 handleCurrentChange(val)
 		 {
 			 this.currentPage = val;
-			 this.initData();
+			 _this.onSearchDetailData();
 		 },
 
 		 addTabOK()
@@ -306,7 +306,7 @@
 		 getCurrentActiveTab()
 		 {
 			 let activeItem = null;
-			 for (let item of  _this.editableTabs) {
+			 for (let item of _this.editableTabs) {
 				 if (item.id === _this.activeId) {
 					 activeItem = item;
 				 }
@@ -365,8 +365,15 @@
 				 })
 			 }
 		 },
+
 		 handleTabClick(tab, event)
 		 {
+			 this.currentPage = 1;
+			 _this.editableTabs.forEach((itemTab, index) => {
+				 if (itemTab.id === this.activeId) {
+					 _this.editableTabs[index].tableData = [];
+				 }
+			 });
 			 _this.onSearchDetailData();
 		 },
 
@@ -436,11 +443,11 @@
 				 if (responseIsOK(response)) {
 					 _this.totalRecords = response.data.data.total;
 					 _this.startRow = response.data.data.startRow;
-					 _this.editableTabs.forEach((tab, index) => {
+					 _this.editableTabs.forEach((tab, index)=>{
 						 if (tab.id === this.activeId) {
 							 _this.editableTabs[index].tableData = response.data.data.list;
 						 }
-					 });
+					 })
 				 }
 				 else {
 					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
