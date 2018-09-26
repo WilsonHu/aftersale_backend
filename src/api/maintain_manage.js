@@ -192,13 +192,16 @@ export function assignTaskToSubmit(condition) {
 
 // /add
 export function addMainTainRecorder(submitData) {
+	let params = new URLSearchParams();
+	let keys = Object.keys(submitData);
+	for (let key of keys) {
+		params.append(key, submitData[key]);
+	}
 	return new Promise((resolve, reject) => {
-		let params = new URLSearchParams();
-		params.append('maintainRecord', JSON.stringify(submitData));
 		return request({
-			url: 'maintain/record/add',
+			url: 'maintain/record/addList',
 			method: 'post',
-			data: submitData
+			data: params
 		}).then(response=> {
 			resolve(response);
 		}).catch(error=> {

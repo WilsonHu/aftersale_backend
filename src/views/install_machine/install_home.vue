@@ -90,6 +90,13 @@
                         </el-col >
                     </el-row >
                 </el-form >
+
+	            <div>
+		            <el-steps   simple>
+			            <el-step title="设置安装项" status="finish" icon="el-icon-setting"></el-step>
+			            <el-step title="安装调试派单" status="success"></el-step>
+					</el-steps>
+	            </div>
                 <el-table
 		                v-loading="loadingUI"
 		                element-loading-text="获取数据中..."

@@ -22,7 +22,8 @@
 		        :data="tableData"
 		        border
 		        empty-text="暂无数据..."
-		        ref="singleTable"
+		        ref="multipleTable"
+		        @selection-change="handleSelectionChange"
 		        show-overflow-tooltip="true"
 		        style="width: 100%; " >
              <el-table-column
@@ -33,7 +34,11 @@
                             {{scope.$index+startRow}}
                         </template >
              </el-table-column >
-
+			<el-table-column
+				align="center"
+				type="selection"
+				width="55" >
+			</el-table-column >
             <el-table-column
 		            align="center"
 		            prop="nameplate"
@@ -77,14 +82,14 @@
                         </span>
                         </template>
                     </el-table-column>
-            <el-table-column
-		            align="center"
-		            label="选择" >
-                <template slot-scope="scope" >
-                     <el-checkbox v-model="scope.row.checked"
-                                  @change="checkStatusChange(scope.row)" ></el-checkbox >
-                </template >
-            </el-table-column >
+            <!--<el-table-column-->
+		            <!--align="center"-->
+		            <!--label="选择" >-->
+                <!--<template slot-scope="scope" >-->
+                     <!--<el-checkbox v-model="scope.row.checked"-->
+                                  <!--@change="checkStatusChange(scope.row)" ></el-checkbox >-->
+                <!--</template >-->
+            <!--</el-table-column >-->
         </el-table >
 	    <div class="block" style="text-align: center; margin-top: 20px" >
                     <el-pagination
@@ -130,6 +135,7 @@
 			 currentPage: 1,
 			 startRow: 0,
 			 totalRecords: 0,
+			 multipleSelection: [],
 		 }
 	 },
 	 filters: {
@@ -140,6 +146,13 @@
 		 },
 	 },
 	 methods: {
+
+		 handleSelectionChange(val)
+		 {
+			 _this.multipleSelection = val;
+			 _this.dataChanged(_this.getCurrentData());
+		 },
+
 		 handleCurrentChange(val) {
 			 this.currentPage = val;
 			 this.loadData();
@@ -191,15 +204,6 @@
 		 checkStatusChange(row)
 		 {
 			 _this.selectedItem = copyObject(row);
-			 if (row.checked == true && _this.tableData.length > 0) {
-				 for (let i = 0; i < _this.tableData.length; i++) {
-					 if (row.id !== _this.tableData[i].id) {
-						 if (_this.tableData[i].checked == true) {
-							 _this.tableData[i].checked = false;
-						 }
-					 }
-				 }
-			 }
 			 _this.dataChanged(_this.getCurrentData());
 		 },
 
@@ -209,7 +213,7 @@
 		 },
 		 getCurrentData()
 		 {
-			 return _this.selectedItem;
+			 return _this.multipleSelection;
 		 },
 
 	 },

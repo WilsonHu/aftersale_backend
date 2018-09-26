@@ -106,9 +106,16 @@
 		                        icon="el-icon-plus"
 		                        size="small"
 		                        type="primary"
-		                        @click="handleAddMaintain" ></el-button >
+		                        @click="onShowSelectMachine" ></el-button >
                     </el-tooltip >
                 </div >
+	            <div >
+		            <el-steps simple >
+			            <el-step title="添加保养" status="process" icon="el-icon-edit" ></el-step >
+			            <el-step title="设置保养项" status="finish" icon="el-icon-setting" ></el-step >
+			            <el-step title="派单" status="success" ></el-step >
+					</el-steps >
+	            </div >
                 <el-table
 		                :data="tableData"
 		                border
@@ -295,28 +302,8 @@
 	                    <el-button type="primary" @click="onSaveMaintain" icon="el-icon-check" >确 定</el-button >
                     </div >
                 </el-dialog >
-                <el-dialog title="添加保养" :visible.sync="showAddDialog" append-to-body width="50%" >
-                    <el-form :model="formData" label-position="right" label-width="90px" >
-                        <el-row >
-                            <el-col :span="12" >
-                                <el-form-item label="机器编号:" >
-                                    <el-input placeholder="选择机器" v-model="formData.machineNameplate"
-                                              class="input-with-select" >
-                                        <el-button slot="append" icon="el-icon-search"
-                                                   @click="onShowSelectMachine" ></el-button >
-                                    </el-input >
-                                </el-form-item >
-                            </el-col >
-                        </el-row >
-                    </el-form >
-                    <div slot="footer" class="dialog-footer" style="margin-bottom: 20px" >
-                        <el-button type="primary" @click="onAddOK" icon="el-icon-check"
-                        >确定
-                        </el-button >
-                        <el-button @click="showAddDialog = false" icon="el-icon-back" >关闭</el-button >
-                    </div >
-                </el-dialog >
-                <el-dialog title="选择机器" :visible.sync="showSelectMachineDialog" append-to-body width="50%" >
+
+                <el-dialog title="添加保养" :visible.sync="showSelectMachineDialog" append-to-body width="50%" >
                     <SelectAssignMachine ref="selectMachineControl" v-if="showSelectMachineDialog"
                                          :dataChanged="onSelectMachineChanged" >
                     </SelectAssignMachine >
@@ -422,10 +409,8 @@
 				    },
 				    workerList: [],
 			    },
-			    showAddDialog: false,
-			    formData: {},
 			    showSelectMachineDialog: false,
-			    selectedMachine: {},
+			    selectedMachineList: [],
 			    mainTainLibList: [],
 			    machineInfo: {},
 			    assignTaskType: APIConfig.AssignTaskType.MAINTAIN,
@@ -499,51 +484,48 @@
 		    },
 		    onSelectMachineChanged(val)
 		    {
-			    _this.selectedMachine = Object.assign({}, val);
+			    _this.selectedMachineList = val;
 		    },
 		    onShowSelectMachine()
 		    {
-			    _this.selectedMachine = null;
+			    _this.selectedMachineList = [];
 			    _this.showSelectMachineDialog = true;
 		    },
 		    onSelectMachineOK()
 		    {
-			    _this.showSelectMachineDialog = false;
-			    if (this.$refs.selectMachineControl) {
-				    _this.selectedMachine = _this.$refs.selectMachineControl.getCurrentData();
-			    }
-			    if (_this.selectedMachine != null) {
-				    _this.formData.machineNameplate = _this.selectedMachine.nameplate;
-			    }
-		    },
-		    onAddOK()
-		    {
-			    if (isStringEmpty(_this.formData.machineNameplate)) {
+			    if (isStringEmpty(_this.selectedMachineList)) {
 				    showMessage(_this, "请选择要保养的机器！")
 				    return;
 			    }
-			    _this.showAddDialog = false;
-			    let submitData = {
-				    machineNameplate: _this.formData.machineNameplate,
-				    maintainLibName: _this.formData.maintainLibName,
-				    createTime: new Date().format("yyyy-MM-dd"),
-				    maintainStatus: 0,
-			    };
-			    addMainTainRecorder(submitData).then(response=> {
-				    if (responseIsOK(response)) {
-					    showMSG(_this, "提交保养数据成功！", 1)
-					    _this.onSearchDetailData();
+			    _this.showSelectMachineDialog = false;
+			    if (this.$refs.selectMachineControl) {
+				    _this.selectedMachineList = _this.$refs.selectMachineControl.getCurrentData();
+			    }
+			    if (_this.selectedMachineList.length > 0) {
+				    let submitList = [];
+				    for (let item of _this.selectedMachineList) {
+					    submitList.push({
+						    machineNameplate: item.nameplate,
+						    createTime: new Date().format("yyyy-MM-dd"),
+						    maintainStatus: 0,
+						    id:'',
+
+					    })
 				    }
-				    else {
-					    showMSG(_this, isStringEmpty(response.data.message) ? "提交保养数据失败！" : response.data.message)
-				    }
-			    })
+				    addMainTainRecorder({
+					    maintainRecordList: JSON.stringify(submitList),
+				    }).then(response=> {
+					    if (responseIsOK(response)) {
+						    showMSG(_this, "新增保养成功,记得设置保养项！", 1)
+						    _this.onSearchDetailData();
+					    }
+					    else {
+						    showMSG(_this, isStringEmpty(response.data.message) ? "新增保养数据失败！" : response.data.message)
+					    }
+				    })
+			    }
 		    },
 
-		    handleAddMaintain(){
-			    resetObject(_this.formData);
-			    _this.showAddDialog = true;
-		    },
 		    onConShowAssign()
 		    {
 			    _this.showConfirmAssign = false;
