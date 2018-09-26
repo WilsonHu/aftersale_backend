@@ -457,10 +457,7 @@ export default {
 	filters: {
 		filterIssuePosition(id)
 		{
-			if (_this.issuePositionList.length == 0) {
-				return "";
-			}
-			let result = _this.issuePositionList[0].name;
+			let result = "";
 			for (let i = 0; i < _this.issuePositionList.length; i++) {
 				if (id == _this.issuePositionList[i].id) {
 					result = _this.issuePositionList[i].name;
@@ -536,6 +533,10 @@ export default {
 
 	methods: {
 		splitToArray(strObj){
+			if(strObj.length==0)
+			{
+				return "";
+			}
 			return strObj.split(",");
 		},
 		onConForward()//确定转派
@@ -562,8 +563,8 @@ export default {
 		onConShowAssign()
 		{
 			_this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
-            _this.machineInfo.customerId= _this.selectedItem.machineCustomerId
-            _this.machineInfo.customerName= _this.selectedItem.machineCustomerName
+			_this.machineInfo.customerId = _this.selectedItem.machineCustomerId
+			_this.machineInfo.customerName = _this.selectedItem.machineCustomerName
 			if (!_this.machineInfo.factoryDate) {
 				_this.machineInfo.factoryDate = DateMinus(_this.selectedItem.facoryDate);
 			}
@@ -658,9 +659,9 @@ export default {
 				},
 				repairMembers: memberList,
 			};
-            if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
-                submitData.customer=_this.selectedItem.machineCustomerId
-            }
+			if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
+				submitData.customer = _this.selectedItem.machineCustomerId
+			}
 			//再派 status为2或3,生成新的一条记录
 			if (_this.selectedItem.status > 1 && _this.selectedItem.status < 4) {
 				submitData.oldId = _this.selectedItem.id;
