@@ -77,7 +77,7 @@
                         </el-col >
                         <el-col :span="4" >
                             <el-form-item label="保养员:" >
-                                <el-input v-model="condition.agent"
+                                <el-input v-model="condition.maintainChargePerson"
                                           placeholder="保养员" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
@@ -396,7 +396,8 @@
 				    isAgent: true,
 				    agent: '',
 				    status: '',
-				    selectDate: '',
+				    maintainChargePerson: '',
+                    selectDate: '',
 			    },
 			    isShowAgent: true,
 			    showDetailDialog: false,
@@ -553,6 +554,7 @@
 				    machineType: this.condition.machineType,
 				    agent: this.condition.agent,
 				    customerName: this.condition.customer,
+				    maintainChargePerson:this.condition.maintainChargePerson,
 //				    status: this.condition.status,
                     maintainStatus: this.condition.status,
 				    page: this.currentPage,
