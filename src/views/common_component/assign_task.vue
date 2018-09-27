@@ -232,6 +232,18 @@
 		    handleSelectionChange(val)
 		    {
 			    _this.multipleSelection = val;
+			    for (let item of _this.tableData) {
+				    let isSelected = false;
+				    for (let sItem of _this.multipleSelection) {
+					    if (item.id == sItem.id) {
+						    isSelected = true;
+						    break;
+					    }
+				    }
+				    if (!isSelected) {
+					    item.checked = false;
+				    }
+			    }
 		    },
 
 		    queryCustomer(queryString, check) {
@@ -334,6 +346,7 @@
 
 		    onSelectedChanged(selectObj)
 		    {
+			    _this.formData.customerId = selectObj.id;
 			    _this.formData.customerPhone = selectObj.phone;
 			    _this.formData.address = selectObj.address;
 		    },

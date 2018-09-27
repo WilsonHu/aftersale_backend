@@ -371,7 +371,7 @@
 	 filters: {
 		 filterStatus(id)
 		 {
-			 let result = _this.statusList[0].name;
+			 let result = "";
 			 for (let i = 0; i < _this.statusList.length; i++) {
 				 if (id == _this.statusList[i].value) {
 					 result = _this.statusList[i].name;
@@ -432,12 +432,12 @@
 				 this.formData = copyObject(_this.maintainRecorderInfo);
 				 //console.log(`formData: \n${JSON.stringify(_this.maintainRecorderInfo)}`);
 			 }
+			 _this.maintainCotentList = [];
 			 try {
 				 _this.maintainCotentList = JSON.parse(this.formData.maintainInfo);
+				 //console.log(`maintainCotentList: \n${JSON.stringify(_this.maintainCotentList)}`);
 			 } catch (e) {
 				 console.log(e);
-				 _this.maintainCotentList = [];
-
 			 }
 		 },
 		 tabSwitchClick(tab)

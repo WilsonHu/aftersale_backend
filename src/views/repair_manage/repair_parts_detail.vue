@@ -257,7 +257,7 @@
                               <span >{{formData.repairActualMethod}}</span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6" >
+                        <el-col :span="22" >
                             <el-form-item label="故障部位:" >
                                 <el-tag class="tagClass" type="success"
                                         v-for="item in splitToArray(formData.issuePositionList)"
@@ -312,9 +312,13 @@
                               <span >{{formData.repairActualMethod}}</span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6" >
+                        <el-col :span="22" >
                             <el-form-item label="故障部位:" >
-                              <span >{{formData.issuePositionName}}</span >
+                                <el-tag class="tagClass" type="success"
+                                        v-for="item in splitToArray(formData.issuePositionList)"
+                                        :key="item" >
+                                        {{item|filterIssuePosition}}
+	                            </el-tag >
                             </el-form-item >
                         </el-col >
                     </el-tab-pane >
@@ -509,17 +513,14 @@
 	 filters: {
 		 filterIssuePosition(id)
 		 {
-			 if (_this.issuePositionList.length == 0) {
-				 return "";
-			 }
-			 let result = _this.issuePositionList[0].name;
-			 for (let i = 0; i < _this.issuePositionList.length; i++) {
-				 if (id == _this.issuePositionList[i].id) {
-					 result = _this.issuePositionList[i].name;
-					 break;
-				 }
-			 }
-			 return result;
+             let result = "";
+             for (let i = 0; i < _this.issuePositionList.length; i++) {
+                 if (id == _this.issuePositionList[i].id) {
+                     result = _this.issuePositionList[i].name;
+                     break;
+                 }
+             }
+             return result;
 		 },
 		 converterUrl: function (url) {
 			 return APIConfig.request_server_url + url;

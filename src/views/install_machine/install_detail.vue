@@ -131,9 +131,9 @@
                     <el-col >
                         <el-form-item label="安装人员:" >
                             <el-tag
-                                    v-for="user in installMembers"
-                                    :key="user.name"
-                                    class="tagClass" type="info" >
+		                            v-for="user in installMembers"
+		                            :key="user.name"
+		                            class="tagClass" type="info" >
                                 {{user.name}}
                             </el-tag >
                         </el-form-item >
@@ -174,14 +174,14 @@
                     <div class="panel panel-primary" v-for="item in installCotentList"
                          style="font-weight: bold;font-size: 20px;" >
                         <div class="panel-heading" style="text-align: left" >
-                            <span class="panel-title" >{{item.installLibName}}</span >
+                            <span class="panel-title" >{{item.install_lib_name}}</span >
                         </div >
                         <div class="panel-body" >
-                            <el-col :span="20" v-for="itemContent in item.contentList" >
+                            <el-col :span="22" v-for="itemContent in item.contentList" >
                                 <span v-if="isShowContent(itemContent)"
-                                      style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.installContent}}</span >
-                                <el-form-item :label="itemContent.installContent" v-else >
-                                    <span >: {{itemContent.installValue}}</span >
+                                      style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.install_content}}</span >
+                                <el-form-item :label="itemContent.install_content" v-else >
+                                    <span >: {{itemContent.install_value}}</span >
                                 </el-form-item >
                             </el-col >
                         </div >
@@ -274,7 +274,7 @@
 
 		 filterStatus(id)
 		 {
-			 var result = _this.statusList[0].name;
+			 var result = "";
 			 for (var i = 0; i < _this.statusList.length; i++) {
 				 if (id == _this.statusList[i].value) {
 					 result = _this.statusList[i].name;
@@ -291,7 +291,10 @@
 		 },
 		 isShowContent(item)
 		 {
-			 return isUndefined(item.installValue);
+			 if (isUndefined(item)) {
+				 return false;
+			 }
+			 return item.install_lib_name != "基础项";
 		 },
 		 loadMembers()
 		 {
@@ -327,12 +330,31 @@
 					 if (responseIsOK(response)) {
 						 if (response.data.data.list.length > 0) {
 							 _this.formData = response.data.data.list[0];
+							 _this.installCotentList = [];
 							 try {
-								 _this.installCotentList = JSON.parse(this.formData.installInfo);
+								 let list = JSON.parse(_this.formData.installInfo);
+								 for (let item of list) {
+									 let isExsitName = false;
+									 for (let cItem of _this.installCotentList) {
+										 if (item.install_lib_name == cItem.install_lib_name) {
+											 isExsitName = true
+											 cItem.contentList.push(item)
+											 break;
+										 }
+									 }
+									 if (!isExsitName) {
+										 let detailList = [];
+										 detailList.push(item);
+										 _this.installCotentList.push({
+											 "install_lib_name": item.install_lib_name,
+											 "contentList": detailList,
+										 });
+									 }
+								 }
+								 //console.log("数据 installCotentList:\r\n" + JSON.stringify(_this.installCotentList))
 								 _this.loadMembers();
 							 } catch (e) {
 								 console.log(e);
-								 _this.installCotentList = [];
 							 }
 						 }
 					 }
@@ -376,9 +398,10 @@ span {
 	alignment: left;
 	text-align: left;
 }
+
 .tagClass {
-    margin-left: 5px;
-    width: 200px;
+	margin-left: 5px;
+	width: 200px;
 }
 
 .status_class {
