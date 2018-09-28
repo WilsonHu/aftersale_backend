@@ -91,12 +91,12 @@
                     </el-row >
                 </el-form >
 
-	            <div>
-		            <el-steps   simple>
-			            <el-step title="设置安装项" status="finish" icon="el-icon-setting"></el-step>
-			            <el-step title="安装调试派单" status="success"></el-step>
-					</el-steps>
-	            </div>
+	            <div >
+		            <el-steps simple >
+			            <el-step title="设置安装项" status="finish" icon="el-icon-setting" ></el-step >
+			            <el-step title="安装调试派单" status="success" ></el-step >
+					</el-steps >
+	            </div >
                 <el-table
 		                v-loading="loadingUI"
 		                element-loading-text="获取数据中..."
@@ -165,12 +165,12 @@
 			                 label="安装项" >
 		                 <template scope="scope" >
 			                 <div
-			                      :disabled="scope.row.installStatus>2"
-			                      @click="editInstall(scope.row)"
-			                      style="font-weight: bold;"
-			                      class="btn btn-link">
+					                 :disabled="scope.row.installStatus>2"
+					                 @click="editInstall(scope.row)"
+					                 style="font-weight: bold;"
+					                 class="btn btn-link" >
 	                              <span style="color: red"
-                                      v-if="scope.row.installInfo==''||scope.row.installInfo==null" >
+	                                    v-if="scope.row.installInfo==''||scope.row.installInfo==null" >
                                       点击设置
                                   </span >
 	                              <span v-else >
@@ -462,15 +462,15 @@
 		    },
 		    onConInstall()
 		    {
-		    	if(isStringEmpty(_this.installLib))
-			    {
+			    if (isStringEmpty(_this.installLib)) {
 				    showMSG(_this, "安装项不能为空！")
-			    	return;
+				    return;
 			    }
 			    _this.showInstallDialog = false;
 			    let data = {
 				    installRecord: JSON.stringify(_this.selectedItem),
 				    installLibName: _this.installLib,
+				    baseName: "基础项"
 			    }
 			    updateInstallInfo(data).then(response=> {
 				    if (responseIsOK(response)) {
