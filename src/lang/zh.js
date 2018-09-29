@@ -1,6 +1,6 @@
 export default {
   route: {
-    dashboard: 'SinSim',
+    dashboard: '首页',
 
     install_machine:'调试管理',
     install_home:'调试主页',
@@ -86,7 +86,7 @@ export default {
   },
   navbar: {
     logOut: '注销',
-    dashboard: 'SinSim',
+    dashboard: '首页',
     github: '项目地址',
     screenfull: '全屏',
     theme: '换肤'

@@ -1,6 +1,6 @@
 const APIConfig = {
 
-	request_server_url: '/api/',  // for axios ajax url
+	request_server_url: '/api',  // for axios ajax url
 
 	EveryPageNum: 10, //每页显示记录数
 
