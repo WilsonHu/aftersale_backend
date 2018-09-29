@@ -29,7 +29,7 @@
                                 </el-select >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="3" :offset="1" >
+                        <el-col :span="3" :offset="1" v-show="!isAgentLogin()" >
                             <el-form-item label="显示代理商:" >
                                 <el-switch
 		                                v-model="condition.isAgent"
@@ -38,7 +38,7 @@
                                 </el-switch >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="5" v-show="condition.isAgent" >
+                        <el-col :span="5" v-show="!isAgentLogin()&&condition.isAgent" >
                             <el-form-item label="" >
                                 <el-input v-model="condition.agent"
                                           placeholder="代理商" clearable
@@ -153,13 +153,12 @@
 		                    label="客户联系人" >
                     </el-table-column >
                     <el-table-column
-		                    v-if="isShowAgent"
+		                    v-if="!isAgentLogin()"
 		                    align="center"
 		                    prop="machineAgentName"
 		                    label="代理商" >
                     </el-table-column >
 	                 <el-table-column
-			                 v-if="isShowAgent"
 			                 align="center"
 			                 prop="installInfo"
 			                 label="安装项" >
@@ -367,7 +366,6 @@
 				    status: '',
 				    selectDate: '',
 			    },
-			    isShowAgent: true,
 			    allMachineType: [],
 			    allRoles: [],
 			    loadingUI: false,
@@ -437,6 +435,10 @@
 		    },
 	    },
 	    methods: {
+		    isAgentLogin()
+		    {
+			    return _this.$store.getters.user.user.agent != "0" && _this.$store.getters.user.user.agent != "";
+		    },
 		    filterInstallInfo(info)
 		    {
 			    if (isStringEmpty(info)) {
@@ -597,7 +599,8 @@
 				    installChargePersonName: "",
 				    query_start_time_install: '',
 				    query_finish_time_install: '',
-				    agent: this.condition.agent,
+				    agent: !_this.isAgentLogin() ? this.condition.agent : _this.$store.getters.user.user.agentName,//代理商登录为后者
+				    isAgent: _this.isAgentLogin(),
 				    installRecordCustomerName: this.condition.customer,
 				    page: this.currentPage,
 				    size: this.pageSize,
@@ -612,7 +615,6 @@
 					    _this.tableData = response.data.data.list;
 					    _this.totalRecords = response.data.data.total;
 					    _this.startRow = response.data.data.startRow;
-					    _this.isShowAgent = _this.condition.isAgent;
 				    }
 				    else {
 					    showMSG(_this, isStringEmpty(response.data.message) ? "加载数据失败！" : response.data.message)
@@ -672,6 +674,7 @@
 		    _this.initInstallLib();
 		    this.initData();
 		    this.search();
+		    console.log(`user: ${JSON.stringify(_this.$store.getters.user.user)}`)
 	    }
 
     }

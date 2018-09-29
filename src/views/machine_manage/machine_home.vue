@@ -19,7 +19,7 @@
                             </el-form-item >
                         </el-col >
 
-                        <el-col :span="3" :offset="1" >
+                        <el-col :span="3" :offset="1" v-show="!isAgentLogin()">
                             <el-form-item label="显示代理商:" >
                                 <el-switch
 		                                v-model="condition.isAgent"
@@ -28,7 +28,7 @@
                                 </el-switch >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="5" v-show="condition.isAgent" >
+                        <el-col :span="5" v-show="!isAgentLogin()&&condition.isAgent">
                             <el-form-item label="" >
                                 <el-input v-model="condition.agent"
                                           placeholder="代理商" clearable
@@ -36,14 +36,7 @@
                             </el-form-item >
                         </el-col >
 
-	                    <el-col :span="2" :offset="3" >
-                            <el-button
-		                            icon="el-icon-search"
-		                            size="normal"
-		                            type="primary"
-		                            @click="search" >查询
-                            </el-button >
-                        </el-col >
+
                     </el-row >
                     <el-row >
 	                    <el-col :span="5" >
@@ -86,7 +79,14 @@
                                 </el-select >
                             </el-form-item >
                         </el-col >
-
+                        <el-col :span="2" :offset="2" >
+                            <el-button
+		                            icon="el-icon-search"
+		                            size="normal"
+		                            type="primary"
+		                            @click="search" >查询
+                            </el-button >
+                        </el-col >
                         <el-col :span="6" >
                             <el-form-item label="日期:" >
                                 <el-date-picker
@@ -165,7 +165,7 @@
 		                    label="客户" >
                     </el-table-column >
                     <el-table-column
-		                    v-if="isShowAgent"
+		                    v-if="!isAgentLogin()"
 		                    align="center"
 		                    prop="agent"
 		                    label="代理商" >
@@ -405,7 +405,10 @@
 		 },
 	 },
 	 methods: {
-
+		 isAgentLogin()
+		 {
+			 return _this.$store.getters.user.user.agent != "0" && _this.$store.getters.user.user.agent != "";
+		 },
 		 handleCurrentChange(val) {
 			 this.currentPage = val;
 			 this.search();
@@ -423,7 +426,8 @@
 				 installChargePersonName: "",
 				 query_start_time_install: '',
 				 query_finish_time_install: '',
-				 agent: this.condition.agent,
+				 agent: !_this.isAgentLogin() ? this.condition.agent : _this.$store.getters.user.user.agentName,//代理商登录为后者
+				 isAgent: _this.isAgentLogin(),
 				 installRecordCustomerName: this.condition.customer,
 				 page: this.currentPage,
 				 size: this.pageSize,

@@ -1,4 +1,4 @@
-import {loginByAccount, logout, getUserInfo} from '@/api/login'
+import {loginByAccount, logout, getUserInfo, getAgentInfo} from '@/api/login'
 import {getToken, setToken, removeToken} from '@/utils/auth'
 
 const user = {
@@ -29,10 +29,21 @@ const user = {
 						if (response.status == 200) {
 							let userData = response.data;
 							userData.Token = response.headers.authorization;
-							let roles = userData.roleId == 1 ? ['admin'] : ['editor']
-							setToken(userData);//set token to cookie
-							commit('SET_ROLES', roles);
 							commit('SET_TOKEN', userData.Token)
+							let roles = userData.roleId == 1 ? ['admin'] : ['editor']
+							commit('SET_ROLES', roles);
+
+							if (userData.agent != "0") {
+								getAgentInfo(userData.agent).then(res=> {
+									if (res.status == 200) {
+										userData.agentName = res.data.data.name;
+									}
+									setToken(userData);//set token to cookie
+									commit('SET_USER', userData)
+									resolve()
+								})
+							}
+							setToken(userData);//set token to cookie
 							commit('SET_USER', userData)
 							resolve()
 						}

@@ -46,7 +46,7 @@
                         </el-col >
                     </el-row >
                     <el-row >
-	                   <el-col :span="5" >
+	                   <el-col :span="5" v-show="!isAgentLogin()" >
                             <el-form-item label="显示代理商:" >
                                 <el-switch
 		                                v-model="condition.isAgent"
@@ -55,7 +55,7 @@
                                 </el-switch >
                             </el-form-item >
                         </el-col >
-	                    <el-col :span="5" v-show="condition.isAgent" >
+	                    <el-col :span="5" v-show="!isAgentLogin()&&condition.isAgent" >
                             <el-form-item label="代理商:" >
                                  <el-input v-model="condition.agent"
                                            placeholder="代理商" clearable
@@ -103,8 +103,10 @@
                                 </el-select >
                             </el-form-item >
                         </el-col >
-	                    <el-col :span="4" >
-		                    <el-form-item label="" >
+                    </el-row >
+	                <el-row>
+		                <el-col :span="4" >
+		                    <el-form-item label="查询日期" >
 				                    <el-select v-model="condition.dateType" placeholder="请选择" clearable >
 									      <el-option label="报修日期" value="0" ></el-option >
 									      <el-option label="完成日期" value="1" ></el-option >
@@ -113,22 +115,21 @@
 
 	                    </el-col >
 	                    <el-col :span="8" >
-	                    <el-form-item label=":" >
-	                    <el-date-picker
-			                    clearable
-			                    v-model="condition.selectDate"
-			                    type="daterange"
-			                    align="left"
-			                    unlink-panels
-			                    range-separator="—"
-			                    start-placeholder="开始日期"
-			                    end-placeholder="结束日期"
-			                    :picker-options="pickerOptions" >
-	                    </el-date-picker >
-	                    </el-form-item >
+		                    <el-form-item label=":" >
+			                    <el-date-picker
+					                    clearable
+					                    v-model="condition.selectDate"
+					                    type="daterange"
+					                    align="left"
+					                    unlink-panels
+					                    range-separator="—"
+					                    start-placeholder="开始日期"
+					                    end-placeholder="结束日期"
+					                    :picker-options="pickerOptions" >
+	                            </el-date-picker >
+	                        </el-form-item >
 	                    </el-col >
-
-                    </el-row >
+	                </el-row>
                 </el-form >
                 <el-table
 		                v-loading="loadingUI"
@@ -154,16 +155,6 @@
 		                    prop="machineNameplate"
 		                    label="机器编号" >
                     </el-table-column >
-	                <!--<el-table-column-->
-	                <!--align="center"-->
-	                <!--prop="machineType"-->
-	                <!--label="机型" >-->
-	                <!--<template scope="scope" >-->
-	                <!--<div >-->
-	                <!--{{scope.row.machineType}}-->
-	                <!--</div >-->
-	                <!--</template >-->
-	                <!--</el-table-column >-->
                     <el-table-column label="订单号"
                                      sortable
                                      align="center"
@@ -181,6 +172,7 @@
 		                    label="客户" >
                     </el-table-column >
                     <el-table-column
+		                    v-if="!isAgentLogin()"
 		                    align="center"
 		                    prop="machineAgentName"
 		                    label="代理商" >
@@ -532,9 +524,12 @@ export default {
 	},
 
 	methods: {
+		isAgentLogin()
+		{
+			return _this.$store.getters.user.user.agent != "0" && _this.$store.getters.user.user.agent != "";
+		},
 		splitToArray(strObj){
-			if(strObj.length==0)
-			{
+			if (strObj.length == 0) {
 				return "";
 			}
 			return strObj.split(",");
@@ -711,7 +706,8 @@ export default {
 				queryFinishRepairCreateTime: '',
 				queryStartRepairEndTime: '',
 				queryFinishRepairEndTime: '',
-				agent: this.condition.agent,
+				agent: !_this.isAgentLogin() ? this.condition.agent : _this.$store.getters.user.user.agentName,//代理商登录为后者
+				isAgent: _this.isAgentLogin(),
 				repairRecordCustomerName: this.condition.customer,
 				repairStatus: this.condition.status,
 				partsStatus: '',

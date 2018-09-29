@@ -13,7 +13,7 @@
                         </el-col >
 
 
-                        <el-col :span="3" :offset="1" >
+                        <el-col :span="3" :offset="1" v-show="!isAgentLogin()">
                             <el-form-item label="显示代理商:" >
                                 <el-switch
 		                                v-model="condition.isAgent"
@@ -22,7 +22,7 @@
                                 </el-switch >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="5" v-show="condition.isAgent" >
+                        <el-col :span="5" v-show="!isAgentLogin()&&condition.isAgent" >
                             <el-form-item label="" >
                                 <el-input v-model="condition.agent"
                                           placeholder="代理商" clearable
@@ -39,14 +39,6 @@
                                     </el-option >
                                 </el-select >
                             </el-form-item >
-                        </el-col >
-                        <el-col :span="2" :offset="3" >
-                            <el-button
-		                            icon="el-icon-search"
-		                            size="normal"
-		                            type="primary"
-		                            @click="search" >查询
-                            </el-button >
                         </el-col >
                     </el-row >
                     <el-row >
@@ -81,6 +73,14 @@
                                           placeholder="保养员" clearable
                                           auto-complete="off" ></el-input >
                             </el-form-item >
+                        </el-col >
+	                    <el-col :span="2" :offset="3" >
+                            <el-button
+		                            icon="el-icon-search"
+		                            size="normal"
+		                            type="primary"
+		                            @click="search" >查询
+                            </el-button >
                         </el-col >
                         <el-col :span="8" >
                             <el-form-item label="日期:" >
@@ -169,7 +169,7 @@
 		                    label="客户联系人" >
                     </el-table-column >
                     <el-table-column
-		                    v-if="isShowAgent"
+		                    v-if="!isAgentLogin()"
 		                    align="center"
 		                    prop="machineAgentName"
 		                    label="代理商" >
@@ -399,7 +399,6 @@
 				    maintainChargePerson: '',
                     selectDate: '',
 			    },
-			    isShowAgent: true,
 			    showDetailDialog: false,
 			    showAssignTaskDialog: false,
 			    showConfirmAssign: false,
@@ -455,6 +454,10 @@
 		    },
 	    },
 	    methods: {
+		    isAgentLogin()
+		    {
+			    return _this.$store.getters.user.user.agent != "0" && _this.$store.getters.user.user.agent != "";
+		    },
 		    onSaveMaintain()
 		    {
 			    let submitData = {
@@ -552,10 +555,10 @@
 				    orderNum: this.condition.orderNum.trim(),
 				    nameplate: this.condition.nameplate.trim(),
 				    machineType: this.condition.machineType,
-				    agent: this.condition.agent,
+				    agent: !_this.isAgentLogin() ? this.condition.agent : _this.$store.getters.user.user.agentName,//代理商登录为后者
+				    isAgent: _this.isAgentLogin(),
 				    customerName: this.condition.customer,
 				    maintainChargePerson:this.condition.maintainChargePerson,
-//				    status: this.condition.status,
                     maintainStatus: this.condition.status,
 				    page: this.currentPage,
 				    size: this.pageSize,
@@ -566,7 +569,6 @@
 					    _this.tableData = response.data.data.list;
 					    _this.totalRecords = response.data.data.total;
 					    _this.startRow = response.data.data.startRow;
-					    _this.isShowAgent = _this.condition.isAgent;
 				    }
 				    else {
 					    showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
