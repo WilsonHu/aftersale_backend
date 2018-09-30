@@ -1,5 +1,6 @@
 import {loginByAccount, logout, getUserInfo, getAgentInfo} from '@/api/login'
 import {getToken, setToken, removeToken} from '@/utils/auth'
+import {APIConfig} from  '@/config/apiConfig'
 
 const user = {
 	state: {
@@ -30,7 +31,13 @@ const user = {
 							let userData = response.data;
 							userData.Token = response.headers.authorization;
 							commit('SET_TOKEN', userData.Token)
-							let roles = userData.roleId == 1 ? ['admin'] : ['editor']
+							let roles = APIConfig.UserRole[0].name;
+							for (let r of APIConfig.UserRole) {
+								if (r.value == userData.roleId) {
+									roles = r.name;
+									break;
+								}
+							}
 							commit('SET_ROLES', roles);
 
 							if (userData.agent != "0") {
@@ -60,9 +67,15 @@ const user = {
 		SetData({commit}, userData)
 		{
 			return new Promise((resolve, reject) => {
-				let roles = userData.roleId == 1 ? ['admin'] : ['editor']
+				let roles = APIConfig.UserRole[0].name;
+				for (let r of APIConfig.UserRole) {
+					if (r.value == userData.roleId) {
+						roles = r.name;
+						break;
+					}
+				}
+				commit('SET_ROLES', roles);
 				setToken(userData);//set token to cookie
-
 				commit('SET_ROLES', roles);
 				commit('SET_TOKEN', userData.Token)
 				commit('SET_USER', userData)

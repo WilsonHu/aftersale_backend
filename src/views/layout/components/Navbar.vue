@@ -1,26 +1,35 @@
 <template >
   <el-menu class="navbar" mode="horizontal" >
-    <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened" ></hamburger >
+    <el-row >
+        <el-col :span="20" >
+            <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened" ></hamburger >
+            <breadcrumb class="breadcrumb-container" ></breadcrumb >
+        </el-col >
+        <el-col :span="2">
+            <div style="font-size: 20px;color: green;margin-top: 5px; font-weight: bold;text-align: right;" >{{roleName}}</div >
+        </el-col>
+        <el-col :span="2" >
+          <div class="right-menu" >
+            <el-dropdown class="avatar-container right-menu-item" trigger="click" >
+              <div class="avatar-wrapper" >
+                <div style="font-size: 16px;font-weight: bold" >{{userName}}</div >
+                <i class="el-icon-caret-bottom" ></i >
+              </div >
+              <el-dropdown-menu slot="dropdown" >
+                <router-link to="/" >
+                  <el-dropdown-item >
+                    {{$t('navbar.dashboard')}}
+                  </el-dropdown-item >
+                </router-link >
+                <el-dropdown-item divided >
+                  <span @click="logout" style="display:block;" >{{$t('navbar.logOut')}}</span >
+                </el-dropdown-item >
+              </el-dropdown-menu >
+            </el-dropdown >
+          </div >
+        </el-col >
 
-    <breadcrumb class="breadcrumb-container" ></breadcrumb >
-    <div class="right-menu" >
-      <el-dropdown class="avatar-container right-menu-item" trigger="click" >
-        <div class="avatar-wrapper" >
-          <div style="font-size: 20px;font-weight: bold" v-html="userName" ></div >
-          <i class="el-icon-caret-bottom" ></i >
-        </div >
-        <el-dropdown-menu slot="dropdown" >
-          <router-link to="/" >
-            <el-dropdown-item >
-              {{$t('navbar.dashboard')}}
-            </el-dropdown-item >
-          </router-link >
-          <el-dropdown-item divided >
-            <span @click="logout" style="display:block;" >{{$t('navbar.logOut')}}</span >
-          </el-dropdown-item >
-        </el-dropdown-menu >
-      </el-dropdown >
-    </div >
+      </el-row >
   </el-menu >
 </template >
 
@@ -32,6 +41,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
+import {APIConfig} from  '@/config/apiConfig'
 
 export default {
 	components: {
@@ -50,10 +60,22 @@ export default {
 	},
 	data() {
 		return {
-			userName: this.$store.getters.user.user.name
+			userName: this.$store.getters.user.user.name,
+			roleName: this.getRole(),
 		}
 	},
 	methods: {
+		getRole()
+		{
+			let roles = APIConfig.UserRole[0].title;
+			for (let r of APIConfig.UserRole) {
+				if (r.value == this.$store.getters.user.user.roleId) {
+					roles = r.title;
+					break;
+				}
+			}
+			return roles
+		},
 		toggleSideBar() {
 			this.$store.dispatch('toggleSideBar')
 		},

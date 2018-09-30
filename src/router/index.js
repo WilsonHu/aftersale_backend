@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
 const _import = require('./_import_' + process.env.NODE_ENV)
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
@@ -21,7 +22,26 @@ import Layout from '../views/layout/Layout'
  * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']     will control the page roles (you can set multiple roles)
+    roles: UserRole    will control the page roles (you can set multiple roles)
+    UserRole: [
+		{
+			name: "Unknown",
+			value: 0,
+		},
+		{
+			name: "SuperAdmin",
+			value: 1,
+		},
+		{
+			name: "Admin",
+			value: 2,
+		},
+		{
+			name: "Agent",
+			value: 4,
+		},
+	],
+
     title: 'title'               the name show in submenu and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar,
     noCache: true                if true ,the page will no be cached(default is false)
@@ -148,95 +168,87 @@ export const asyncRouterMap = [
 			},
 		]
 	},
-    {
-        path: '/machineManage',
-        component: Layout,
-        redirect: 'noredirect',
-        name: 'machine_manage',
-        meta: {
-            icon: 'sewingMachine'
-        },
-        children: [
-            {
-                path: 'machineHome',
-                component: _import('machine_manage/machine_home'),
-                name: 'machine_home',
-                meta: {
-                	title: 'machine_home',
+	{
+		path: '/machineManage',
+		component: Layout,
+		redirect: 'noredirect',
+		name: 'machine_manage',
+		meta: {
+			icon: 'sewingMachine'
+		},
+		children: [
+			{
+				path: 'machineHome',
+				component: _import('machine_manage/machine_home'),
+				name: 'machine_home',
+				meta: {
+					title: 'machine_home',
 					noCache: true,
-                    icon: 'sewingMachine'
+					icon: 'sewingMachine'
 				}
-            }
-        ]
-    },
-    {
-        path: '/partsManage',
-        component: Layout,
-        redirect: 'noredirect',
-        name: 'parts_manage',
-        meta: {
-
-        },
-        children: [
-            {
-                path: 'partsHome',
-                component: _import('system_manage/parts_manage'),
-                name: 'parts_manage',
-                meta: {title: 'parts_manage', noCache: true,icon: 'parts'}
-            }
-        ]
-    },
-    {
-        path: '/staffManage',
-        component: Layout,
-        redirect: 'noredirect',
-        name: 'staff_manage',
-        meta: {
-
-        },
-        children: [
-            {
-                path: 'staffHome',
-                component: _import('system_manage/staff_manage'),
-                name: 'staff_manage',
-                meta: {title: 'staff_manage', noCache: true,icon: 'people'}
-            }
-        ]
-    },
-    {
-        path: '/clientManage',
-        component: Layout,
-        redirect: 'noredirect',
-        name: 'client_manage',
-        meta: {
-
-        },
-        children: [
-            {
-                path: 'clientHome',
-                component: _import('system_manage/client_manage'),
-                name: 'client_manage',
-                meta: {title: 'client_manage', noCache: true,icon: 'peoples'}
-            }
-        ]
-    },
-    {
-        path: '/agentManage',
-        component: Layout,
-        redirect: 'noredirect',
-        name: 'agent_manage',
-        meta: {
-
-        },
-        children: [
-            {
-                path: 'agentHome',
-                component: _import('system_manage/agent_manage'),
-                name: 'agent_manage',
-                meta: {title: 'agent_manage', noCache: true,icon: 'agent'}
-            }
-        ]
-    },
+			}
+		]
+	},
+	{
+		path: '/partsManage',
+		component: Layout,
+		redirect: 'noredirect',
+		name: 'parts_manage',
+		meta: {},
+		children: [
+			{
+				path: 'partsHome',
+				component: _import('system_manage/parts_manage'),
+				name: 'parts_manage',
+				meta: {title: 'parts_manage', noCache: true, icon: 'parts'}
+			}
+		]
+	},
+	{
+		path: '/staffManage',
+		component: Layout,
+		redirect: 'noredirect',
+		name: 'staff_manage',
+		meta: {},
+		children: [
+			{
+				path: 'staffHome',
+				component: _import('system_manage/staff_manage'),
+				name: 'staff_manage',
+				meta: {title: 'staff_manage', noCache: true, icon: 'people'}
+			}
+		]
+	},
+	{
+		path: '/clientManage',
+		component: Layout,
+		redirect: 'noredirect',
+		name: 'client_manage',
+		meta: {},
+		children: [
+			{
+				path: 'clientHome',
+				component: _import('system_manage/client_manage'),
+				name: 'client_manage',
+				meta: {title: 'client_manage', noCache: true, icon: 'peoples'}
+			}
+		]
+	},
+	{
+		path: '/agentManage',
+		component: Layout,
+		redirect: 'noredirect',
+		name: 'agent_manage',
+		meta: {roles: ["Agent"]},
+		children: [
+			{
+				path: 'agentHome',
+				component: _import('system_manage/agent_manage'),
+				name: 'agent_manage',
+				meta: {title: 'agent_manage', noCache: true, icon: 'agent'}
+			}
+		]
+	},
 	// {
 	// 	path: '/systemManage',
 	// 	component: Layout,

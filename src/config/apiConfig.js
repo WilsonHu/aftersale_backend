@@ -73,6 +73,30 @@ const APIConfig = {
 		CustomerContacter: 6
 	},
 
+	UserRole: [
+		{
+			name: "Unknown",
+			value: 0,
+			title: "未知用户",
+		},
+		{
+			name: "SuperAdmin",
+			value: 1,
+			title: "超级管理员",
+		},
+		{
+			name: "Admin",
+			value: 2,
+			title: "管理员",
+
+		},
+		{
+			name: "Agent",
+			value: 4,
+			title: "代理商",
+		},
+	],
+
 	YESORNOList: [
 		{
 			value: 0,
@@ -155,7 +179,7 @@ const APIConfig = {
 		{value: 1, name: '通过'},
 	],
 
-	 SendBackStatusList: [
+	SendBackStatusList: [
 		{value: 0, name: '无'},
 		{value: 1, name: '待寄回'},
 		{value: 2, name: '寄回中'},
