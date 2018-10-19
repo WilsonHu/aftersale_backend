@@ -299,26 +299,26 @@ export const asyncRouterMap = [
 				path: 'repositoryHome',
 				component: _import('repository_manage/repository_home'),
 				name: 'repository_home',
-				meta: {title: 'repository_home', noCache: true,}
+				meta: {title: 'repository_home', noCache: true, icon: 'table'}
 			},
-			{
-				path: 'knowledgeDetail',
-				component: _import('repository_manage/knowledge_detail'),
-				name: 'knowledge_detail',
-				meta: {title: 'knowledge_detail', noCache: true,}
-			},
-			{
-				path: 'experienceDetail',
-				component: _import('repository_manage/experience_detail'),
-				name: 'experience_detail',
-				meta: {title: 'experience_detail', noCache: true,}
-			},
-			{
-				path: 'repositoryShare',
-				component: _import('repository_manage/repository_share'),
-				name: 'repository_share',
-				meta: {title: 'repository_share', noCache: true,}
-			},
+			// {
+			// 	path: 'knowledgeDetail',
+			// 	component: _import('repository_manage/knowledge_detail'),
+			// 	name: 'knowledge_detail',
+			// 	meta: {title: 'knowledge_detail', noCache: true,}
+			// },
+			// {
+			// 	path: 'experienceDetail',
+			// 	component: _import('repository_manage/experience_detail'),
+			// 	name: 'experience_detail',
+			// 	meta: {title: 'experience_detail', noCache: true,}
+			// },
+			// {
+			// 	path: 'repositoryShare',
+			// 	component: _import('repository_manage/repository_share'),
+			// 	name: 'repository_share',
+			// 	meta: {title: 'repository_share', noCache: true,}
+			// },
 		]
 	},
 	{path: '*', redirect: '/404', hidden: true}
