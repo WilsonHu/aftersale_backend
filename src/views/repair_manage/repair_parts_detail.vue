@@ -513,17 +513,21 @@
 	 filters: {
 		 filterIssuePosition(id)
 		 {
-             let result = "";
-             for (let i = 0; i < _this.issuePositionList.length; i++) {
-                 if (id == _this.issuePositionList[i].id) {
-                     result = _this.issuePositionList[i].name;
-                     break;
-                 }
-             }
-             return result;
+			 let result = "";
+			 for (let i = 0; i < _this.issuePositionList.length; i++) {
+				 if (id == _this.issuePositionList[i].id) {
+					 result = _this.issuePositionList[i].name;
+					 break;
+				 }
+			 }
+			 return result;
 		 },
 		 converterUrl: function (url) {
-			 return APIConfig.request_server_url + url;
+			 if (isStringEmpty(url)) {
+				 return "";
+			 }
+			 url = url.replace(APIConfig.FilterUrl, "");
+			 return APIConfig.WEBURL + url;
 		 },
 		 filterDateString(strDate)
 		 {
@@ -583,8 +587,9 @@
 			 if (url == null) {
 				 return;
 			 }
+			 url = url.replace(APIConfig.FilterUrl, "");
 			 if (player.paused || this.voiceInfo.voiceIndex != index) {
-				 this.voiceInfo.voiceUrl = APIConfig.request_server_url + url;
+				 this.voiceInfo.voiceUrl = APIConfig.WEBURL + url;
 				 this.voiceInfo.voiceIndex = index;
 				 this.voiceInfo.voiceType = getAudioType(url);
 				 player.load();//play audio

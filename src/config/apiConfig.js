@@ -2,6 +2,10 @@ const APIConfig = {
 
 	request_server_url: '/api',  // for axios ajax url
 
+	WEBURL: 'https://eservice-tech.cn/',
+
+	FilterUrl: '/home/sinsim/output/aftersale/',
+
 	EveryPageNum: 10, //每页显示记录数
 
 	USER_TYPE_STAFF: 1,

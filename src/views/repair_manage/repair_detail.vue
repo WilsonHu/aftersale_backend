@@ -199,10 +199,10 @@
                                               @click="onPlayVoice(item,index)" >
                                              <el-tooltip placement="top" :content="item|converterUrl" >
                                                  <svg-icon :icon-class="onSelectIcon(index)"
-                                                       @click="onPlayVoice(item,index)"
-                                                       data-toggle="tooltip" data-placement="top"
-                                                       :title="item|converterUrl"
-                                                       style="width:100px;height: 100px; margin: 3px; cursor:hand; "
+                                                           @click="onPlayVoice(item,index)"
+                                                           data-toggle="tooltip" data-placement="top"
+                                                           :title="item|converterUrl"
+                                                           style="width:100px;height: 100px; margin: 3px; cursor:hand; "
                                                  />
                                              </el-tooltip >
                                         </span >
@@ -462,7 +462,8 @@
 			 if (isStringEmpty(url)) {
 				 return "";
 			 }
-			 return APIConfig.request_server_url + url;
+			 url = url.replace(APIConfig.FilterUrl, "");
+			 return APIConfig.WEBURL + url;
 		 },
 		 filterDateString(strDate)
 		 {
@@ -513,8 +514,9 @@
 			 if (url == null) {
 				 return;
 			 }
+			 url = url.replace(APIConfig.FilterUrl, "");
 			 if (player.paused || this.voiceInfo.voiceIndex != index) {
-				 this.voiceInfo.voiceUrl = APIConfig.request_server_url + url;
+				 this.voiceInfo.voiceUrl = APIConfig.WEBURL + url;
 				 this.voiceInfo.voiceIndex = index;
 				 this.voiceInfo.voiceType = getAudioType(url);
 				 player.load();//play audio
