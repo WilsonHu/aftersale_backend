@@ -493,6 +493,10 @@
 		    },
 		    assignTask(row)
 		    {
+			    if (row.installInfo == '' || row.installInfo == null) {
+				    showMessage(_this, "请先设置安装项再派单！");
+				    return;
+			    }
 			    _this.selectedItem = copyObject(row);
 			    _this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
 			    _this.machineInfo.customerId = _this.selectedItem.machineCustomerId

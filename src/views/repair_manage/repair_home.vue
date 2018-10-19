@@ -183,35 +183,39 @@
 		                    sortable
 		                    label="状态" >
                         <template scope="scope" >
-                            <div v-if="scope.row.status==0"
-                                 style="color: #686868" >
+	                        <div v-if="scope.row.status==0"
+	                              style="color: #000000" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==1"
-                                 style="color: #8b6c0e" >
+                                 style="color: #686868" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==2"
-                                 style="color: #13678b" >
+                                 style="color: #8b6c0e" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==3"
-                                 style="color: red" >
+                                 style="color: #13678b" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==4"
-                                 style="color: orange" >
+                                 style="color: red" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==5"
-                                 style="color: indianred" >
+                                 style="color: orange" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==6"
-                                 style="color: #13ce66" >
+                                 style="color: indianred" >
                                 {{scope.row.status|filterStatus}}
                             </div >
                             <div v-if="scope.row.status==7"
+                                 style="color: #13ce66" >
+                                {{scope.row.status|filterStatus}}
+                            </div >
+                            <div v-if="scope.row.status==8"
                                  style="color: #198b57" >
                                 {{scope.row.status|filterStatus}}
                             </div >
@@ -302,7 +306,7 @@
                                 </el-button >
                             </el-tooltip >
                             <el-tooltip placement="top" content="派单"
-                                        v-show="(scope.row.status<=3)&&!(scope.row.forwardInfo==1 && $store.getters.user.user.agent > 0)" >
+                                        v-show="(scope.row.status<=4)&&!(scope.row.forwardInfo==2 && $store.getters.user.user.agent > 0)" >
                                 <el-button
 		                                size="mini"
 		                                type="success"
@@ -311,7 +315,7 @@
                                 </el-button >
                             </el-tooltip >
 	                        <el-tooltip placement="top" content="转派"
-	                                    v-show="scope.row.status == 3 && scope.row.machineAgentName != ''&&scope.row.forwardInfo!=1" >
+	                                    v-show="scope.row.status == 4 && scope.row.machineAgentName != ''&&scope.row.forwardInfo!=1" >
                                 <el-button
 		                                size="mini"
 		                                type="danger"

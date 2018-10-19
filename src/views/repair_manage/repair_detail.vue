@@ -110,37 +110,41 @@
                 <el-col :span="6" >
                     <el-form-item label="维修结果:" >
                         <div v-if="formData.status==0"
+                             style="color: #000000" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==1"
                              style="color: #686868" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==1"
-                                 style="color: #8b6c0e" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==2"
-                                 style="color: #13678b" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==3"
-                                 style="color: red" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==4"
-                                 style="color: orange" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==5"
-                                 style="color: indianred" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==6"
-                                 style="color: #13ce66" >
-                                {{formData.status|filterStatus}}
-                            </div >
-                            <div v-if="formData.status==7"
-                                 style="color: #198b57" >
-                                {{formData.status|filterStatus}}
-                            </div >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==2"
+                             style="color: #8b6c0e" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==3"
+                             style="color: #13678b" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==4"
+                             style="color: red" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==5"
+                             style="color: orange" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==6"
+                             style="color: indianred" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==7"
+                             style="color: #13ce66" >
+                            {{formData.status|filterStatus}}
+                        </div >
+                        <div v-if="formData.status==8"
+                             style="color: #198b57" >
+                            {{formData.status|filterStatus}}
+                        </div >
                     </el-form-item >
                 </el-col >
             </div >

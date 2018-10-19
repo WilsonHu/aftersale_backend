@@ -232,7 +232,7 @@ export function getMaintainDetail(condition) {
 			params.append(key, condition[key]);
 		}
 		return request({
-			url: 'install/record/getMaintainRecordInfoList',
+			url: 'maintain/record/getMaintainRecordInfoList',
 			method: 'post',
 			data: params
 		}).then(response=> {

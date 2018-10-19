@@ -560,10 +560,16 @@
 				    customerName: this.condition.customer,
 				    maintainChargePerson:this.condition.maintainChargePerson,
                     maintainStatus: this.condition.status,
+				    query_start_time_maintain:'',
+				    query_finish_time_maintain:'',
 				    page: this.currentPage,
 				    size: this.pageSize,
 				    isFuzzy: true,
 			    };
+			    if (this.condition.selectDate != null && this.condition.selectDate.length > 0) {
+				    condition.query_start_time_maintain = this.condition.selectDate[0].format("yyyy-MM-dd");
+				    condition.query_finish_time_maintain = this.condition.selectDate[1].format("yyyy-MM-dd");
+			    }
 			    getMaintainRecordInfoList(condition).then(response=> {
 				    if (responseIsOK(response)) {
 					    _this.tableData = response.data.data.list;
@@ -576,8 +582,13 @@
 				    }
 			    })
 		    },
+
 		    assignTask(row)
 		    {
+			    if (row.maintainLibName == '' || row.maintainLibName == null) {
+				    showMessage(_this, "请先设置保养项再派单！");
+				    return;
+			    }
 			    _this.selectedItem = copyObject(row);
 			    _this.machineInfo.machineCustomerCompanyId = _this.selectedItem.machineCustomerCompanyId;
 			    _this.machineInfo.customerId = _this.selectedItem.machineCustomerId
