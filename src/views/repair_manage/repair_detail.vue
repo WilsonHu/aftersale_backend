@@ -466,7 +466,7 @@
 			 if (isStringEmpty(url)) {
 				 return "";
 			 }
-			 url = url.replace(APIConfig.FilterUrl, "");
+			 url = url.replace(APIConfig.FilterUrl, "").trim(' ');
 			 return APIConfig.WEBURL + url;
 		 },
 		 filterDateString(strDate)
@@ -518,7 +518,7 @@
 			 if (url == null) {
 				 return;
 			 }
-			 url = url.replace(APIConfig.FilterUrl, "");
+			 url = url.replace(APIConfig.FilterUrl, "").trim(' ');
 			 if (player.paused || this.voiceInfo.voiceIndex != index) {
 				 this.voiceInfo.voiceUrl = APIConfig.WEBURL + url;
 				 this.voiceInfo.voiceIndex = index;

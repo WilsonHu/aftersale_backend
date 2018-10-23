@@ -173,12 +173,14 @@
                 </el-col >
                 <el-col :span="22" >
                         <el-form-item label="图片描述:" >
-                             <div v-for="itemPicture in formData.repairRequestPictures"
+                             <div v-for="itemPicture in splitToArray(formData.repairRequestPictures)"
                                   style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
                                 <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
-                                    <img :src="itemPicture.image|converterUrl" class="img-responsive" alt="Chania"
-                                         style="width:300px;height: 200px; margin: 3px;" >
-	                                </img>
+                                   <el-tooltip placement="top" :content="itemPicture|converterUrl" >
+                                         <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
+                                              style="width:300px;height: 200px; margin: 3px;" >
+                                       </img>
+                                    </el-tooltip >
                                 </div >
                             </div >
                         </el-form-item >
@@ -190,15 +192,17 @@
                                     <source :src="voiceInfo.voiceUrl" :type="voiceInfo.voiceType" >
 	                             <!--<source src="song.mp3" type="audio/mp3" />-->
                              </audio >
-                            <el-col :span="2" v-for="(item,index) in formData.repairRequestVoice" >
+                            <el-col :span="2" v-for="(item,index) in splitToArray(formData.repairRequestVoice)" >
                                         <span :style="{'border-color': onSelectVoice(index)}"
                                               @click="onPlayVoice(item,index)" >
-                                             <svg-icon :icon-class="onSelectIcon(index)"
-                                                       @click="onPlayVoice(item,index)"
-                                                       data-toggle="tooltip" data-placement="top"
-                                                       :title="item|converterUrl"
-                                                       style="width:100px;height: 100px; margin: 3px; cursor:hand; "
-                                             />
+                                             <el-tooltip placement="top" :content="item|converterUrl" >
+                                                 <svg-icon :icon-class="onSelectIcon(index)"
+                                                           @click="onPlayVoice(item,index)"
+                                                           data-toggle="tooltip" data-placement="top"
+                                                           :title="item|converterUrl"
+                                                           style="width:100px;height: 100px; margin: 3px; cursor:hand; "
+                                                 />
+                                             </el-tooltip >
                                         </span >
                             </el-col >
                         </el-form-item >
@@ -422,12 +426,14 @@
                 </el-col >
                 <el-col :span="22" >
                         <el-form-item label="图片描述:" >
-                             <div v-for="itemPicture in formData.sendbackTrackingPictrue"
+                             <div v-for="itemPicture in splitToArray(formData.sendbackTrackingPictrue)"
                                   style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
                                 <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
-                                    <img :src="itemPicture.image|converterUrl" class="img-responsive" alt="Chania"
-                                         style="width:300px;height: 200px; margin: 3px;" >
-	                                </img>
+                                    <el-tooltip placement="top" :content="itemPicture|converterUrl" >
+                                         <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
+                                              style="width:300px;height: 200px; margin: 3px;" >
+                                       </img>
+                                    </el-tooltip >
                                 </div >
                             </div >
                         </el-form-item >
@@ -526,7 +532,7 @@
 			 if (isStringEmpty(url)) {
 				 return "";
 			 }
-			 url = url.replace(APIConfig.FilterUrl, "");
+			 url = url.replace(APIConfig.FilterUrl, "").trim(' ');
 			 return APIConfig.WEBURL + url;
 		 },
 		 filterDateString(strDate)
@@ -560,6 +566,9 @@
 	 },
 	 methods: {
 		 splitToArray(strObj){
+             if (isStringEmpty(strObj)) {
+                 return "";
+             }
 			 return strObj.split(",");
 		 },
 		 onStarLoad(item)
@@ -587,7 +596,7 @@
 			 if (url == null) {
 				 return;
 			 }
-			 url = url.replace(APIConfig.FilterUrl, "");
+			 url = url.replace(APIConfig.FilterUrl, "").trim(' ');
 			 if (player.paused || this.voiceInfo.voiceIndex != index) {
 				 this.voiceInfo.voiceUrl = APIConfig.WEBURL + url;
 				 this.voiceInfo.voiceIndex = index;
@@ -627,7 +636,7 @@
 			 this.formData = copyObject(_this.repairRecorderInfo);
 			 this.skillStars = loadServerScore(_this.formData.repairFeedbackCustomerMark);
 			 _this.loadMembers();
-			 console.log(`formData: ${JSON.stringify(this.formData)}`);
+//			 console.log(`formData: ${JSON.stringify(this.formData)}`);
 		 },
 		 tabSwitchClick(tab)
 		 {
