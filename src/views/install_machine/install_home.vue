@@ -605,7 +605,7 @@
 				    query_finish_time_install: '',
 				    agent: !_this.isAgentLogin() ? this.condition.agent : _this.$store.getters.user.user.agentName,//代理商登录为后者
 				    isAgent: _this.isAgentLogin(),
-				    installRecordCustomerName: this.condition.customer,
+				    machineCustomerName: this.condition.customer,
 				    page: this.currentPage,
 				    size: this.pageSize,
 				    isFuzzy: true,
