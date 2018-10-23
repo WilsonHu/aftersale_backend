@@ -54,11 +54,11 @@
                     </el-table-column >
                     <el-table-column
 		                    align="center"
-		                    prop="machineTypeName"
+		                    prop="machineType"
 		                    label="机型" >
                         <template scope="scope" >
                             <div >
-                                {{scope.row.machineTypeName}}
+                                {{scope.row.machineType | filterMachineType}}
                             </div >
                         </template >
                     </el-table-column >
@@ -111,16 +111,16 @@
                         </template >
                     </el-table-column >
                 </el-table >
-                <div class="block" style="text-align: center; margin-top: 20px" >
-                    <el-pagination
-		                    background
-		                    @current-change="handleCurrentChange"
-		                    :current-page="currentPage"
-		                    :page-size="pageSize"
-		                    layout="total, prev, pager, next, jumper"
-		                    :total="totalRecords" >
-                    </el-pagination >
-                </div >
+                <!--<div class="block" style="text-align: center; margin-top: 20px" >-->
+                    <!--<el-pagination-->
+		                    <!--background-->
+		                    <!--@current-change="handleCurrentChange"-->
+		                    <!--:current-page="currentPage"-->
+		                    <!--:page-size="pageSize"-->
+		                    <!--layout="total, prev, pager, next, jumper"-->
+		                    <!--:total="totalRecords" >-->
+                    <!--</el-pagination >-->
+                <!--</div >-->
             </el-col >
 
             <el-dialog title="分配机器" :visible.sync="showAssignDialog" append-to-body width="90%" >
@@ -196,7 +196,7 @@
 		                        label="机型" >
                             <template scope="scope" >
                                 <div >
-                                    {{scope.row.machineTypeName}}
+                                    {{scope.row.machineType | filterMachineType}}
                                 </div >
                             </template >
                         </el-table-column >
@@ -247,7 +247,7 @@
 		                        label="出厂日期" >
                             <template slot-scope="scope" >
                         <span >
-                            {{(scope.row.facoryDate)|filterDateString}}
+                            {{(scope.row.factoryDate)|filterDateString}}
                         </span >
                             </template >
                         </el-table-column >
@@ -443,6 +443,7 @@
 				    _this.showAssignDialog = false;
 				    if (responseIsOK(response)) {
 					    showMessage(_this, "绑定成功!", 1);
+                        _this.onSearchDetailData();
 				    }
 				    else {
 					    showMessage(_this, "绑定失败!" + response.data.message);
