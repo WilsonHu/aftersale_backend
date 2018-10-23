@@ -326,6 +326,9 @@
 	    filters: {
 		    filterDateString(strDate)
 		    {
+			    if (isStringEmpty(strDate)) {
+				    return "";
+			    }
 			    var resDate = new Date(strDate);
 			    return resDate.format("yyyy-MM-dd");
 		    },

@@ -179,7 +179,7 @@
                                    <el-tooltip placement="top" :content="itemPicture|converterUrl" >
                                          <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
                                               style="width:300px;height: 200px; margin: 3px;" >
-                                       </img>
+	                                   </img>
                                     </el-tooltip >
                                 </div >
                             </div >
@@ -402,12 +402,12 @@
                 </el-col >
                 <el-col :span="6" >
                         <el-form-item label="状态:" >
-                            <div v-if="formData.partsStatus==0"
-                                 style="color: #686868" >
-                                {{formData.partsStatus|filterPartStatus}}
-                            </div >
+                            <!--<div v-if="formData.partsStatus==0"-->
+                            <!--style="color: #686868" >-->
+                            <!--{{formData.partsStatus|filterPartStatus}}-->
+                            <!--</div >-->
                             <div v-if="formData.partsStatus==1"
-                                 style="color: #8b6c0e" >
+                                 style="color: red" >
                                 {{formData.partsStatus|filterPartStatus}}
                             </div >
                             <div v-if="formData.partsStatus==2"
@@ -425,14 +425,14 @@
                         </el-form-item >
                 </el-col >
                 <el-col :span="22" >
-                        <el-form-item label="图片描述:" >
+                        <el-form-item label="配件图片:" >
                              <div v-for="itemPicture in splitToArray(formData.sendbackTrackingPictrue)"
                                   style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
                                 <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
                                     <el-tooltip placement="top" :content="itemPicture|converterUrl" >
                                          <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
                                               style="width:300px;height: 200px; margin: 3px;" >
-                                       </img>
+	                                    </img>
                                     </el-tooltip >
                                 </div >
                             </div >
@@ -537,6 +537,9 @@
 		 },
 		 filterDateString(strDate)
 		 {
+			 if (isStringEmpty(strDate)) {
+				 return "";
+			 }
 			 var resDate = new Date(strDate);
 			 return resDate.format("yyyy-MM-dd");
 		 },
@@ -566,9 +569,9 @@
 	 },
 	 methods: {
 		 splitToArray(strObj){
-             if (isStringEmpty(strObj)) {
-                 return "";
-             }
+			 if (isStringEmpty(strObj)) {
+				 return "";
+			 }
 			 return strObj.split(",");
 		 },
 		 onStarLoad(item)

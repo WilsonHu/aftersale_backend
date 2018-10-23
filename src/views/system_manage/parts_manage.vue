@@ -163,12 +163,12 @@
 		                    prop="partsStatus"
 		                    label="状态" >
                         <template scope="scope" >
-                            <div v-if="scope.row.partsStatus==0"
-                                 style="color: #686868" >
-                                {{scope.row.partsStatus|filterStatus}}
-                            </div >
+                            <!--<div v-if="scope.row.partsStatus==0"-->
+                                 <!--style="color: #686868" >-->
+                                <!--{{scope.row.partsStatus|filterStatus}}-->
+                            <!--</div >-->
                             <div v-if="scope.row.partsStatus==1"
-                                 style="color: #8b6c0e" >
+                                 style="color: red" >
                                 {{scope.row.partsStatus|filterStatus}}
                             </div >
                             <div v-if="scope.row.partsStatus==2"
@@ -223,7 +223,7 @@
                                 </el-button >
                             </el-tooltip >
                             <el-tooltip placement="top" content="确认"
-                                        v-show="scope.row.partsStatus>0 && scope.row.partsStatus<3 " >
+                                        v-show="scope.row.partsStatus>1 && scope.row.partsStatus<4 " >
                                 <el-button
 		                                size="mini"
 		                                type="success"
@@ -362,7 +362,7 @@ export default {
 			_this.confirmCheckDialog = false;
 			let partsInfo = {
 				id: _this.selectedItem.id,
-				partsStatus: APIConfig.SendBackStatusList[3].value,
+				partsStatus: APIConfig.SendBackStatusList[3].value, //{value: 4, name: '已确认'},
 				sendbackConfirmedPerson: store.getters.user.user.id,
 			};
 			updatePartsInfo(partsInfo).then(response => {

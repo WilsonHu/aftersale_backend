@@ -184,11 +184,15 @@ const APIConfig = {
 		{value: 1, name: '通过'},
 	],
 
+	// 	* 1: 无需回寄，其他表示需要寄回
+	// * 2：未寄回，
+	// * 3：已寄回（待售后确认）
+	// * 4：售后已确认
 	SendBackStatusList: [
-		{value: 0, name: '无'},
-		{value: 1, name: '待寄回'},
-		{value: 2, name: '寄回中'},
+		{value: 1, name: '无'},
+		{value: 2, name: '待寄回'},
 		{value: 3, name: '已寄回'},
+		{value: 4, name: '已确认'},
 
 	],
 }
