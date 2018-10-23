@@ -278,7 +278,7 @@
 			    _this.formData.customerName = "";
 			    _this.formData.customerId = "";
 			    let condition = {
-				    //"customerCompany": _this.machineInfo.machineCustomerCompanyId,
+				    "customerCompany": _this.machineInfo.machineCustomerCompanyId,
 				    "roleId": APIConfig.UserType.CustomerContacter,
 			    }
 			    requestCustomerList(condition).then(response=> {
