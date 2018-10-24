@@ -172,6 +172,12 @@
 		                    label="客户" >
                     </el-table-column >
                     <el-table-column
+                            align="center"
+                            sortable
+                            prop="customerNameInRepairRecord"
+                            label="联系人" >
+                    </el-table-column >
+                    <el-table-column
 		                    v-if="!isAgentLogin()"
 		                    align="center"
 		                    prop="machineAgentName"
