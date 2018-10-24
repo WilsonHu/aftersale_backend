@@ -601,8 +601,8 @@
 				    machineType: this.condition.machineType,
 				    installStatus: this.condition.status,
 				    installChargePersonName: "",
-				    query_start_time_install: '',
-				    query_finish_time_install: '',
+				    query_start_install_actual_time: '',
+				    query_finish_install_actual_time: '',
 				    agent: !_this.isAgentLogin() ? this.condition.agent : _this.$store.getters.user.user.agentName,//代理商登录为后者
 				    isAgent: _this.isAgentLogin(),
 				    machineCustomerName: this.condition.customer,
@@ -611,8 +611,8 @@
 				    isFuzzy: true,
 			    };
 			    if (this.condition.selectDate != null && this.condition.selectDate.length > 0) {
-				    condition.query_start_time_install = this.condition.selectDate[0].format("yyyy-MM-dd");
-				    condition.query_finish_time_install = this.condition.selectDate[1].format("yyyy-MM-dd");
+				    condition.query_start_install_actual_time = this.condition.selectDate[0].format("yyyy-MM-dd");
+				    condition.query_finish_install_actual_time = this.condition.selectDate[1].format("yyyy-MM-dd");
 			    }
 			    getInstallRecordInfoList(condition).then(response => {
 				    if (responseIsOK(response)) {
