@@ -177,18 +177,28 @@
                 </el-col >
                 <el-col :span="22" >
                         <el-form-item label="图片描述:" >
-                             <div v-for="itemPicture in splitToArray(formData.repairRequestPictures)"
-                                  style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
-                                <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
-                                    <el-tooltip placement="top" :content="itemPicture|converterUrl" >
-                                         <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
-                                              style="width:300px;height: 200px; margin: 3px;" >
-	                                    </img>
-                                    </el-tooltip >
-                                </div >
+                            <!--<div v-for="itemPicture in splitToArray(formData.repairRequestPictures)"-->
+                            <!--style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >-->
+                            <!--<div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >-->
+                            <!--<el-tooltip placement="top" :content="itemPicture|converterUrl" >-->
+                            <!--<img :src="itemPicture|converterUrl" class="img-responsive"-->
+                            <!--alt="Chania"-->
+                            <!--style="width:300px;height: 200px; margin: 3px;" >-->
+                            <!--</img>-->
+                            <!--</el-tooltip >-->
+                            <!--</div >-->
+                            <!--</div >-->
+                            <div >
+                                <a v-for="itemPicture in splitToArray(formData.repairRequestPictures)"
+                                   data-magnify="gallery"
+                                   data-caption="图片预览" :href="itemPicture|converterUrl" >
+                                   <img :src="itemPicture|converterUrl"
+                                        :alt="itemPicture|converterUrl"
+                                        style="width:250px;height: 300px; margin: 3px;" >
+	                                </img>
 
+                                </a >
                             </div >
-
                         </el-form-item >
                 </el-col >
                 <el-col :span="22" >
@@ -379,200 +389,205 @@
 </template >
 
 <script >
- import {APIConfig} from '@/config/apiConfig'
- import {resetObject} from '@/utils'
- import {
-		 getRepairMembers,
-		 getIssuePositionList
- } from '@/api/repair_manage';
- import {loadServerScore, getStarMode} from '@/api/commonApi'
- import store from '@/store';
+     $('[data-magnify]').magnify({
+	     fixedContent: true,
+	     initMaximized: true,
+     });
+     import {APIConfig} from '@/config/apiConfig'
+     import {resetObject} from '@/utils'
+     import {
+		     getRepairMembers,
+		     getIssuePositionList
+     } from '@/api/repair_manage';
+     import {loadServerScore, getStarMode} from '@/api/commonApi'
+     import store from '@/store';
 
- var _this;
- export default {
-	 name: 'RepairDetail',
-	 components: {},
-	 props: {
-		 repairRecorderInfo: {
-			 type: Object,
-			 default: {}
-		 }
+     var _this;
+     export default {
+	     name: 'RepairDetail',
+	     components: {},
+	     props: {
+		     repairRecorderInfo: {
+			     type: Object,
+			     default: {}
+		     }
 //		 tabSwitchClick: {
 //			 type: Function,
 //			 default: null
 //		 }
-	 },
-	 data() {
-		 _this = this;
-		 return {
-			 loading: {},
-			 formData: {},
-			 activeTabId: 0,
-			 statusList: APIConfig.RepairStatusList,
-			 voiceInfo: {
-				 voiceIndex: -1,
-				 voiceUrl: "",
-				 voiceType: "audio/mp3",
-			 },
-			 skillStars: {},
-			 repairMembers: [],
-			 issuePositionList: [],
-		 }
-	 },
-	 computed: {
-		 isShowAgent: {//property
-			 get: function () {//getter
-				 let res = false;
-				 if (!isStringEmpty(_this.formData.machineAgentName))//机器是代理商
-				 {
-					 res = _this.formData.forwardInfo == 0 //1-代理商改派过来的，属于sinsim
-				 }
-				 _this.activeTabId = res ? "0" : "1";
-				 return res;
-			 },
-		 },
-		 isShowSinsim: {
-			 get: function () {//getter
-				 let res = true;
-				 if (store.getters.user.user.agent > 0) {
-					 res = false;
-				 }
-				 else {
-					 if (!isStringEmpty(_this.formData.machineAgentName))//机器是代理商
-					 {
-						 res = _this.formData.forwardInfo > 0 //1-代理商改派过来的，属于sinsim
-					 }
-				 }
-				 return res;
-			 },
-		 },
-	 },
-	 filters: {
-		 filterIssuePosition(id)
-		 {
-			 if (isStringEmpty(_this.issuePositionList)) {
-				 return "";
-			 }
-			 let result = "";
-			 for (let i = 0; i < _this.issuePositionList.length; i++) {
-				 if (id == _this.issuePositionList[i].id) {
-					 result = _this.issuePositionList[i].name;
-					 break;
-				 }
-			 }
-			 return result;
-		 },
-		 converterUrl: function (url) {
-			 if (isStringEmpty(url)) {
-				 return "";
-			 }
-			 url = url.replace(APIConfig.FilterUrl, "").trim(' ');
-			 return APIConfig.WEBURL + url;
-		 },
-		 filterDateString(strDate)
-		 {
-             if (isStringEmpty(strDate)) {
-                 return "";
-             }
-			 var resDate = new Date(strDate);
-			 return resDate.format("yyyy-MM-dd");
-		 },
-		 filterStatus(id)
-		 {
-			 let result = "";
-			 for (let i = 0; i < _this.statusList.length; i++) {
-				 if (id == _this.statusList[i].value) {
-					 result = _this.statusList[i].name;
-					 break;
-				 }
-			 }
-			 return result;
-		 },
-	 },
-	 methods: {
-		 splitToArray(strObj){
-			 if (isStringEmpty(strObj)) {
-				 return "";
-			 }
-			 return strObj.split(",");
-		 },
-		 onStarLoad(item)
-		 {
-			 return getStarMode(item.starMode);
-		 },
-		 onSelectIcon(index)
-		 {
-			 let icon = "voice";
-			 if (this.voiceInfo.voiceIndex == index) {
-				 icon = "voice_fill";
-			 }
-			 return icon;
-		 },
-		 onSelectVoice: function (index) {
-			 if (this.voiceInfo.voiceIndex == index) {
-				 return "#2b669a";
-			 } else {
-				 return '#d9edf7';
-			 }
-		 },
+	     },
+	     data() {
+		     _this = this;
+		     return {
+			     loading: {},
+			     formData: {},
+			     activeTabId: 0,
+			     statusList: APIConfig.RepairStatusList,
+			     voiceInfo: {
+				     voiceIndex: -1,
+				     voiceUrl: "",
+				     voiceType: "audio/mp3",
+			     },
+			     skillStars: {},
+			     repairMembers: [],
+			     issuePositionList: [],
+		     }
+	     },
+	     computed: {
+		     isShowAgent: {//property
+			     get: function () {//getter
+				     let res = false;
+				     if (!isStringEmpty(_this.formData.machineAgentName))//机器是代理商
+				     {
+					     res = _this.formData.forwardInfo == 0 //1-代理商改派过来的，属于sinsim
+				     }
+				     _this.activeTabId = res ? "0" : "1";
+				     return res;
+			     },
+		     },
+		     isShowSinsim: {
+			     get: function () {//getter
+				     let res = true;
+				     if (store.getters.user.user.agent > 0) {
+					     res = false;
+				     }
+				     else {
+					     if (!isStringEmpty(_this.formData.machineAgentName))//机器是代理商
+					     {
+						     res = _this.formData.forwardInfo > 0 //1-代理商改派过来的，属于sinsim
+					     }
+				     }
+				     return res;
+			     },
+		     },
+	     },
+	     filters: {
+		     filterIssuePosition(id)
+		     {
+			     if (isStringEmpty(_this.issuePositionList)) {
+				     return "";
+			     }
+			     let result = "";
+			     for (let i = 0; i < _this.issuePositionList.length; i++) {
+				     if (id == _this.issuePositionList[i].id) {
+					     result = _this.issuePositionList[i].name;
+					     break;
+				     }
+			     }
+			     return result;
+		     },
+		     converterUrl: function (url) {
+			     if (isStringEmpty(url)) {
+				     return "";
+			     }
+			     url = url.replace(APIConfig.FilterUrl, "").trim(' ');
+			     return APIConfig.WEBURL + url;
+		     },
+		     filterDateString(strDate)
+		     {
+			     if (isStringEmpty(strDate)) {
+				     return "";
+			     }
+			     var resDate = new Date(strDate);
+			     return resDate.format("yyyy-MM-dd");
+		     },
+		     filterStatus(id)
+		     {
+			     let result = "";
+			     for (let i = 0; i < _this.statusList.length; i++) {
+				     if (id == _this.statusList[i].value) {
+					     result = _this.statusList[i].name;
+					     break;
+				     }
+			     }
+			     return result;
+		     },
+	     },
+	     methods: {
+		     splitToArray(strObj){
+			     if (isStringEmpty(strObj)) {
+				     return "";
+			     }
+			     return strObj.split(",");
+		     },
+		     onStarLoad(item)
+		     {
+			     return getStarMode(item.starMode);
+		     },
+		     onSelectIcon(index)
+		     {
+			     let icon = "voice";
+			     if (this.voiceInfo.voiceIndex == index) {
+				     icon = "voice_fill";
+			     }
+			     return icon;
+		     },
+		     onSelectVoice: function (index) {
+			     if (this.voiceInfo.voiceIndex == index) {
+				     return "#2b669a";
+			     } else {
+				     return '#d9edf7';
+			     }
+		     },
 
-		 onPlayVoice: function (url, index) {
-			 var player = document.getElementById("audioId")
-			 if (url == null) {
-				 return;
-			 }
-			 url = url.replace(APIConfig.FilterUrl, "").trim(' ');
-			 if (player.paused || this.voiceInfo.voiceIndex != index) {
-				 this.voiceInfo.voiceUrl = APIConfig.WEBURL + url;
-				 this.voiceInfo.voiceIndex = index;
-				 this.voiceInfo.voiceType = getAudioType(url);
-				 player.load();//play audio
-			 }
-			 else {
-				 player.pause();//stop audio
-			 }
+		     onPlayVoice: function (url, index) {
+			     var player = document.getElementById("audioId")
+			     if (url == null) {
+				     return;
+			     }
+			     url = url.replace(APIConfig.FilterUrl, "").trim(' ');
+			     if (player.paused || this.voiceInfo.voiceIndex != index) {
+				     this.voiceInfo.voiceUrl = APIConfig.WEBURL + url;
+				     this.voiceInfo.voiceIndex = index;
+				     this.voiceInfo.voiceType = getAudioType(url);
+				     player.load();//play audio
+			     }
+			     else {
+				     player.pause();//stop audio
+			     }
 
-		 },
-		 loadMembers()
-		 {
-			 _this.repairMembers = [];
-			 let condition = {
-				 page: '',
-				 size: '',
-				 repairRecordId: _this.formData.id,
-			 };
-			 getRepairMembers(condition).then(response => {
-				 if (responseIsOK(response)) {
-					 _this.repairMembers = response.data.data.list;
-				 }
-				 else {
-					 showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
-				 }
-			 })
-		 },
-		 loadData()
-		 {
-			 getIssuePositionList({}).then(response => {
-				 if (responseIsOK(response)) {
-					 _this.issuePositionList = response.data.data.list;
-				 }
-				 this.formData = {};
-				 this.formData = Object.assign({}, _this.repairRecorderInfo);
-				 this.skillStars = loadServerScore(_this.formData.repairFeedbackCustomerMark);
-				 _this.loadMembers();
-			 })
-		 },
-		 tabSwitchClick(tab)
-		 {
-			 console.log("tabSwitchClick:" + tab);
+		     },
+		     loadMembers()
+		     {
+			     _this.repairMembers = [];
+			     let condition = {
+				     page: '',
+				     size: '',
+				     repairRecordId: _this.formData.id,
+			     };
+			     getRepairMembers(condition).then(response => {
+				     if (responseIsOK(response)) {
+					     _this.repairMembers = response.data.data.list;
+				     }
+				     else {
+					     showMSG(_this, isStringEmpty(response.data.message) ? "查询数据失败！" : response.data.message)
+				     }
+			     })
+		     },
+		     loadData()
+		     {
+			     getIssuePositionList({}).then(response => {
+				     if (responseIsOK(response)) {
+					     _this.issuePositionList = response.data.data.list;
+				     }
+				     this.formData = {};
+				     this.formData = Object.assign({}, _this.repairRecorderInfo);
+				     this.skillStars = loadServerScore(_this.formData.repairFeedbackCustomerMark);
+				     _this.loadMembers();
+			     })
+		     },
+		     tabSwitchClick(tab)
+		     {
+			     console.log("tabSwitchClick:" + tab);
 
-		 },
-	 },
+		     },
+	     },
 
-	 mounted(){
-		 _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
-	 },
- }
+	     mounted(){
+
+		     _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
+	     },
+     }
 </script >
 
 <style scoped >
@@ -599,4 +614,5 @@ span {
 	alignment: left;
 	text-align: left;
 }
+
 </style >

@@ -173,15 +173,26 @@
                 </el-col >
                 <el-col :span="22" >
                         <el-form-item label="图片描述:" >
-                             <div v-for="itemPicture in splitToArray(formData.repairRequestPictures)"
-                                  style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
-                                <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
-                                   <el-tooltip placement="top" :content="itemPicture|converterUrl" >
-                                         <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
-                                              style="width:300px;height: 200px; margin: 3px;" >
-	                                   </img>
-                                    </el-tooltip >
-                                </div >
+                             <!--<div v-for="itemPicture in splitToArray(formData.repairRequestPictures)"-->
+                                  <!--style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >-->
+                                <!--<div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >-->
+                                   <!--<el-tooltip placement="top" :content="itemPicture|converterUrl" >-->
+                                         <!--<img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"-->
+                                              <!--style="width:300px;height: 200px; margin: 3px;" >-->
+	                                   <!--</img>-->
+                                    <!--</el-tooltip >-->
+                                <!--</div >-->
+                             <!--</div >-->
+                             <div>
+                                <a v-for="itemPicture in splitToArray(formData.repairRequestPictures)"
+                                   data-magnify="gallery"
+                                   data-caption="图片预览" :href="itemPicture|converterUrl" >
+                                   <img :src="itemPicture|converterUrl"
+                                        :alt="itemPicture|converterUrl"
+                                        style="width:250px;height: 300px; margin: 3px;" >
+                                    </img>
+
+                                </a >
                             </div >
                         </el-form-item >
                 </el-col >
@@ -426,16 +437,27 @@
                 </el-col >
                 <el-col :span="22" >
                         <el-form-item label="配件图片:" >
-                             <div v-for="itemPicture in splitToArray(formData.sendbackTrackingPictrue)"
-                                  style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >
-                                <div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >
-                                    <el-tooltip placement="top" :content="itemPicture|converterUrl" >
-                                         <img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"
-                                              style="width:300px;height: 200px; margin: 3px;" >
-	                                    </img>
-                                    </el-tooltip >
-                                </div >
+                            <div >
+                                <a v-for="itemPicture in splitToArray(formData.sendbackTrackingPictrue)"
+                                   data-magnify="gallery"
+                                   data-caption="图片预览" :href="itemPicture|converterUrl" >
+                                   <img :src="itemPicture|converterUrl"
+                                        :alt="itemPicture|converterUrl"
+                                        style="width:250px;height: 300px; margin: 3px;" >
+                                    </img>
+
+                                </a >
                             </div >
+                             <!--<div v-for="itemPicture in splitToArray(formData.sendbackTrackingPictrue)"-->
+                                  <!--style="float:inherit;align-items: center; align-content: center;alignment: center;horiz-align: center;" >-->
+                                <!--<div style="float: left; border: solid;  border-width: 2px;border-color: #d9edf7;margin: 10px" >-->
+                                    <!--<el-tooltip placement="top" :content="itemPicture|converterUrl" >-->
+                                         <!--<img :src="itemPicture|converterUrl" class="img-responsive" alt="Chania"-->
+                                              <!--style="width:300px;height: 200px; margin: 3px;" >-->
+	                                    <!--</img>-->
+                                    <!--</el-tooltip >-->
+                                <!--</div >-->
+                            <!--</div >-->
                         </el-form-item >
                 </el-col >
 
