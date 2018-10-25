@@ -86,14 +86,14 @@
 		                        type="primary"
 		                        @click="handleEdit(scope.row)" ></el-button >
                     </el-tooltip >
-                    <el-tooltip placement="top" >
-                        <div slot="content" >删除</div >
-                        <el-button
-		                        size="small"
-		                        icon="el-icon-delete"
-		                        type="danger"
-		                        @click="handleDelete(scope.row)" ></el-button >
-                    </el-tooltip >
+                    <!--<el-tooltip placement="top" >-->
+                        <!--<div slot="content" >删除</div >-->
+                        <!--<el-button-->
+		                        <!--size="small"-->
+		                        <!--icon="el-icon-delete"-->
+		                        <!--type="danger"-->
+		                        <!--@click="handleDelete(scope.row)" ></el-button >-->
+                    <!--</el-tooltip >-->
                 </template >
             </el-table-column >
         </el-table >

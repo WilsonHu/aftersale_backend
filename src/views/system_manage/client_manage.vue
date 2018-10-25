@@ -377,6 +377,7 @@
             onSelectUsers() {
                 _this.tableData = new Array();
                 _this.loadingUI = true;
+                _this.filters.valid = 1;
                 _this.filters.page = _this.currentPage;
                 _this.filters.size = _this.pageSize;
                 _this.filters.userType = APIConfig.USER_TYPE_CUSTOMER;
@@ -431,13 +432,17 @@
 
             onConfirmDelete: function () {
                 _this.deleteConfirmVisible = false;
-                deleteUser(this.selectedItem.id).then(response => {
+                let userData={
+                    id:this.selectedItem.id,
+                    valid:0, // 删除不删除数据，只设置valid=0;
+                };
+                updateUser(userData).then(response => {
                     if (responseIsOK(response)) {
                         showMSG(_this, "删除客户成功！", 1);
                         _this.deleteConfirmVisible = false;
                         this.onSelectUsers();
                     } else {
-                        showMessage(_this, isStringEmpty(response.data.message) ? "添加客户失败！" : response.data.message);
+                        showMessage(_this, isStringEmpty(response.data.message) ? "删除客户失败！" : response.data.message);
                     }
                 })
             },

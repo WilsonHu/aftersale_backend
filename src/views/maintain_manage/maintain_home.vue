@@ -29,17 +29,17 @@
                                           auto-complete="off" ></el-input >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="5" >
-                            <el-form-item label="代理商完成:" >
-                                <el-select v-model="condition.isfinishByAgent" clearable >
-                                    <el-option
-		                                    v-for="item in finishList"
-		                                    :value="item.value"
-		                                    :label="item.text" >
-                                    </el-option >
-                                </el-select >
-                            </el-form-item >
-                        </el-col >
+                        <!--<el-col :span="5" >-->
+                            <!--<el-form-item label="代理商完成:" >-->
+                                <!--<el-select v-model="condition.isfinishByAgent" clearable >-->
+                                    <!--<el-option-->
+		                                    <!--v-for="item in finishList"-->
+		                                    <!--:value="item.value"-->
+		                                    <!--:label="item.text" >-->
+                                    <!--</el-option >-->
+                                <!--</el-select >-->
+                            <!--</el-form-item >-->
+                        <!--</el-col >-->
                     </el-row >
                     <el-row >
                         <el-col :span="5" >
