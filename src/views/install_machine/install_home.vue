@@ -563,7 +563,7 @@
 					    id: _this.selectedItem.id,
 					    installChargePerson: _this.assignTaskData.formData.chargePersonId,
 					    customer: _this.assignTaskData.formData.customerId,
-					    installDatePlan: _this.assignTaskData.formData.planDate,
+					    installPlanDate: _this.assignTaskData.formData.planDate,
 
 				    },
 				    installMembers: memberList,
