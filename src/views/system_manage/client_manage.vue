@@ -157,32 +157,32 @@
         </el-row>
         <el-dialog title="增加用户" :visible.sync="addDialogVisible" width="60%">
             <el-form :model="form">
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="账号：" :label-width="formLabelWidth">
                         <el-input v-model="form.account" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="姓名：" :label-width="formLabelWidth">
                         <el-input v-model="form.name" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="联系方式：" :label-width="formLabelWidth">
                         <el-input v-model="form.phone" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="公司名称：" :label-width="formLabelWidth">
                         <el-input v-model="form.customerCompany" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="地址：" :label-width="formLabelWidth">
                         <el-input v-model="form.address" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="角色：" :label-width="formLabelWidth">
                         <el-select v-model="form.roleId" @change="onChange">
                             <el-option
@@ -193,7 +193,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="代理商：" :label-width="formLabelWidth">
                         <el-select v-model="form.agent" @change="onChange" clearable :disabled="currentUserAgent != 0">
                             <el-option
@@ -219,33 +219,33 @@
 
         <el-dialog title="编辑用户" :visible.sync="modifyDialogVisible" width="60%">
             <el-form :model="modifyForm">
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="账号：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.account" @change="onChange"
                                   :disabled="modifyForm.account == 'admin'"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="姓名：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.name" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="联系方式：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.phone" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="公司名称：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.customerCompany" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="地址：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.address" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="角色：" :label-width="formLabelWidth">
                         <el-select v-model="modifyForm.roleId" @change="onChange">
                             <el-option
@@ -256,7 +256,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="12">
                     <el-form-item label="代理商：" :label-width="formLabelWidth">
                         <el-select v-model="modifyForm.agent" @change="onChange" clearable :disabled="currentUserAgent != 0">
                             <el-option

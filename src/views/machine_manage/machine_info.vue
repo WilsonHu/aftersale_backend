@@ -2,14 +2,14 @@
 	<div class="root_div" >
 		<el-form :model="formData" label-position="right" label-width="100px" >
 			<el-row >
-				<el-col :span="6" >
+				<el-col :span="8" >
 					<el-form-item label="机器编号:" >
                         <el-input v-model="formData.nameplate" :disabled="isDialbleEdit"
                                   placeholder="机器编号" clearable
                                   auto-complete="off" ></el-input >
                     </el-form-item >
 				</el-col >
-				<el-col :span="6" >
+				<el-col :span="8" >
                     <el-form-item label="订单编号:" >
 	                     <el-input v-model="formData.orderNum" :disabled="isDialbleEdit"
 	                               placeholder="订单编号" clearable
