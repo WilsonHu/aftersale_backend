@@ -167,7 +167,7 @@ const APIConfig = {
 	 * 0：保修期已过，1：在保修期内
 	 */
 	InWarrantyPeriodList: [
-		{value: 0, name: '已过期'},
+		{value: 0, name: '已过保'},
 		{value: 1, name: '保修期内'},
 	],
 

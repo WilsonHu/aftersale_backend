@@ -14,31 +14,31 @@ export function getNotInstallMachineList(condition) {
             url: 'SinsimProcessDB/getMachineList',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
 }
 
 export function getInstallDetail(condition) {
-	return new Promise((resolve, reject) => {
-		let params = new URLSearchParams();
-		let keys = Object.keys(condition);
-		for (let key of keys) {
-			params.append(key, condition[key]);
-		}
-		return request({
-			url: 'install/record/getInstallDetail',
-			method: 'post',
-			data: params
-		}).then(response=> {
-			resolve(response);
-		}).catch(error=> {
-			reject(error);
-		})
-	})
+    return new Promise((resolve, reject) => {
+        let params = new URLSearchParams();
+        let keys = Object.keys(condition);
+        for (let key of keys) {
+            params.append(key, condition[key]);
+        }
+        return request({
+            url: 'install/record/getInstallDetail',
+            method: 'post',
+            data: params
+        }).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        })
+    })
 }
 
 //getInstallRecordInfoList
@@ -53,9 +53,9 @@ export function getInstallRecordInfoList(condition) {
             url: 'install/record/getInstallRecordInfoList',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
@@ -71,6 +71,15 @@ export function selectLibList(condition) {
         url: 'install/lib/selectLibList',
         method: 'post',
         data: params
+    })
+}
+
+
+export function selectLibAll() {
+    return request({
+        url: 'install/lib/list',
+        method: 'post',
+        data: {}
     })
 }
 
@@ -102,9 +111,9 @@ export function deleteInstallItem(id) {
             url: 'install/lib/delete',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
@@ -119,9 +128,9 @@ export function deleteInstallItemByCondition(condition) {
             url: 'install/lib/deleteByName',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
@@ -139,9 +148,9 @@ export function getSaledMachineInfoList(condition) {
             url: 'machine/getSaledMachineInfoList',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
@@ -156,9 +165,9 @@ export function addMachineList(machineList) {
             url: 'machine/addList',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
@@ -175,13 +184,14 @@ export function assignTaskToSubmit(condition) {
             url: 'install/record/AssignTask',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
 }
+
 export function getInstallMembers(condition) {
     return new Promise((resolve, reject) => {
         let params = new URLSearchParams();
@@ -193,9 +203,9 @@ export function getInstallMembers(condition) {
             url: 'install/members/getMembersByInstallRecordId',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
@@ -213,9 +223,9 @@ export function updateInstallInfo(condition) {
             url: 'install/record/updateInstallInfo',
             method: 'post',
             data: params
-        }).then(response=> {
+        }).then(response => {
             resolve(response);
-        }).catch(error=> {
+        }).catch(error => {
             reject(error);
         })
     })
