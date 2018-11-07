@@ -24,7 +24,7 @@ router.beforeEach((to, from, next) => {
 			next({path: '/'})
 			NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
 		} else {
-			if (store.getters.user.user.length == 0) { // 判断当前用户是否已拉取完user_info信息
+			if (store.getters.user.user == "") { // 判断当前用户是否已拉取完user_info信息
 				try {
 					if (store.getters.token.length == 0) {
 						store.dispatch('LogOut').then(() => {
@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
 						})
 					}
 					else if (store.getters.token.length > 0) {
-						let data = JSON.parse(store.getters.token)
+						let data = JSON.parse(store.getters.user.token);
 						store.dispatch("SetData", data)
 							.then(() => {
 								let userRole = store.getters.user.roles; // note: roles must be a array! such as: ['editor','develop']
@@ -50,7 +50,6 @@ router.beforeEach((to, from, next) => {
 								})
 							});
 					}
-
 				} catch (ex) {
 					store.dispatch('LogOut').then(() => {
 						Message.error('No token, please login again')
@@ -58,7 +57,12 @@ router.beforeEach((to, from, next) => {
 					})
 				}
 			} else {
-                next();
+				if (store.getters.addRouters.length == 0) {
+					let userRole = store.getters.user.roles; // note: roles must be a array! such as: ['editor','develop']
+					store.dispatch('GenerateRoutes', userRole).then(() => { // 根据roles权限生成可访问的路由表
+						router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+					})
+				}
 			}
 		}
 	} else {
@@ -70,6 +74,7 @@ router.beforeEach((to, from, next) => {
 			NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
 		}
 	}
+	next();
 })
 
 router.afterEach(() => {
