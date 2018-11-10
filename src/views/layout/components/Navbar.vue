@@ -1,31 +1,33 @@
 <template >
   <el-menu class="navbar" mode="horizontal" >
     <el-row >
-        <el-col :span="20" >
-            <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened" ></hamburger >
+        <el-col :span="19" >
+            <hamburger class="hamburger-container" :toggleClick="toggleSideBar"
+                       :isActive="sidebar.opened" ></hamburger >
             <breadcrumb class="breadcrumb-container" ></breadcrumb >
         </el-col >
-        <el-col :span="2">
-            <div style="font-size: 20px;color: green;margin-top: 5px; font-weight: bold;text-align: right;" >{{roleName}}</div >
-        </el-col>
-        <el-col :span="2" >
+        <!--<el-col :span="3" >-->
+            <!--<div style="font-size: 20px;color: green;margin-top: 5px; font-weight: bold;text-align: right;float: right" >{{roleName}}</div >-->
+        <!--</el-col >-->
+        <el-col :span="5" >
           <div class="right-menu" >
-            <el-dropdown class="avatar-container right-menu-item" trigger="click" >
-              <div class="avatar-wrapper" >
-                <div style="font-size: 16px;font-weight: bold" >{{userName}}</div >
-                <i class="el-icon-caret-bottom" ></i >
-              </div >
-              <el-dropdown-menu slot="dropdown" >
-                <router-link to="/" >
-                  <el-dropdown-item >
-                    {{$t('navbar.dashboard')}}
-                  </el-dropdown-item >
-                </router-link >
-                <el-dropdown-item divided >
-                  <span @click="logout" style="display:block;" >{{$t('navbar.logOut')}}</span >
-                </el-dropdown-item >
-              </el-dropdown-menu >
-            </el-dropdown >
+              <el-dropdown class="avatar-container right-menu-item" trigger="click" >
+                  <div class="avatar-wrapper" >
+                      <div style="font-size: 20px;font-weight: bold;color: orange" >{{userName}}</div >
+                      <i class="el-icon-caret-bottom" ></i >
+                  </div >
+                  <el-dropdown-menu slot="dropdown" >
+                    <router-link to="/" >
+                      <el-dropdown-item >
+                        {{$t('navbar.dashboard')}}
+                      </el-dropdown-item >
+                    </router-link >
+                    <el-dropdown-item divided >
+                      <span @click="logout" style="display:block;" >{{$t('navbar.logOut')}}</span >
+                    </el-dropdown-item >
+                  </el-dropdown-menu >
+              </el-dropdown >
+              <div style="font-size: 28px;color: green;margin-top: 3px;;margin-right: 5px; font-weight: bold;float: left" >{{roleName}}</div >
           </div >
         </el-col >
 

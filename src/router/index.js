@@ -86,13 +86,13 @@ export const asyncRouterMap = [
 				path: 'assignMachine',
 				component: _import('install_machine/assign_machine'),
 				name: 'assign_machine',
-				meta: {title: 'assign_machine', noCache: true,}
+				meta: {title: 'assign_machine', noCache: true, icon: 'install', roles: ["SuperAdmin", "Admin"]}
 			},
 			{
 				path: 'installHome',
 				component: _import('install_machine/install_home'),
 				name: 'install_home',
-				meta: {title: 'install_home', noCache: true,}
+				meta: {title: 'install_home', noCache: true, icon: 'install'}
 			},
 			// {
 			// 	path: 'installDetail',
@@ -104,14 +104,14 @@ export const asyncRouterMap = [
 				path: 'installItem',
 				component: _import('install_machine/install_item'),
 				name: 'install_item',
-				meta: {title: 'install_item', noCache: true,}
+				meta: {title: 'install_item', noCache: true, icon: 'install', roles: ["SuperAdmin", "Admin"]}
 			},
 		]
 	},
 	{
 		path: '/maintainManage',
 		component: Layout,
-		redirect: 'noredirect',
+		redirect: 'redirect',
 		name: 'maintain_manage',
 		meta: {
 			title: 'maintain_manage',
@@ -122,7 +122,7 @@ export const asyncRouterMap = [
 				path: 'maintainHome',
 				component: _import('maintain_manage/maintain_home'),
 				name: 'maintain_home',
-				meta: {title: 'maintain_home', noCache: true,}
+				meta: {title: 'maintain_home', noCache: true, icon: 'maintain'}
 			},
 			// {
 			// 	path: 'maintainDetail',
@@ -134,13 +134,13 @@ export const asyncRouterMap = [
 				path: 'maintainTypeManage',
 				component: _import('maintain_manage/maintain_type_manage'),
 				name: 'maintain_type_manage',
-				meta: {title: 'maintain_type_manage', noCache: true,}
+				meta: {title: 'maintain_type_manage', noCache: true, icon: 'maintain', roles: ["SuperAdmin", "Admin"]}
 			},
 			{
 				path: 'maintainItem',
 				component: _import('maintain_manage/maintain_item'),
 				name: 'maintain_item',
-				meta: {title: 'maintain_item', noCache: true,}
+				meta: {title: 'maintain_item', noCache: true, icon: 'maintain', roles: ["SuperAdmin", "Admin"]}
 			},
 		]
 	},
@@ -158,13 +158,13 @@ export const asyncRouterMap = [
 				path: 'repairHome',
 				component: _import('repair_manage/repair_home'),
 				name: 'repair_home',
-				meta: {title: 'repair_home', noCache: true,}
+				meta: {title: 'repair_home', noCache: true, icon: 'repair'}
 			},
 			{
 				path: 'repairIssuePosition',
 				component: _import('repair_manage/repair_issue_position'),
 				name: 'repair_issue_position',
-				meta: {title: 'repair_issue_position', noCache: true,}
+				meta: {title: 'repair_issue_position', noCache: true, icon: 'repair', roles: ["SuperAdmin", "Admin"]}
 			},
 		]
 	},
@@ -174,7 +174,8 @@ export const asyncRouterMap = [
 		redirect: 'noredirect',
 		name: 'machine_manage',
 		meta: {
-			icon: 'sewingMachine'
+			icon: 'sewingMachine',
+			roles: ["SuperAdmin", "Admin"]
 		},
 		children: [
 			{
@@ -184,7 +185,8 @@ export const asyncRouterMap = [
 				meta: {
 					title: 'machine_home',
 					noCache: true,
-					icon: 'sewingMachine'
+					icon: 'sewingMachine',
+					roles: ["SuperAdmin", "Admin"]
 				}
 			}
 		]
@@ -194,13 +196,13 @@ export const asyncRouterMap = [
 		component: Layout,
 		redirect: 'noredirect',
 		name: 'parts_manage',
-		meta: {},
+		meta: {roles: ["SuperAdmin", "Admin"]},
 		children: [
 			{
 				path: 'partsHome',
 				component: _import('system_manage/parts_manage'),
 				name: 'parts_manage',
-				meta: {title: 'parts_manage', noCache: true, icon: 'parts'}
+				meta: {title: 'parts_manage', noCache: true, icon: 'parts', roles: ["SuperAdmin", "Admin"]}
 			}
 		]
 	},
@@ -239,52 +241,16 @@ export const asyncRouterMap = [
 		component: Layout,
 		redirect: 'noredirect',
 		name: 'agent_manage',
-		meta: {roles: ["Agent"]},
+		meta: {roles: ["SuperAdmin", "Admin"]},
 		children: [
 			{
 				path: 'agentHome',
 				component: _import('system_manage/agent_manage'),
 				name: 'agent_manage',
-				meta: {title: 'agent_manage', noCache: true, icon: 'agent'}
+				meta: {title: 'agent_manage', noCache: true, icon: 'agent', roles: ["SuperAdmin", "Admin"]}
 			}
 		]
 	},
-	// {
-	// 	path: '/systemManage',
-	// 	component: Layout,
-	// 	redirect: 'noredirect',
-	// 	name: 'system_manage',
-	// 	meta: {
-	// 		title: 'system_manage',
-	// 		icon: 'peoples'
-	// 	},
-	// 	children: [
-	// 		{
-	// 			path: 'staffManage',
-	// 			component: _import('system_manage/staff_manage'),
-	// 			name: 'staff_manage',
-	// 			meta: {title: 'staff_manage', noCache: true,}
-	// 		},
-	// 		{
-	// 			path: 'clientManage',
-	// 			component: _import('system_manage/client_manage'),
-	// 			name: 'client_manage',
-	// 			meta: {title: 'client_manage', noCache: true,}
-	// 		},
-	// 		{
-	// 			path: 'agentManage',
-	// 			component: _import('system_manage/agent_manage'),
-	// 			name: 'agent_manage',
-	// 			meta: {title: 'agent_manage', noCache: true,}
-	// 		},
-	// 		{
-	// 			path: 'partsManage',
-	// 			component: _import('system_manage/parts_manage'),
-	// 			name: 'parts_manage',
-	// 			meta: {title: 'parts_manage', noCache: true,}
-	// 		},
-	// 	]
-	// },
 	{
 		path: '/repositoryManage',
 		component: Layout,
@@ -301,24 +267,6 @@ export const asyncRouterMap = [
 				name: 'repository_home',
 				meta: {title: 'repository_home', noCache: true, icon: 'table'}
 			},
-			// {
-			// 	path: 'knowledgeDetail',
-			// 	component: _import('repository_manage/knowledge_detail'),
-			// 	name: 'knowledge_detail',
-			// 	meta: {title: 'knowledge_detail', noCache: true,}
-			// },
-			// {
-			// 	path: 'experienceDetail',
-			// 	component: _import('repository_manage/experience_detail'),
-			// 	name: 'experience_detail',
-			// 	meta: {title: 'experience_detail', noCache: true,}
-			// },
-			// {
-			// 	path: 'repositoryShare',
-			// 	component: _import('repository_manage/repository_share'),
-			// 	name: 'repository_share',
-			// 	meta: {title: 'repository_share', noCache: true,}
-			// },
 		]
 	},
 	{path: '*', redirect: '/404', hidden: true}

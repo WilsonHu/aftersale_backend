@@ -7,9 +7,9 @@
       </div>
     </div>
     <div>
-      <span>
-        没权限访问
-      </span>
+      <!--<span>-->
+        <!--没权限访问-->
+      <!--</span>-->
       <!--<img class="emptyGif" :src="emptyGif">-->
     </div>
   </div>
