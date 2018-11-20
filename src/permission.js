@@ -7,13 +7,6 @@ import {getToken} from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({showSpinner: false})// NProgress Configuration
 
-// permissiom judge function
-function hasPermission(roles, permissionRoles) {
-	if (roles.contains('Admin')) return true // admin permission passed directly
-	if (!permissionRoles) return true
-	return route.meta.roles.indexOf(roles) < 0;
-}
-
 const whiteList = ['/login', '/authredirect']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {

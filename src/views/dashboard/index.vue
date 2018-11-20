@@ -23,7 +23,7 @@ export default {
 		])
 	},
 	created() {
-		if (!this.roles.includes('Admin')) {
+		if (!this.roles.toUpperCase().includes('Admin'.toUpperCase())) {
 			this.currentRole = 'editorDashboard'
 		}
 	}
