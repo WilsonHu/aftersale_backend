@@ -222,7 +222,7 @@
                 <el-col :span="12">
                     <el-form-item label="账号：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.account" @change="onChange"
-                                  :disabled="modifyForm.account == 'admin'"></el-input>
+                                  :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
