@@ -333,7 +333,8 @@
 					 if (responseIsOK(response)) {
 						 if (response.data.data.list.length > 0) {
 							 _this.formData = response.data.data.list[0];
-							 _this.installCotentList = [];
+                             _this.skillStars = loadServerScore(_this.formData.installFeedbackCustomerMark);
+                             _this.installCotentList = [];
 							 try {
 								 let list = JSON.parse(_this.formData.installInfo);
 								 for (let item of list) {
@@ -379,7 +380,6 @@
 
 	 mounted(){
 		 _this.loadData();//仅仅第一次show出来时，会调用。之后，父控件会自行调用loadData()
-		 _this.skillStars = loadServerScore(_this.formData.maintainFeedbackCustomerMark);
 //		 this.$on('onShowDetail', function () {//对应父控件调用的方法二
 //			 _this.loadData();
 //			 console.log('监听成功')
