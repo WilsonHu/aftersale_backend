@@ -10,14 +10,14 @@
                                   clearable></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="3">
-                    <el-form-item label="姓名:">
-                        <el-input v-model="filters.name"
-                                  placeholder="姓名"
-                                  auto-complete="off"
-                                  clearable></el-input>
-                    </el-form-item>
-                </el-col>
+                <!--<el-col :span="3">-->
+                    <!--<el-form-item label="姓名:">-->
+                        <!--<el-input v-model="filters.name"-->
+                                  <!--placeholder="姓名"-->
+                                  <!--auto-complete="off"-->
+                                  <!--clearable></el-input>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
                 <el-col :span="4">
                     <el-form-item label="角色:">
                         <el-select v-model="filters.roleId" clearable>
@@ -85,11 +85,11 @@
                         prop="account"
                         label="账号">
                 </el-table-column>
-                <el-table-column
-                        align="center"
-                        prop="name"
-                        label="姓名">
-                </el-table-column>
+                <!--<el-table-column-->
+                        <!--align="center"-->
+                        <!--prop="name"-->
+                        <!--label="姓名">-->
+                <!--</el-table-column>-->
 
                 <el-table-column
                         align="center"
@@ -162,11 +162,11 @@
                         <el-input v-model="form.account" @change="onChange"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                    <el-form-item label="姓名：" :label-width="formLabelWidth">
-                        <el-input v-model="form.name" @change="onChange"></el-input>
-                    </el-form-item>
-                </el-col>
+                <!--<el-col :span="12">-->
+                    <!--<el-form-item label="姓名：" :label-width="formLabelWidth">-->
+                        <!--<el-input v-model="form.name" @change="onChange"></el-input>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
                 <el-col :span="12">
                     <el-form-item label="联系方式：" :label-width="formLabelWidth">
                         <el-input v-model="form.phone" @change="onChange"></el-input>
@@ -225,11 +225,11 @@
                                   :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                    <el-form-item label="姓名：" :label-width="formLabelWidth">
-                        <el-input v-model="modifyForm.name" @change="onChange"></el-input>
-                    </el-form-item>
-                </el-col>
+                <!--<el-col :span="12">-->
+                    <!--<el-form-item label="姓名：" :label-width="formLabelWidth">-->
+                        <!--<el-input v-model="modifyForm.name" @change="onChange"></el-input>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
                 <el-col :span="12">
                     <el-form-item label="联系方式：" :label-width="formLabelWidth">
                         <el-input v-model="modifyForm.phone" @change="onChange"></el-input>
@@ -453,11 +453,13 @@
                 if (!iserror && isStringEmpty(formObj.account)) {
                     iserror = true;
                     this.errorMsg = '账号不能为空';
+                } else {
+                    formObj.name = formObj.account;
                 }
-                if (!iserror && isStringEmpty(formObj.name)) {
-                    iserror = true;
-                    this.errorMsg = '姓名不能为空';
-                }
+                // if (!iserror && isStringEmpty(formObj.name)) {
+                //     iserror = true;
+                //     this.errorMsg = '姓名不能为空';
+                // }
 
                 if (!iserror && isStringEmpty(formObj.phone)) {
                     iserror = true;
