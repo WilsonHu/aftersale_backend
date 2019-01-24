@@ -279,24 +279,32 @@
 			    _this.formData.customerId = "";
 			    let condition = {
 				    "customerCompany": _this.machineInfo.machineCustomerCompanyId,
-				    "roleId": APIConfig.UserType.CustomerContacter,
+				    // "roleId": APIConfig.UserType.CustomerContacter,
 			    }
 			    requestCustomerList(condition).then(response=> {
 				    if (responseIsOK(response)) {
 					    _this.customerList = [];
 					    let dataList = response.data.data.list;
 					    for (let item of dataList) {
-						    _this.customerList.push(Object.assign({
-							    value: item.name,
-							    id: item.id,
-							    comment: "联系人"
-						    }, item));
+					        if (item.roleId == APIConfig.UserType.CustomerContacter) {
+                                _this.customerList.push(Object.assign({
+                                    value: item.name,
+                                    id: item.id,
+                                    comment: "联系人"
+                                }, item));
+                            } else if (item.roleId == APIConfig.UserType.Customer) {
+                                _this.customerList.push(Object.assign({
+                                    value: item.name,
+                                    id: item.id,
+                                    comment: "客户"
+                                }, item));
+                            }
 					    }
-					    _this.customerList.unshift({
-						    value: _this.machineInfo.customerName,
-						    id: _this.machineInfo.customerId,
-						    comment: "客户"
-					    })
+					    // _this.customerList.unshift({
+						 //    value: _this.machineInfo.customerName,
+						 //    id: _this.machineInfo.customerId,
+						 //    comment: "客户",
+					    // })
 					    _this.formData.customerId = ""
 					    _this.formData.customerName = ""
 				    }
