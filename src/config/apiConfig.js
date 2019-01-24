@@ -2,7 +2,7 @@ const APIConfig = {
 
 	request_server_url: '/api',  // for axios ajax url
 
-	WEBURL: 'https://eservice-tech.cn/',
+	WEBURL: 'https://aftersalesinsim.cn/',
 
 	FilterUrl: '/home/sinsim/output/aftersale/',
 
