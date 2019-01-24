@@ -152,7 +152,6 @@ const APIConfig = {
 	 * 转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
 	 */
 	RepairStatusList: [
-		{value: 0, name: '报修中'},
 		{value: 1, name: '未派单'},
 		{value: 2, name: '已派单'},
 		{value: 3, name: '已接受'},
