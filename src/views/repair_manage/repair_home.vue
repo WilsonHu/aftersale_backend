@@ -429,6 +429,7 @@ export default {
 				orderNum: '',
 				machineType: '',
 				customer: '',
+        repairChargePersonName: '',
 				isAgent: true,
 				agent: '',
 				status: '',
