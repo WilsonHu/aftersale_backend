@@ -31,7 +31,7 @@
                                   <el-select v-model="condition.repairChargePersonName" clearable >
                                     <el-option
 		                                    v-for="item in employeeList"
-		                                    :value="item.id"
+		                                    :value="item.name"
 		                                    :label="item.name" >
                                     </el-option >
                                 </el-select >
