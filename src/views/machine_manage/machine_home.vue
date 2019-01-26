@@ -41,7 +41,7 @@
                     <el-row >
 	                    <el-col :span="5" >
                             <el-form-item label="机器来源:" >
-                                <el-select v-model="condition.machineSource" clearable >
+                                <el-select v-model="condition.machineWhereFrom" clearable >
                                     <el-option
 		                                    v-for="item in machineSourceList"
 		                                    :value="item.value"
@@ -330,6 +330,7 @@
 				 nameplate: '',
 				 orderNum: '',
 				 machineType: '',
+         machineWhereFrom: '',
 				 customer: '',
 				 isAgent: true,
 				 agent: '',
@@ -422,7 +423,8 @@
 				 orderNum: this.condition.orderNum.trim(),
 				 nameplate: this.condition.nameplate.trim(),
 				 machineType: this.condition.machineType,
-				 installStatus: this.condition.status,
+         machineWhereFrom: this.condition.machineWhereFrom,
+         status: this.condition.status,
 				 installChargePersonName: "",
 				 query_start_time_install: '',
 				 query_finish_time_install: '',
