@@ -79,7 +79,7 @@
                                   <el-select v-model="condition.repairChargePersonName" clearable >
                                     <el-option
 		                                    v-for="item in employeeList"
-		                                    :value="item.id"
+		                                    :value="item.name"
 		                                    :label="item.name" >
                                     </el-option >
                                 </el-select >
@@ -429,6 +429,7 @@ export default {
 				orderNum: '',
 				machineType: '',
 				customer: '',
+        repairChargePersonName: '',
 				isAgent: true,
 				agent: '',
 				status: '',
@@ -721,7 +722,7 @@ export default {
 				repairRecordCustomerName: this.condition.customer,
 				repairStatus: this.condition.status,
 				partsStatus: '',
-				repairChargePersonName: '',
+				repairChargePersonName: this.condition.repairChargePersonName,
 				inWarrantyPeriod: this.condition.inWarrantyPeriod,
 				issuePositionName: '',
 				page: this.currentPage,
