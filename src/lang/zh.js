@@ -92,7 +92,7 @@ export default {
     theme: '换肤'
   },
   login: {
-    title: '系统登录',
+    title: 'SINSIM售后服务系统',
     logIn: '登录',
     username: '账号',
     password: '密码',
