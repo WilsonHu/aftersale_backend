@@ -390,11 +390,11 @@
                         </span >
                     </el-form-item >
                 </el-col >
-                <el-col :span="6" >
-                        <el-form-item label="供应商:" >
-	                        <span >{{formData.supplier}}</span >
-                        </el-form-item >
-                </el-col >
+                <!--<el-col :span="6" >-->
+                        <!--<el-form-item label="供应商:" >-->
+	                        <!--<span >{{formData.supplier}}</span >-->
+                        <!--</el-form-item >-->
+                <!--</el-col >-->
                 <el-col :span="6" >
                         <el-form-item label="回寄日期:" >
 	                        <span >{{formData.sendbackDate|filterDateString}}</span >

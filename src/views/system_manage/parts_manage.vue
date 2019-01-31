@@ -38,7 +38,15 @@
                             </el-form-item >
                         </el-col >
 
-	                    <el-col :span="2" :offset="2" >
+                        <!--<el-col :span="5" >-->
+                            <!--<el-form-item label="供应商:" >-->
+                                <!--<el-input v-model="condition.supplier"-->
+                                          <!--placeholder="供应商" clearable-->
+                                          <!--auto-complete="off" ></el-input >-->
+                            <!--</el-form-item >-->
+                        <!--</el-col >-->
+
+                        <el-col :span="2" :offset="2" >
                             <el-button
 		                            icon="el-icon-search"
 		                            size="normal"
@@ -48,26 +56,17 @@
                         </el-col >
                     </el-row >
                     <el-row >
-	                    <el-col :span="5" >
-                            <el-form-item label="供应商:" >
-                                <el-input v-model="condition.supplier"
-                                          placeholder="供应商" clearable
-                                          auto-complete="off" ></el-input >
-                            </el-form-item >
-                        </el-col >
-
-	                    <el-col :span="5" >
+                        <el-col :span="5" >
                             <el-form-item label="回寄状态:" >
                                 <el-select v-model="condition.partsStatus" clearable >
                                     <el-option
-		                                    v-for="item in statusList"
-		                                    :value="item.value"
-		                                    :label="item.name" >
+                                            v-for="item in statusList"
+                                            :value="item.value"
+                                            :label="item.name" >
                                     </el-option >
                                 </el-select >
                             </el-form-item >
                         </el-col >
-
 	                    <el-col :span="5" >
                             <el-form-item label="回寄单号:" >
                                 <el-input v-model="condition.number"
@@ -124,6 +123,11 @@
 
                     <el-table-column
 		                    align="center"
+		                    prop="machineNameplate"
+		                    label="机器编号" >
+                    </el-table-column >
+                    <el-table-column
+		                    align="center"
 		                    prop="sendbackTrackingNumber"
 		                    label="单号" >
                     </el-table-column >
@@ -152,11 +156,11 @@
 		                    prop="customerNameInRepairRecord"
 		                    label="客户" >
                     </el-table-column >
-                    <el-table-column
-		                    align="center"
-		                    prop="supplier"
-		                    label="供应商" >
-                    </el-table-column >
+                    <!--<el-table-column-->
+		                    <!--align="center"-->
+		                    <!--prop="supplier"-->
+		                    <!--label="供应商" >-->
+                    <!--</el-table-column >-->
                     <el-table-column
 		                    sortable
 		                    align="center"
