@@ -306,11 +306,11 @@
                               <span v-html="formData.repairChargePersonPhone" ></span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="开始时间:" >
-                              <span >{{formData.repairStartTime|filterDateString}}</span >
-                            </el-form-item >
-                        </el-col >
+                        <!--<el-col :span="6" >-->
+                            <!--<el-form-item label="开始时间:" >-->
+                              <!--<span >{{formData.repairStartTime|filterDateString}}</span >-->
+                            <!--</el-form-item >-->
+                        <!--</el-col >-->
                         <el-col :span="6" >
                             <el-form-item label="完成时间:" >
                               <span >{{formData.repairEndTime|filterDateString}}</span >
