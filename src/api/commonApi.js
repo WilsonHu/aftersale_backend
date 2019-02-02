@@ -26,7 +26,6 @@ export function getSaledMachineInfoList(condition) {
 	})
 }
 
-
 export function getMachineTypeList() {
 	return new Promise((resolve, reject) => {
 		return request({
@@ -39,6 +38,20 @@ export function getMachineTypeList() {
 			reject(error);
 		})
 	})
+}
+
+export function getCustomerNameList() {
+    return new Promise((resolve, reject) => {
+        return request({
+            url: 'SinsimProcessDB/getCustomerNameList',
+            method: 'post',
+            data: ""
+        }).then(response=> {
+            resolve(response);
+        }).catch(error=> {
+            reject(error);
+        })
+    })
 }
 
 export function selectUsers(condition) {

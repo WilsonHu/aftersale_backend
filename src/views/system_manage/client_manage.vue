@@ -174,7 +174,13 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司名称：" :label-width="formLabelWidth">
-                        <el-input v-model="form.customerCompany" @change="onChange"></el-input>
+                        <!--<el-input v-model="form.customerCompany" @change="onChange"></el-input>-->
+                        <el-autocomplete
+                                v-model="form.customerCompany"
+                                :fetch-suggestions="queryCustomer"
+                                placeholder="公司名称"
+                        >
+                        </el-autocomplete>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -237,7 +243,13 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司名称：" :label-width="formLabelWidth">
-                        <el-input v-model="modifyForm.customerCompany" @change="onChange"></el-input>
+                        <!--<el-input v-model="modifyForm.customerCompany" @change="onChange"></el-input>-->
+                        <el-autocomplete
+                                v-model="form.customerCompany"
+                                :fetch-suggestions="queryCustomer"
+                                placeholder="公司名称"
+                        >
+                        </el-autocomplete>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -294,6 +306,7 @@
     var _this;
     import {getAllRole, selectUsers, addStaff,updateUser,deleteUser} from '@/api/system_manage';
     import {getAllAgent} from '@/api/agent';
+    import {getCustomerNameList} from '@/api/commonApi';
     import {APIConfig} from '@/config/apiConfig';
 
     export default {
@@ -347,6 +360,7 @@
                 allRoles: [],
                 allAgents: [],
                 allMarketGroups: [],
+                customerList: [],
                 loadingUI: false,
                 currentUserAgent: 0
             }
@@ -361,7 +375,26 @@
                     _this.isError = _this.validateForm(_this.modifyForm, true);
                 }
             },
-
+            queryCustomer(queryString, check) {
+                //缓存加载
+                var results = _this.customerList;
+                if (queryString) {
+                    results = _this.customerList.filter(
+                        this.createStateFilter(queryString)
+                    );
+                }
+                clearTimeout(_this.customerTimeout);
+                _this.customerTimeout = setTimeout(() => {
+                    check(results);
+                }, 800 * Math.random());
+            },
+            createStateFilter(queryString) {
+                return item => {
+                    return (
+                        item.value.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
+                    );
+                };
+            },
 
             handleSizeChange(val) {
 
@@ -548,6 +581,22 @@
                         Promise.reject("获取代理商信息错误！");
                     }
                 });
+            },
+            initAllCustomer() {
+                getCustomerNameList().then(response => {
+                    Promise.reject(response);
+                    if (response.data.code == 200) {
+                        _this.customerList = [];
+                        let tmp = response.data.data.list;
+                        for (let i = 0; i < tmp.length; i++) {
+                            _this.customerList.push({
+                                value: tmp[i].customerName
+                            });
+                        }
+                    } else {
+                        Promise.reject("获取公司名称出错！");
+                    }
+                });
             }
         },
         computed: {},
@@ -574,6 +623,7 @@
             this.currentUserAgent = _this.$store.getters.user.user.agent;
             this.initAllRoles();
             this.initAllAgent();
+            this.initAllCustomer();
         },
         mounted: function () {
             this.onSelectUsers();
