@@ -280,6 +280,14 @@
 		                                @click="editWithItem(scope.row,2)" >
                                 </el-button >
                             </el-tooltip >
+                            <el-tooltip placement="top" content="解绑" v-show="scope.row.status==1">
+                                <el-button
+		                                size="mini"
+		                                type="danger"
+		                                icon="el-icon-close"
+		                                @click="deleteItem(scope.row)" >
+                                </el-button >
+                            </el-tooltip >
                         </template >
                     </el-table-column >
                 </el-table >
@@ -308,7 +316,7 @@
  import {Loading} from 'element-ui';
  import {resetObject} from '@/utils'
  import {getSaledMachineInfoList} from '@/api/install_machine';
- import {addMachine, updateMachine} from '@/api/machine_manage';
+ import {addMachine, updateMachine, deleteMachine} from '@/api/machine_manage';
  import MachineInfo from '@/views/machine_manage/machine_info';
  var _this;
  export default {
@@ -465,6 +473,18 @@
 			 _this.showMachineDialog = true;
 
 		 },
+         deleteItem(item)//解绑
+         {
+             deleteMachine(item.id).then(response=> {
+                 if (responseIsOK(response)) {
+                     showMessage(_this, "解绑成功!", 1);
+                     this.search();
+                 }
+                 else {
+                     showMessage(_this, "解绑失败!" + response.data.message);
+                 }
+             });
+         },
 
 		 onSubmitMachine(item)
 		 {

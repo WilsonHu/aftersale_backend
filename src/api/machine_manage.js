@@ -31,3 +31,19 @@ export function updateMachine(machine) {
 	})
 }
 
+export function deleteMachine(id) {
+    let params = new URLSearchParams();
+    params.append('id', id);
+    return new Promise((resolve, reject) => {
+        return request({
+            url: 'machine/delete',
+            method: 'post',
+            data: params
+        }).then(response=> {
+            resolve(response);
+        }).catch(error=> {
+            reject(error);
+        })
+    })
+}
+
