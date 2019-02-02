@@ -486,8 +486,8 @@
 				 //submit
 				 if (_this.machineInfoData.showType == "0") {//add
 					 machine.isOldMachine = "2";
-					 machine.oldMachineCheck = "0";
-					 machine.status = 1;
+					 machine.oldMachineCheck = "1";
+					 machine.status = 3;
 					 addMachine(machine).then(response=> {
 						 if (responseIsOK(response)) {
 							 showMessage(_this, "添加成功!", 1);
