@@ -245,7 +245,7 @@
                     <el-form-item label="公司名称：" :label-width="formLabelWidth">
                         <!--<el-input v-model="modifyForm.customerCompany" @change="onChange"></el-input>-->
                         <el-autocomplete
-                                v-model="form.customerCompany"
+                                v-model="modifyForm.customerCompany"
                                 :fetch-suggestions="queryCustomer"
                                 placeholder="公司名称"
                         >
