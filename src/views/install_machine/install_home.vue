@@ -278,7 +278,6 @@
                             <el-col :span="12" >
                                 <el-checkbox-group v-model="checkedList" >
                                     <el-checkbox
-		                                    :disabled="item=='基础项'"
 		                                    :label="item"
 		                                    :key="item"
 		                                    v-for="item in filterInstallInfo(installLibList)" ></el-checkbox >
