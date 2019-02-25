@@ -1,5 +1,5 @@
 <template >
-    <div class="root_div" >
+    <div class="install_home_div" >
         <div >
             <el-col class="well well-lg" style="background-color: white;" >
                 <el-form :model="condition" label-position="right" label-width="90px" >
@@ -702,7 +702,7 @@
 </script >
 
 <style scoped >
-    .root_div {
+    .install_home_div {
 	    position: relative;
 	    padding: 20px;
 	    width: 100%;
