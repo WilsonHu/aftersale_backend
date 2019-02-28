@@ -670,8 +670,8 @@ export default {
 			if (isStringEmpty(_this.assignTaskData.formData.customerName)) {
 				submitData.customer = _this.selectedItem.machineCustomerId
 			}
-			//再派 status为2或3,生成新的一条记录
-			if (_this.selectedItem.status > 1 && _this.selectedItem.status < 5) {
+			//再派 status为3或4,生成新的一条记录
+			if (_this.selectedItem.status > 2 && _this.selectedItem.status < 5) {
 				submitData.oldId = _this.selectedItem.id;
 				submitData.repairRecord.machineNameplate = _this.selectedItem.machineNameplate;
 				submitData.repairRecord.repairRequestInfo = _this.selectedItem.repairRequestInfo;
