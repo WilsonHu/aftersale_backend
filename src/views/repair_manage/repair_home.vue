@@ -344,7 +344,7 @@
                 </div >
 		     <el-dialog title="确认转派" :visible.sync="showConfirmForward"
 		                append-to-body width="30%" >
-                    <span >当前任务状态是<span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.status|filterStatus}}</span >, 确定需要转派本次维修吗？</span >
+                    <span >当前任务 <span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.status|filterStatus}}</span > , 确定需要转派本次维修吗？</span >
                     <span slot="footer" class="dialog-footer" >
 		              <el-button @click="showConfirmForward = false" icon="el-icon-close" >取 消</el-button >
 		              <el-button type="primary" @click="onConForward" icon="el-icon-check" >确 定</el-button >
@@ -371,7 +371,7 @@
 		     </el-dialog >
 		     <el-dialog title="提示" :visible.sync="showConfirmAssign"
 		                append-to-body width="30%" >
-                    <span >当前任务状态是<span style="font-weight: bold;font-size: 18px;color: #1c8de0;" > {{selectedItem.status|filterStatus}}</span >, 确定需要再次派单吗？</span >
+                    <span >当前任务 <span style="font-weight: bold;font-size: 18px;color: #1c8de0;" >{{selectedItem.status|filterStatus}}</span > , 确定需要再次派单吗？</span >
                     <span slot="footer" class="dialog-footer" >
 		              <el-button @click="showConfirmAssign = false" icon="el-icon-close" >取 消</el-button >
 		              <el-button type="primary" @click="onConShowAssign" icon="el-icon-check" >确 定</el-button >
@@ -590,17 +590,19 @@ export default {
 				factoryDate: DateMinus(_this.selectedItem.facoryDate),
 			};
 			_this.selectedItem = copyObject(row);
-			/*
-			 * 0：未派单，
-			 * 1：已派单（但未接单）,
-			 * 2：已接受（进行中，可以再派），
-			 * 3：失败，(可以 再派，代理商可以 转派)
-			 * 4：已再派，
-			 * 5：已转派，
-			 * 6：已完成(客户未确认)，
-			 * 7. 客户确认（维修成功）
-			 */
-			if (_this.selectedItem.status == 2) {
+            /**
+             * 维修状态
+             * 0: 报修进行中（报修过程中，文件上传没完成等情况）
+             * 1：未派单，
+             * 2：已派单（但未接单）,
+             * 3：已接受（进行中，可以再派），
+             * 4：失败，(可以 再派，代理商可以 转派)
+             * 5：已再派，
+             * 6：已转派，
+             * 7：已完成(客户未确认)，
+             * 8. 客户确认（维修成功）。转派后，前面的维修记录要保留，但是客户只需要看到成功的最后那次记录。
+             */
+			if (_this.selectedItem.status == 2 || _this.selectedItem.status == 3 || _this.selectedItem.status == 4) {
 				_this.showConfirmAssign = true;
 			}
 			else {
