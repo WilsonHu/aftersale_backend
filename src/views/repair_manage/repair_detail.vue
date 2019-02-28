@@ -192,11 +192,9 @@
                                 <a v-for="itemPicture in splitToArray(formData.repairRequestPictures)"
                                    data-magnify="gallery"
                                    data-caption="图片预览" :href="itemPicture|converterUrl" >
-                                   <img :src="itemPicture|converterUrl"
-                                        :alt="itemPicture|converterUrl"
-                                        style="width:250px;height: 300px; margin: 3px;" >
-	                                </img>
-
+                                    <img :src="itemPicture|converterUrl"
+                                         :alt="itemPicture|converterUrl"
+                                         style="width:250px;height: 300px; margin: 3px;"/>
                                 </a >
                             </div >
                         </el-form-item >
@@ -246,11 +244,11 @@
                               <span v-html="formData.repairChargePersonPhone" ></span >
                             </el-form-item >
                         </el-col >
-                        <el-col :span="6" >
-                            <el-form-item label="开始时间:" >
-                              <span >{{formData.repairStartTime|filterDateString}}</span >
-                            </el-form-item >
-                        </el-col >
+                        <!--<el-col :span="6" >-->
+                            <!--<el-form-item label="开始时间:" >-->
+                              <!--<span >{{formData.repairStartTime|filterDateString}}</span >-->
+                            <!--</el-form-item >-->
+                        <!--</el-col >-->
                         <el-col :span="6" >
                             <el-form-item label="完成时间:" >
                               <span >{{formData.repairEndTime|filterDateString}}</span >
@@ -278,11 +276,6 @@
                             </el-form-item >
                         </el-col >
                         <el-col :span="22" >
-                            <el-form-item label="解决方案:" >
-                              <span >{{formData.repairActualMethod}}</span >
-                            </el-form-item >
-                        </el-col >
-                        <el-col :span="22" >
                             <el-form-item label="故障部位:" >
                                 <el-tag class="tagClass" type="success"
                                         v-for="item in splitToArray(formData.issuePositionList)"
@@ -291,7 +284,19 @@
 	                            </el-tag >
                             </el-form-item >
                         </el-col >
-
+                        <el-col :span="22" >
+                            <el-form-item label="维修图片:" >
+                                <div >
+                                    <a v-for="itemPicture in splitToArray(formData.afterResolvePictures)"
+                                       data-magnify="gallery"
+                                       data-caption="图片预览" :href="itemPicture|converterUrl" >
+                                        <img :src="itemPicture|converterUrl"
+                                             :alt="itemPicture|converterUrl"
+                                             style="width:250px;height: 300px; margin: 3px;"/>
+                                    </a >
+                                </div >
+                            </el-form-item >
+                        </el-col >
                     </el-tab-pane >
                     <el-tab-pane label="信胜维修" name="1" v-if="isShowSinsim" >
                         <el-col :span="6" >
@@ -344,6 +349,19 @@
                                         :key="item" >
                                         {{item|filterIssuePosition}}
 	                            </el-tag >
+                            </el-form-item >
+                        </el-col >
+                        <el-col :span="22" >
+                            <el-form-item label="维修图片:" >
+                                <div >
+                                    <a v-for="itemPicture in splitToArray(formData.afterResolvePictures)"
+                                       data-magnify="gallery"
+                                       data-caption="图片预览" :href="itemPicture|converterUrl" >
+                                        <img :src="itemPicture|converterUrl"
+                                             :alt="itemPicture|converterUrl"
+                                             style="width:250px;height: 300px; margin: 3px;"/>
+                                    </a >
+                                </div >
                             </el-form-item >
                         </el-col >
                     </el-tab-pane >
