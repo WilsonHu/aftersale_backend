@@ -179,10 +179,9 @@
                         <div class="panel-body" >
                             <el-col :span="22" v-for="itemContent in item.contentList" >
                                 <span v-if="isShowContent(itemContent)"
-                                      style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.install_content}}</span >
-                                <el-form-item :label="itemContent.install_content" v-else >
-                                    <span >: {{itemContent.install_value}}</span >
-                                </el-form-item >
+                                      style="font-weight: bold;font-size: 20px;margin-left: 5px;" >{{itemContent.install_content}} :  {{itemContent.install_value? itemContent.install_value:'未完成'}}</span >
+                                <span v-else style="font-weight: bold;font-size: 20px;margin-left: 5px;" >
+                                    {{itemContent.install_content}} :  {{itemContent.install_value? itemContent.install_value:'不安装'}}</span >
                             </el-col >
                         </div >
                     </div >
