@@ -191,6 +191,10 @@
 				 showMessage(_this, "客户不能空！")
 				 return;
 			 }
+             if (_this.formData.customer < 1) {
+                 showMessage(_this, "客户不存在！")
+                 return;
+             }
 			 if (isStringEmpty(_this.formData.machineType)) {
 				 showMessage(_this, "机型不能空！")
 				 return;
@@ -247,7 +251,7 @@
 			 //查询出当前登录角色拥有的客户
 			 //代理商或sinsim
 			 let condition = {
-				 "agentId": store.getters.user.user.agent,
+				 //"agentId": store.getters.user.user.agent,
 				 "roleId": APIConfig.UserType.Customer,
 			 }
 			 requestCustomerList(condition).then(response=> {
