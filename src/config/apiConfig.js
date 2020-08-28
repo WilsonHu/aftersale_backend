@@ -127,7 +127,7 @@ const APIConfig = {
 	MaintainStatusList: [
 		{value: 0, name: '待派单'},
 		{value: 1, name: '已派单'},
-		{value: 2, name: '已接受'},
+		{value: 2, name: '已接单'},
 		{value: 3, name: '完成待确认'},
 		{value: 4, name: '已确认'},
 	],
@@ -136,7 +136,7 @@ const APIConfig = {
 	InstallStatusList: [
 		{value: 0, name: '待派单'},
 		{value: 1, name: '已派单'},
-		{value: 2, name: '已接受'},
+		{value: 2, name: '已接单'},
 		{value: 3, name: '完成待确认'},
 		{value: 4, name: '已确认'},
 	],
@@ -154,7 +154,7 @@ const APIConfig = {
 	RepairStatusList: [
 		{value: 1, name: '未派单'},
 		{value: 2, name: '已派单'},
-		{value: 3, name: '已接受'},
+		{value: 3, name: '已接单'},
 		{value: 4, name: '失败'},
 		{value: 5, name: '已再派'},
 		{value: 6, name: '已转派'},

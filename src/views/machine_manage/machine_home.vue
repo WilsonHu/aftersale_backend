@@ -532,6 +532,8 @@
 				 }
 				 else if (_this.machineInfoData.showType == "2") {//check
 					 machine.oldMachineCheck = item.oldMachineCheck;
+
+					 machine.status = 5; //报修时 无论审核通过，就是报修状态
 					 machine.id = item.id;
 					 updateMachine(machine).then(response=> {
 						 if (responseIsOK(response)) {
