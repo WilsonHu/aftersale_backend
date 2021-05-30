@@ -131,6 +131,15 @@
                         {{scope.row.valid == 1 ? "在职" : "离职"}}
                     </template >
                 </el-table-column >
+
+                <el-table-column
+                        align="center"
+                        prop="valid"
+                        label="生产系统绑定" >
+                    <template scope="scope" >
+                        {{scope.row.wechatUnionId }}
+                    </template >
+                </el-table-column >
                 <el-table-column
 		                align="center"
 		                label="操作"
